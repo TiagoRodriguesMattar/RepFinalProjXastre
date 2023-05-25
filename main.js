@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 
+const axios = require('axios');
+
 let MainWindow;
 let ChildWindow;
 
@@ -52,6 +54,32 @@ ipcMain.on("JanelaCadastro", (event, args) => {
   CadastroWindow();
 });
 
+const AcessoQuiz= () => {
+  ChildWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: MainWindow,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
+
+  ChildWindow.loadFile("./RicardoPages/BuscaQuiz.html");
+  
+  ChildWindow.once("ready-to-show", () => {
+      ChildWindow.show();
+  });
+
+}
+
+ipcMain.on("JanelaAcessoQuiz", (event, args) => {
+  AcessoQuiz();
+});
+
 
 
 const QuizWindow = () => {
@@ -82,26 +110,18 @@ ipcMain.on("JanelaQuiz", (event, args) => {
 
 
 
-ipcMain.handle('some-name', async (event, cadastro) => {
+ipcMain.handle('treino-bd', async (event, cadastro) => {
+    axios.post('http://localhost:3000/treinamento',cadastro)
+    .then((res) => {
+      console.log(res);
+    })
+})
 
-  const mysql_pool = require('mysql2')
-  const pool = mysql_pool.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: "schema1"
-  });
-
-  pool.connect(function(err) {
-      if (err) throw err;
-      console.log("conectou");
-  });
-
-  pool.query(`INSERT INTO Treinamento (codigo, nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.codigo}', '${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
-
-  pool.end(() => {
-      console.log("Connection succesfully closed");
-  });
+ipcMain.handle('quiz-bd', async (event, InfoQuiz) => {
+  axios.post('http://localhost:3000/quiz',InfoQuiz)
+  .then((res) => {
+    console.log(res);
+  })
 })
 
 ipcMain.handle("res",async (event, res) => {
