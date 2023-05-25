@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title></title>
+  </head>
+  <form id="aluno">
+    <button type="submit">ALUNO</button>
+  </form>
+    
+    <form id="adm">
+      <button type="submit">ADMINISTRADORES</button>
+    </form>
+    <form id="mod">
+      <button type="submit">MENTORES</button>
+    </form>
+    <form id="empresa">
+      <button type="submit">EMPRESAS</button>
+    </form>   
+  <body>
+    <form id="data">
+        <label for="user">Email:</label>
+        <input id =user type="email" name="user"><br>
+        <label for="password">Senha:</label>
+        <input id=password type="password" name="password"><br>
+        <label for="cargo">Cargo:</label>
+        <input id =cargo name="user"><br>
+        <label for="nome">Nome:</label>
+        <input id =nome name="user"><br>
+        <button type ="submit"class="btn btn-primary">Sign in</button>
+    </form>
+    <br>
+    <form id="Login">
+      <label for="user_login">Email:</label>
+      <input id =user_login type="email" name="user"><br>
+      <label for="password_login">Senha:</label>
+      <input id=password_login type="password" name="password"><br>
+      <button type ="submit"class="btn btn-primary">Login</button>
+    </form>
+    
+    <p id="info"></p>
+  </body>
+  <script src="./renderer.js"></script>
+</html>
