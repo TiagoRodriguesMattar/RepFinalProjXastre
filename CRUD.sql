@@ -1,0 +1,1 @@
+create table Treinamento(codigo int, nome_comercial varchar(255), descricao varchar(255), carga_horaria int, inicio_inscricoes date, fim_inscricoes date, inicio_treinamento date, fim_treinamento date, min_inscritos int, max_inscritos int);
