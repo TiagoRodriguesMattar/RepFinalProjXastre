@@ -1,32 +1,195 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const axios = require('axios');
+const { app, BrowserWindow, ipcMain } = require('electron');  
+const { authPlugins } = require('mysql2');
+const axios = require('axios').default;
 
-let MainWindow;
-let childWindow;
+let mainwindow;
 
-const createWindow = () => {
-    MainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-        //preload: path.join(__dirname, 'preload.js'),
-          nodeIntegration: true,
-          contextIsolation: false
-        }
-    })
+function createWindow () {
+    mainwindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      //preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
 
-    MainWindow.loadFile('index.html');
+  mainwindow.loadFile('index.html')
 }
 
 app.whenReady().then(() => {
-    createWindow()
+  createWindow()
 
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-      }
-    })
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
 })
+
+function window_signup() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainwindow, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+  
+  childWindow.loadFile("./cadastro.html");
+  
+  childWindow.once("ready-to-show", () => {
+    childWindow.show();
+  });
+}
+
+ipcMain.on("janela_signup", (event, arg) => {
+  window_signup();
+});
+
+// janela aluno
+
+function windowaluno() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainwindow, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+  });
+  
+  childWindow.loadFile("./LemePages/aluno.html");
+  
+  childWindow.once("ready-to-show", () => {
+    childWindow.show();
+  });
+}
+
+ipcMain.on("janela_aluno", (event, arg) => {
+  windowaluno();
+});
+
+// janela adm
+
+function windowadm() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainwindow, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+  
+  childWindow.loadFile("./LemePages/adm.html");
+  
+  childWindow.once("ready-to-show", () => {
+    childWindow.show();
+  });
+}
+
+ipcMain.on("janela_adm", (event, arg) => {
+  try{
+    axios.get
+    windowadm();
+  }catch(e){
+  }
+});
+
+// janela moderador
+
+function windowmod() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainwindow, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+  
+  childWindow.loadFile("./LemePages/moderador.html");
+  
+  childWindow.once("ready-to-show", () => {
+    childWindow.show();
+  });
+}
+
+ipcMain.on("janela_mod", (event, arg) => {
+  windowmod();
+});
+
+// login empresa
+
+function windowempresa() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    parent: mainwindow, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+  
+  childWindow.loadFile("./LemePages/empresas.html");
+  
+  childWindow.once("ready-to-show", () => {
+    childWindow.show();
+  });
+}
+
+ipcMain.on("janela_empresa", (event, arg) => {
+  windowempresa();
+});
+
+// Parte CRUD vagas de emprego
+
+function windowJobsAllOptions() {
+    childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      }, 
+    });
+
+    childWindow.loadFile("index2.html");
+
+    childWindow.once("ready-to-show", () => {
+        childWindow.show();
+    });
+}
+
+ipcMain.on("Janela_JobsAllOptions", (event, arg) => {
+    windowJobsAllOptions();
+});
 
 //Janela de cadastro de uma nova vaga de emprego (EMPRESA)
 
@@ -36,7 +199,6 @@ const NewJobWindow = () => {
         height: 700,
         modal: true,
         show: false,
-        parent: MainWindow,
         webPreferences: {
           nodeIntegration: true,
           contextIsolation: false,
@@ -44,7 +206,7 @@ const NewJobWindow = () => {
         },
     });
 
-    childWindow.loadFile("./pages/newJob.html");
+    childWindow.loadFile("./GuitosPages/newJob.html");
   
     childWindow.once("ready-to-show", () => {
         childWindow.show();
@@ -63,7 +225,6 @@ const editJobWindow = () => {
         height: 700,
         modal: true,
         show: false,
-        parent: MainWindow, 
         webPreferences: {
           nodeIntegration: true,
           contextIsolation: false,
@@ -71,7 +232,7 @@ const editJobWindow = () => {
         },
     });
 
-    childWindow.loadFile("./pages/editJob.html");
+    childWindow.loadFile("./GuitosPages/editJob.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
@@ -90,7 +251,6 @@ const ReadJobWindow = () => {
       height: 700,
       modal: true,
       show: false,
-      parent: MainWindow, 
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -98,7 +258,7 @@ const ReadJobWindow = () => {
       },
   });
 
-  childWindow.loadFile("./pages/readJob.html");
+  childWindow.loadFile("./GuitosPages/readJob.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -117,7 +277,6 @@ const DeleteJobWindow = () => {
       height: 700,
       modal: true,
       show: false,
-      parent: MainWindow, 
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -125,7 +284,7 @@ const DeleteJobWindow = () => {
       },
   });
 
-  childWindow.loadFile("./pages/deleteJob.html");
+  childWindow.loadFile("./GuitosPages/deleteJob.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -136,7 +295,30 @@ ipcMain.on("Janela_DeleteJob", (event, args) => {
     DeleteJobWindow();
 });
 
-//Invokes
+// banco de dados (invokes)
+
+// https://api-dados.herokuapp.com/signin --> n existe mais
+ipcMain.handle('cadastro', async (event, dados) => {
+  //console.log(dados);
+  axios.post('http://localhost:3000/signin', dados)
+  .then((response)=> {
+    //console.log(response)
+  },(error) => {
+    console.log("entrou aqui --")
+    console.log(error);
+  })
+})
+
+// https://api-dados.herokuapp.com/login
+ipcMain.handle('login', async (event, dados) => {
+  console.log("entrei aqui porra");
+  axios.post('http://localhost:3000/login', dados)
+  .then((res)=> {
+    console.log(res.data.accessToken);
+  },(error) => {
+    console.log(error);
+  })  
+})
 
 ipcMain.handle('NewJobChannel', async (event, jobdata) => {
     console.log(jobdata);

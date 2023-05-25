@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="./src/renderer.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/cadastro.css">
+    <title>SIGN UP</title>
+</head>
+<body>
+    <form id="data">
+        <label for="nome">Nome: </label>
+        <input id="nome" type="text" name="nome"><br>
+        <label for="cargo">Cargo: </label>
+        <select id="cargo" name="cargo">
+            <option value=""></option>
+            <option value="adm">Administrador</option>
+            <option value="aluno">Aluno</option>
+            <option value="empresa">Empresa</option>
+            <option value="mentor">Mentor</option><br>
+        </select>
+        <label for="user">Email:</label>
+        <input id ="user" type="email" name="user"><br>
+        <label for="password">Senha:</label>
+        <input id="password" type="password" name="password">
+        <button type ="submit"class="btn btn-primary">Sign Up</button>
+    </form>
+</body>
+</html>
