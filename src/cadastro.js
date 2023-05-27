@@ -12,7 +12,7 @@ if(button_signup) {
     button_signup.addEventListener('submit', (e) => {
         var select = document.getElementById('cargo');
 	    var option = select.options[select.selectedIndex];
-        console.log("entrou puta")
+        //console.log("entrou puta")
         console.log(option.value);
         e.preventDefault();
         try{

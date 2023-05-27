@@ -1,7 +1,9 @@
+const axios = require('axios');
 const { ipcRenderer } = require('electron');
 
+const ViewJobs_button = document.getElementById("ViewJobs");
 const delete_button = document.getElementById('delete_button');
-const deleteJobTitle = document.querySelector('#DeleteJobTitle');
+const deleteJobTitle = document.querySelector('#OldJobTitle');
 
 function verificar() {
     var auth = true;
@@ -22,16 +24,40 @@ function verificar() {
     return auth;
 }
 
+if(ViewJobs_button) {
+    ViewJobs_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try {
+            if(verificar()) {
+                const user = JSON.parse(localStorage.getItem('user'));
+                const obj = { email: user.email, password: user.password }
+                //console.log(obj);
+                axios.post('http://localhost:3000/viewjobs', obj)
+                .then((response) => {
+                    localStorage.setItem('Username', JSON.stringify(response.data));
+                    axios.post('http://localhost:3000/readjob', response)
+                })
+            }
+        }
+        catch(e) {
+        }
+    })
+}
+
 if(delete_button) {
     delete_button.addEventListener('click', (e) => {
         e.preventDefault();
         try {
             if(verificar()) {
-                obj = {
+                const obj = {
                     JobName: deleteJobTitle.value,
-                    JobCompany: CompanyNameForRead.value
+                    JobCompany: JSON.parse(localStorage.getItem('Username'))
                 }
-                ipcRenderer.invoke('DeleteJobChannel', obj);
+                axios.post('http://localhost:3000/deletejob', obj)                
+                .then((response)=> {
+                }, (error) => {
+                    console.log(error);
+                })
             }
             else
                 console.log('acesso negado');

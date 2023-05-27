@@ -45,7 +45,6 @@ if (button_login) {
 
 if(botao_janela_signup) {
     botao_janela_signup.addEventListener('submit', (e) => {
-        
         e.preventDefault();
         try{
             ipcRenderer.send('janela_signup');

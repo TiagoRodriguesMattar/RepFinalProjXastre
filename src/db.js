@@ -78,10 +78,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/auth/aluno', async (req,res) => {
-
-})
-
 // banco de dados guitos
 
 app.post('/newjob', async (req, res) => {
@@ -92,12 +88,8 @@ app.post('/newjob', async (req, res) => {
             //console.log("conectou");
         });
       
-        //console.log(job);
-      
         pool.query(`INSERT into job (JobTitle, Company, Activities, Requiriments, Salary, MaxNumber) values ('${job.JobTitle}','${job.JobCompany}','${job.JobActivities}','${job.JobRequiriments}','${job.JobSalary}','${job.JobMaxNumber}');`);
-        /*pool.query(`SELECT * FROM xastreprojeto.job`, (err, result) => {
-            return console.log(result);
-        });*/
+        console.log('Vaga cadastrada com sucesso!');
       
         /*pool.end(() => {
             console.log("Connection succesfully closed");
@@ -109,10 +101,10 @@ app.post('/newjob', async (req, res) => {
 
 app.post('/viewjobs', async(req, res) => {
     const query = req.body;
-    const retorno = { nome: 1 };
     try {
-        await user.find(query, retorno);
-        console.log(retorno);
+        //console.log(query);
+        const result = await user.findOne({email: query.email}, {email: 0, senha: 0, cargo: 0, nome: 1});
+        res.json(result.nome);
     }
     catch(e) {
         console.log(e);
@@ -127,8 +119,8 @@ app.post('/editjob', async (req, res) => {
             //console.log("conectou");
         });
       
-        var query = `UPDATE xastreprojeto.job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ? and Company = ?`;
-        pool.query(query, [newjob.newJobTitle, newjob.newJobCompany, newjob.newJobActivities, newjob.newJobRequiriments, newjob.newJobSalary, newjob.newJobMaxNumber, newjob.oldJobTitle, newjob.oldJobCompany]);
+        var query = `UPDATE xastreprojeto.job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ?`;
+        pool.query(query, [newjob.newJobTitle, newjob.oldJobCompany, newjob.newJobActivities, newjob.newJobRequiriments, newjob.newJobSalary, newjob.newJobMaxNumber, newjob.oldJobTitle]);
         
         console.log("Vaga alterada com sucesso");
         /*pool.end(() => {
@@ -147,10 +139,11 @@ app.post('/readjob', async (req, res) => {
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM xastreprojeto.job WHERE Company = '${readjob.Name}'`, (err, result) => {
+      pool.query(`SELECT * FROM xastreprojeto.job WHERE Company = '${readjob.data}'`, (err, result) => {
           return console.log(result);
       });
-      
+      console.log('Vagas cadastradas da empresa ' +  readjob.data + ':');
+
     } catch(e){
       console.log(e);
     }
@@ -168,7 +161,7 @@ app.post('/deletejob', async (req, res) => {
           return console.log(result);
       });
 
-      console.log("Job succesfully deleted");
+      console.log("Vaga deletada com sucesso!");
     } catch(e){
       console.log(e);
     }

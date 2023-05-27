@@ -2,16 +2,14 @@ const axios = require('axios');
 const { ipcRenderer } = require('electron');
 
 const edit_button = document.getElementById("edit_button");
+const ViewJobs_button = document.getElementById("ViewJobs");
 
 const OldJobTitleName = document.querySelector('#OldJobTitle');
 const newJobTitle = document.querySelector('#newJobTitle');
-const newCompany = document.querySelector('#newCompany');
 const newActivities = document.querySelector('#newActivities');
 const newRequiriments = document.querySelector('#newRequiriments');
 const newSalary = document.querySelector('#newSalary');
 const newMaxNumber = document.querySelector('#newMaxNumber');
-
-const ViewJobs_button = document.getElementById('viewJobs');
 
 function verificar() {
     var auth = true;
@@ -37,16 +35,17 @@ if(ViewJobs_button) {
         e.preventDefault();
         try {
             if(verificar()) {
-                axios.post('http://localhost:3000/signin', {
-                    email: email_login.value,
-                    senha: password_login.value
-                }).then(response => {
-
+                const user = JSON.parse(localStorage.getItem('user'));
+                const obj = { email: user.email, password: user.password }
+                //console.log(obj);
+                axios.post('http://localhost:3000/viewjobs', obj)
+                .then((response) => {
+                    localStorage.setItem('Username', JSON.stringify(response.data));
+                    axios.post('http://localhost:3000/readjob', response)
                 })
             }
         }
         catch(e) {
-
         }
     })
 }
@@ -57,34 +56,24 @@ if(edit_button){
         try{
             if(verificar()) {
                 const obj = {
-                    newJobTitle: newJobTitle.value,
-                    newJobCompany: newCompany.value,
-                    newJobActivities: newActivities.value,
-                    newJobRequiriments: newRequiriments.value,
+                    newJobTitle: newJobTitle.value.toUpperCase(),
+                    newJobActivities: newActivities.value.toUpperCase(),
+                    newJobRequiriments: newRequiriments.value.toUpperCase(),
                     newJobSalary: newSalary.value,
                     newJobMaxNumber: newMaxNumber.value,
-                    oldJobTitle: OldJobTitleName.value,
-                    oldJobCompany: CompanyNameForRead.value
+                    oldJobTitle: OldJobTitleName.value.toUpperCase(),
+                    oldJobCompany: JSON.parse(localStorage.getItem('Username'))
                 }
-                ipcRenderer.invoke('EditJobChannel', obj);
+                axios.post('http://localhost:3000/editjob', obj)
+                .then((response)=> {
+                }, (error) => {
+                    console.log(error);
+                })
             }
             else
                 console.log('acesso negado');
         }
         catch{
-            console.log(e);
-        }
-    })
-}
-
-const viewjobs = document.getElementById('ViewJobs');
-if(viewjobs) {
-    viewjobs.addEventListener('click', (e) => {
-        e.preventDefault();
-        try {
-            ipcRenderer.invoke()
-        } 
-        catch (e) {
             console.log(e);
         }
     })

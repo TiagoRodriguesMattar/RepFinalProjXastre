@@ -33,18 +33,17 @@ if(register_button){
         try{
             if(verificar()) {
                 const obj = {
-                    JobTitle: JobTitle.value,
-                    JobCompany: Company.value,
-                    JobActivities: Activities.value,
-                    JobRequiriments: Requiriments.value,
+                    JobTitle: JobTitle.value.toUpperCase(),
+                    JobCompany: Company.value.toUpperCase(),
+                    JobActivities: Activities.value.toUpperCase(),
+                    JobRequiriments: Requiriments.value.toUpperCase(),
                     JobSalary: Salary.value,
                     JobMaxNumber: MaxNumber.value
                 }
                 axios.post('http://localhost:3000/newjob', obj)
                 .then((response)=> {
-                console.log("deu certo");
                 },(error) => {
-                console.log(error);
+                    console.log(error);
                 })
             }
             else

@@ -320,43 +320,6 @@ ipcMain.handle('login', async (event, dados) => {
   })  
 })
 
-ipcMain.handle('NewJobChannel', async (event, jobdata) => {
-    console.log(jobdata);
-    axios.post('http://localhost:3000/newjob', jobdata)
-    .then((response)=> {
-      console.log("deu certo");
-    },(error) => {
-      console.log(error);
-    })
-})
-
-ipcMain.handle('EditJobChannel', async (event, editedjobdata) => {
-    axios.post('http://localhost:3000/editjob', editedjobdata)
-    .then((response)=> {
-      console.log("deu bom");
-    },(error) => {
-      console.log(error);
-    })
-})
-
-ipcMain.handle('ReadJobChannel', async (event, readjobdata) => {
-    axios.post('http://localhost:3000/readjob', readjobdata)
-    .then((response)=> {
-      console.log("deu bom");
-    },(error) => {
-      console.log(error);
-    })
-})
-
-ipcMain.handle('DeleteJobChannel', async (event, deletejobdata) => {
-    axios.post('http://localhost:3000/deletejob', deletejobdata)
-    .then((response)=> {
-      console.log("deu bom");
-    },(error) => {
-      console.log(error);
-    })
-})
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
