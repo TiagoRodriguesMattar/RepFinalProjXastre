@@ -27,7 +27,15 @@ function login(e) {
                 console.log(res.status);
                 if (res.status === 200) {
                     User.token = res.data.accessToken;
-                    ipcRenderer.send('Janela_JobsAllOptions');
+                    axios.post('http://localhost:3000/verifycargo', User)
+                    .then((res) => {
+                        if(res.data == 'ALUNO'){
+                            ipcRenderer.send('Janela_AlunoJobs');
+                        }
+                        if(res.data == 'EMPRESA'){
+                            ipcRenderer.send('Janela_JobsAllOptions');
+                        }
+                    })
                 }
                 saveUser(User)
             }, (error) => {

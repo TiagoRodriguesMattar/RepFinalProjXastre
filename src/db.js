@@ -99,7 +99,7 @@ app.post('/newjob', async (req, res) => {
       }
 });
 
-app.post('/viewjobs', async(req, res) => {
+app.post('/viewjobs', async(req, res) => {    // retorna o username do usuario logado
     const query = req.body;
     try {
         //console.log(query);
@@ -162,6 +162,37 @@ app.post('/deletejob', async (req, res) => {
       });
 
       console.log("Vaga deletada com sucesso!");
+    } catch(e){
+      console.log(e);
+    }
+});
+
+app.post('/verifycargo', async(req, res) => {     // retorna o cargo do usuario logado
+  const userlogin = req.body;
+  //console.log(userlogin);
+  try {
+    const result = await user.findOne({email: userlogin.email}, {email: 0, senha: 0, cargo: 1, nome: 0});
+    //console.log(result.cargo);
+    res.json(result.cargo);
+  }
+  catch(e) {
+      console.log(e);
+  }
+})
+
+app.post('/readAlljob', async (req, res) => {
+  //console.log('entrou');
+  try {
+      pool.connect(function(err) {
+          if (err) throw err;
+          //console.log("conectou");
+      });
+
+      pool.query(`SELECT * FROM xastreprojeto.job ORDER BY Company`, (err, result) => {
+          return console.log(result);
+      });
+      
+      console.log('Lista de todas as vagas cadastradas: ');
     } catch(e){
       console.log(e);
     }

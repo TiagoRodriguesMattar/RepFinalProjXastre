@@ -53,116 +53,30 @@ ipcMain.on("janela_signup", (event, arg) => {
   window_signup();
 });
 
-// janela aluno
+// Parte do aluno das vagas de emprego
 
-function windowaluno() {
+function windowAlunoJobs() {
   childWindow = new BrowserWindow({
     width: 1000,
     height: 700,
     modal: true,
     show: false,
-    parent: mainwindow, 
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    },
-  });
-  
-  childWindow.loadFile("./LemePages/aluno.html");
-  
-  childWindow.once("ready-to-show", () => {
-    childWindow.show();
-  });
-}
-
-ipcMain.on("janela_aluno", (event, arg) => {
-  windowaluno();
-});
-
-// janela adm
-
-function windowadm() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    parent: mainwindow, 
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
     }, 
   });
-  
-  childWindow.loadFile("./LemePages/adm.html");
-  
+
+  childWindow.loadFile("JobsAlunoHome.html");
+
   childWindow.once("ready-to-show", () => {
-    childWindow.show();
+      childWindow.show();
   });
 }
 
-ipcMain.on("janela_adm", (event, arg) => {
-  try{
-    axios.get
-    windowadm();
-  }catch(e){
-  }
-});
-
-// janela moderador
-
-function windowmod() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    parent: mainwindow, 
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-  
-  childWindow.loadFile("./LemePages/moderador.html");
-  
-  childWindow.once("ready-to-show", () => {
-    childWindow.show();
-  });
-}
-
-ipcMain.on("janela_mod", (event, arg) => {
-  windowmod();
-});
-
-// login empresa
-
-function windowempresa() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    parent: mainwindow, 
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-  
-  childWindow.loadFile("./LemePages/empresas.html");
-  
-  childWindow.once("ready-to-show", () => {
-    childWindow.show();
-  });
-}
-
-ipcMain.on("janela_empresa", (event, arg) => {
-  windowempresa();
+ipcMain.on("Janela_AlunoJobs", (event, arg) => {
+  windowAlunoJobs();
 });
 
 // Parte CRUD vagas de emprego
@@ -180,7 +94,7 @@ function windowJobsAllOptions() {
       }, 
     });
 
-    childWindow.loadFile("index2.html");
+    childWindow.loadFile("JobsEmpresaHome.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
