@@ -46,6 +46,7 @@ if(ViewJobs_button) {
             }
         }
         catch(e) {
+            console.log(e);
         }
     })
 }

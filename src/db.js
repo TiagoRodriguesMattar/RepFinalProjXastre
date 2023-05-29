@@ -120,13 +120,21 @@ app.post('/editjob', async (req, res) => {
             //console.log("conectou");
         });
       
-        var query = `UPDATE xastreprojeto.job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ?`;
-        pool.query(query, [newjob.newJobTitle, newjob.oldJobCompany, newjob.newJobActivities, newjob.newJobRequiriments, newjob.newJobSalary, newjob.newJobMaxNumber, newjob.oldJobTitle]);
-        
-        console.log("Vaga alterada com sucesso");
-        /*pool.end(() => {
-            console.log("Connection succesfully closed");
-        });*/ 
+        pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${newjob.oldJobTitle}' and Company = '${newjob.oldJobCompany}'`, (err, result) => {
+          if(!Objetovazio(result)) {
+            var query = `UPDATE xastreprojeto.job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ?`;
+            pool.query(query, [newjob.newJobTitle, newjob.oldJobCompany, newjob.newJobActivities, newjob.newJobRequiriments, newjob.newJobSalary, newjob.newJobMaxNumber, newjob.oldJobTitle]);
+
+            var query2 = `UPDATE alunojob SET jobname = '${newjob.newJobTitle}' where jobname = '${newjob.oldJobTitle}' and jobcompany = '${newjob.oldJobCompany}'`;
+            pool.query(query2, function (err, result) {
+            });
+            console.log("Vaga alterada com sucesso");
+          }
+          else {
+            console.log('Vaga antiga inexistente no sistema!');
+          }
+        });
+
       } catch(e){
         console.log(e);
       }
@@ -158,11 +166,19 @@ app.post('/deletejob', async (req, res) => {
           //console.log("conectou");
       });
 
-      pool.query(`Delete FROM xastreprojeto.job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
-          return console.log(result);
+      pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
+        if(!Objetovazio(result)) {
+          pool.query(`Delete FROM xastreprojeto.job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
+            console.log("Vaga deletada com sucesso!");
+            //return console.log(result);
+          });
+          pool.query(`Delete FROM alunojob WHERE jobname = '${DeleteJob.JobName}' and jobcompany = '${DeleteJob.JobCompany}'`, (err, result) => {});
+        }
+        else {
+          console.log('Vaga inexistente no sistema!');
+        }
       });
 
-      console.log("Vaga deletada com sucesso!");
     } catch(e){
       console.log(e);
     }
