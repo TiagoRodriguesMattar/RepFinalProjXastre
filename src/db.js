@@ -206,7 +206,8 @@ app.post('/readAlljob', async (req, res) => {     // listagem pros alunos de tod
       });
 
       pool.query(`SELECT * FROM xastreprojeto.job ORDER BY Company`, (err, result) => {
-          return console.log(result);
+          console.log(result);
+          res.json(result);
       });
       
       console.log('Lista de todas as vagas cadastradas: ');

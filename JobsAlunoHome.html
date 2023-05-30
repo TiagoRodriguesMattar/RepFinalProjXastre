@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>vagas de empredo aluno</title>
+    <link rel="stylesheet" href="./css/vagas.css">
 </head>
 <body>
     <div>
         <button id="AllJobsList">Lista de todas as vagas disponíveis</button><br><br>
     </div>
+    
     <div>
         <label for="UserSigninJobName">Selecione o nome da vaga: </label>
         <input id ="UserSigninJobName" type="text"><br><br>
@@ -17,6 +19,11 @@
         <input id ="UserSigninJobCompany" type="text"><br><br>
         <button id="CadUser">Cadastrar a vaga</button>
     </div>
+    <main></main>
+    <div class="content">
+        <div class="jobs"></div>
+    </div>
+    </main>
 </body>
 <script src="./src/JobsJs/AlunoJobs.js"></script>
 </html>

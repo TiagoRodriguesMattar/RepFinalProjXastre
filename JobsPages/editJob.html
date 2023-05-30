@@ -4,36 +4,40 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>edit job page</title>
+        <link rel="stylesheet" href="../css/editjob.css">
+        <title>Edit Job Page</title>
     </head>
 
     <body>
         <div>
-            <h3>Vagas já criadas possíveis de dar UPDATE</h3>
+            <h2>Vagas já criadas possíveis de dar UPDATE</h2>
             <button id="ViewJobs">Ver</button><br><br>
         </div>
         <div>
-            <label for="OldJobTitle">título da vaga desejada: </label>
+            <label for="OldJobTitle">Título da vaga desejada: </label>
             <input type="text" id="OldJobTitle"/><br><br>
+            <button id="button_edit">Clique aqui para começar a editar</button>
+            
         </div>
-        <div>
+        <div id="update">
             <h1>UPDATING JOB...</h1>
-        </div>
         <div>
-            <label for="newJobTitle">Novo título..........: </label>
+            <label for="newJobTitle">Novo título:</label>
             <input type="text" id="newJobTitle"/><br><br>
-            <label for="newActivities">Nova Descrição.................: </label>
+            <label for="newActivities">Nova Descrição:</label>
             <input type="text" id="newActivities" minlength="0" maxlength="100"/><br><br>
-            <label for="newRequiriments">Novos Requisitos................: </label>
+            <label for="newRequiriments">Novos Requisitos:</label>
             <input type="text" id="newRequiriments" minlength="0" maxlength="100"/><br><br>
-            <label for="newSalary">Nova Faixa salarial............: </label>
+            <label for="newSalary">Nova Faixa salarial:</label>
             <input type="number" id="newSalary"/><br><br>
-            <label for="newMaxNumber">Novo número máximo......: </label>
+            <label for="newMaxNumber">Novo número máximo:</label>
             <input type="number" id="newMaxNumber" min=0/><br><br>
         </div>
-
-        <button id="edit_button">Editar</button>
-    </body>
+        <div class="button_editar">
+            <button id="edit_button">Concluir Edição</button>
+        </div>
+    </div>
 
     <script src="../src/JobsJs/edit_Job.js"></script>
+    </body>
 </html>

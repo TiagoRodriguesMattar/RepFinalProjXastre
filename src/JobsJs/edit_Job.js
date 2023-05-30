@@ -11,6 +11,22 @@ const newRequiriments = document.querySelector('#newRequiriments');
 const newSalary = document.querySelector('#newSalary');
 const newMaxNumber = document.querySelector('#newMaxNumber');
 
+const button_edit = document.getElementById("button_edit");
+if (button_edit) {
+    button_edit.addEventListener("click", () => {
+        EditFunction();
+    })
+}
+
+function EditFunction() { 
+    var x = document.getElementById("update"); 
+    if (x.style.display === "none") { 
+        x.style.display = "block"; 
+    } else { 
+        x.style.display = "none"; 
+    } 
+} 
+
 function verificar() {
     var auth = true;
     //console.log(User)

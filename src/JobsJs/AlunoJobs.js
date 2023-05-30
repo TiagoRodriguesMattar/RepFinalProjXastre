@@ -1,5 +1,31 @@
 const axios = require('axios');
 
+const jobs = document.querySelector(".jobs");
+
+function displayVagas() {
+        /*const questions = JSON.parse(localStorage.getItem('dataQuiz'));
+        spnQtd.innerHTML = `${currentIndex + 1}/${questions.length}`;
+        const item = questions[currentIndex];
+        question.innerHTML = item.PerguntaQuiz;*/
+        jobs.innerHTML = "";
+        axios.post("http://localhost:3000/readAlljob")
+        .then(response => {
+            const obj = response.data;
+            for(let i = 0; i < obj.length; i++) {
+                const div = document.createElement("div");
+                div.innerHTML = `<p>
+                Nome da vaga: ${obj[i].JobTitle}<br>
+                Companhia: ${obj[i].Company}<br>
+                Atividades: ${obj[i].Activities}<br>
+                Requisitos: ${obj[i].Requiriments}<br>
+                Salario: ${obj[i].Salary}<br>
+                Vagas disponíveis: ${obj[i].MaxNumber}<br>
+                </p>`;
+                jobs.appendChild(div);
+            }
+        });
+}
+
 function verificar() {
     var auth = true;
     //console.log(User)
@@ -26,7 +52,8 @@ if(AllJobsList){
         e.preventDefault();
         try {
             if(verificar()) {
-                axios.post('http://localhost:3000/readAllJob')
+                //axios.post('http://localhost:3000/readAllJob');
+                displayVagas();
             }
         }
         catch(e) {
