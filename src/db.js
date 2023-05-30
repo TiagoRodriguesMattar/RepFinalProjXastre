@@ -77,7 +77,7 @@ app.post('/login', async (req, res) => {
 
 // banco de dados guitos
 
-app.post('/newjob', async (req, res) => {
+app.post('/newjob', async (req, res) => {     // (CREATE)
     const job = req.body;
     try {
         pool.connect(function(err) {
@@ -112,7 +112,7 @@ app.post('/viewjobs', async(req, res) => {    // retorna o username do usuario l
     }
 });
 
-app.post('/editjob', async (req, res) => {
+app.post('/editjob', async (req, res) => {    // (UPDATE)
     const newjob = req.body;
     try {
         pool.connect(function(err) {
@@ -140,7 +140,7 @@ app.post('/editjob', async (req, res) => {
       }
 });
 
-app.post('/readjob', async (req, res) => {
+app.post('/readjob', async (req, res) => {      // retorna as vagas cadastradas de determinada empresa (READ)
   const readjob = req.body;
   try {
       pool.connect(function(err) {
@@ -158,7 +158,7 @@ app.post('/readjob', async (req, res) => {
     }
 });
 
-app.post('/deletejob', async (req, res) => {
+app.post('/deletejob', async (req, res) => {    // (DELETE)
   const DeleteJob = req.body;
   try {
       pool.connect(function(err) {
@@ -197,7 +197,7 @@ app.post('/verifycargo', async(req, res) => {     // retorna o cargo do usuario 
   }
 })
 
-app.post('/readAlljob', async (req, res) => {
+app.post('/readAlljob', async (req, res) => {     // listagem pros alunos de todas as vagas disponíveis pra cadastro
   //console.log('entrou');
   try {
       pool.connect(function(err) {
@@ -215,7 +215,7 @@ app.post('/readAlljob', async (req, res) => {
     }
 });
 
-app.post('/CadUsuario', async (req, res) => {
+app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga de emprego
   const jobdata = req.body;
   try {
       pool.connect(function(err) {
@@ -253,7 +253,7 @@ function Objetovazio(obj) {
   return true;
 }
 
-app.post('/viewstudents', (req, res) => {
+app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados em uma determinada vaga da empresa logada
   const obj = req.body;
 
   pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${obj.jobname}' and Company = '${obj.jobcompany}'`, (err, result) => {
@@ -280,6 +280,30 @@ app.post('/auth', (req,res) => {
     if(verify === null) res.status(401)
 
     res.json({status: 'Authorized!'});
+})
+
+// Banco de dados Treinamentos -> Ricardo
+
+app.get('/get-quiz', (req,res) => {
+    pool.query(`SELECT * FROM quiz;`, (err, response, fields) => {
+      res.json(response); // enviar como response
+    });
+})
+
+app.post('/HistAcertosQuiz', (req, res) => {
+    const obj = req.body;
+    console.log(obj);
+    try {
+        pool.connect(function(err) {
+          if (err) throw err;
+          //console.log("conectou");
+        });
+        pool.query(`INSERT into histacertos (NomeAluno, NomeQuiz, NumAcertos) values ('${obj.NomeAluno}','${obj.NomeQuiz}','${obj.NumAcertos}');`)
+    }
+
+    catch(e){
+      console.log(e);
+    }
 })
 
 app.listen(port, () => {

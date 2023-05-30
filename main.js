@@ -79,6 +79,30 @@ ipcMain.on("Janela_AlunoJobs", (event, arg) => {
   windowAlunoJobs();
 });
 
+function windowAlunoTreino() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("JobsAlunoHome.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_AlunoTreinamentos", (event, arg) => {
+  windowAlunoTreino();
+});
+
 // Parte CRUD vagas de emprego
 
 function windowJobsAllOptions() {
@@ -235,10 +259,82 @@ ipcMain.on("Janela_ListStudents", (event, args) => {
     ListStudentsJobWindow();
 });
 
+const QuizAppWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/quiz.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_QuizApp", (event, args) => {
+    QuizAppWindow();
+});
+
+const AlunoTreinamentosWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/TreinamentoTest.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_AlunoTreinamentos", (event, args) => {
+    AlunoTreinamentosWindow();
+});
+
+const HomeAluno = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./NiveisDePermissao/Aluno.html");
+
+  /// cafe
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_HomeAlunoPerm", (event, args) => {
+    HomeAluno();
+});
 
 // banco de dados (invokes)
 
-// https://api-dados.herokuapp.com/signin --> n existe mais
 ipcMain.handle('cadastro', async (event, dados) => {
   //console.log(dados);
   axios.post('http://localhost:3000/signin', dados)

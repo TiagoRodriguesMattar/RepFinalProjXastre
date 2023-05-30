@@ -28,11 +28,14 @@ function login(e) {
                     User.token = res.data.accessToken;
                     axios.post('http://localhost:3000/verifycargo', User)
                     .then((res) => {
-                        if(res.data == 'ALUNO'){
-                            ipcRenderer.send('Janela_AlunoJobs');
+                        if(res.data === 'ALUNO'){
+                            ipcRenderer.send('Janela_HomeAlunoPerm');
                         }
-                        if(res.data == 'EMPRESA'){
+                        if(res.data === 'EMPRESA'){
                             ipcRenderer.send('Janela_JobsAllOptions');
+                        }
+                        if(res.data === 'ADM'){
+                            ipcRenderer.send('Janela_QuizApp');
                         }
                     })
                 }
