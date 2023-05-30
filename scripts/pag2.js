@@ -1,4 +1,3 @@
-
 const {ipcRenderer} = require('electron');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');

@@ -22,6 +22,7 @@ pool.connect(function(err) {
 });
 
 
+//Adciona um treinamento novo no bd
 app.post("/treinamento", async (req, res) => {
     const cadastro = req.body
     console.log(cadastro)
@@ -29,12 +30,25 @@ app.post("/treinamento", async (req, res) => {
         if (err) throw err;
         console.log("conectou");
     });
-  
-    pool.query(`INSERT INTO Treinamento (codigo, nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.codigo}', '${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
 
+    var loop = true;
+    while(loop){
+        pool.query(`SELECT codigo FROM quiz WHERE codigo = '${cadastro.codigo}'`, (err,result) => {
+            var verifyCod = result;
+            if(verifyCod === NULL){
+                pool.query(`INSERT INTO Treinamento (codigo, nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.codigo}', '${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
+                loop = false;
+            }
+            else{
+                cadastro.codigo++;
+            }
+        });
+        
+    }
 })
 
 
+//Salva um quiz no BD
 app.post("/quiz", async (req, res) => {
 
     const InfoQuiz = req.body

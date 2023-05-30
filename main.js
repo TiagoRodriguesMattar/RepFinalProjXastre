@@ -111,10 +111,7 @@ ipcMain.on("JanelaQuiz", (event, args) => {
 
 
 ipcMain.handle('treino-bd', async (event, cadastro) => {
-    axios.post('http://localhost:3000/treinamento',cadastro)
-    .then((res) => {
-      console.log(res);
-    })
+    
 })
 
 ipcMain.handle('quiz-bd', async (event, InfoQuiz) => {
