@@ -15,13 +15,13 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-const mysql_pool = require('mysql2')
+/*const mysql_pool = require('mysql2')
 const pool = mysql_pool.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'Acdcacdc16@',
     database: "xastreprojeto"
-});
+}); */
 
 function Encrypt(dados){
   const saltRounds = 10;
@@ -69,7 +69,7 @@ app.post('/login', async (req, res) => {
         else{
           console.log("\nSENHA CORRETA, USUARIO LOGADO");
         }
-       const token = jwt.sign({email: dados.email},process.env.SECRET);
+       const token = jwt.sign({email: dados.email},"12345");
        
        res.json({accessToken: token});
     }

@@ -118,7 +118,7 @@ function windowJobsAllOptions() {
       }, 
     });
 
-    childWindow.loadFile("JobsEmpresaHome.html");
+    childWindow.loadFile("jobs_home.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
@@ -128,6 +128,31 @@ function windowJobsAllOptions() {
 ipcMain.on("Janela_JobsAllOptions", (event, arg) => {
     windowJobsAllOptions();
 });
+// abrir crud 
+const janelaCrud = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./JobsPages/JobsEmpresaCrud.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_crud", (event, args) => {
+  janelaCrud();
+});
+
 
 //Janela de cadastro de uma nova vaga de emprego (EMPRESA)
 
