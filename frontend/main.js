@@ -94,15 +94,40 @@ function windowJobsAllOptions() {
       }, 
     });
 
-    childWindow.loadFile("JobsEmpresaHome.html");
+    childWindow.loadFile("JobsEmpresaAllOptions.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
     });
 }
 
-ipcMain.on("Janela_JobsAllOptions", (event, arg) => {
+ipcMain.on("display_crud", (event, arg) => {
     windowJobsAllOptions();
+});
+
+
+function windowJobsHome() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("jobs_home.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_JobsHome", (event, arg) => {
+  windowJobsHome();
 });
 
 //Janela de cadastro de uma nova vaga de emprego (EMPRESA)

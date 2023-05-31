@@ -32,7 +32,7 @@ function login(e) {
                             ipcRenderer.send('Janela_HomeAlunoPerm');
                         }
                         if(res.data === 'EMPRESA'){
-                            ipcRenderer.send('Janela_JobsAllOptions');
+                            ipcRenderer.send('Janela_JobsHome');
                         }
                         if(res.data === 'ADM'){
                             ipcRenderer.send('janela_HomeAdmPerm');
