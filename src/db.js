@@ -15,13 +15,13 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-/*const mysql_pool = require('mysql2')
+const mysql_pool = require('mysql2')
 const pool = mysql_pool.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'Acdcacdc16@',
     database: "xastreprojeto"
-}); */
+});
 
 function Encrypt(dados){
   const saltRounds = 10;
@@ -69,7 +69,7 @@ app.post('/login', async (req, res) => {
         else{
           console.log("\nSENHA CORRETA, USUARIO LOGADO");
         }
-       const token = jwt.sign({email: dados.email},"12345");
+       const token = jwt.sign({email: dados.email},process.env.SECRET);
        
        res.json({accessToken: token});
     }
@@ -286,12 +286,12 @@ app.post('/auth', (req,res) => {
 // Banco de dados Treinamentos -> Ricardo
 
 app.get('/get-quiz', (req,res) => {
-    pool.query(`SELECT * FROM quiz;`, (err, response, fields) => {
+    pool.query(`SELECT * FROM quiz;`, (err, response, fields) => {    // Select todos os quiz
       res.json(response); // enviar como response
     });
 })
 
-app.post('/HistAcertosQuiz', (req, res) => {
+app.post('/HistAcertosQuiz', (req, res) => {        // Histórico de acertos de um aluno em determinado quiz
     const obj = req.body;
     console.log(obj);
     try {
@@ -306,6 +306,52 @@ app.post('/HistAcertosQuiz', (req, res) => {
       console.log(e);
     }
 })
+
+function verificarData(data){
+  const date = new Date();
+  if(data[0] < date.getFullYear()) {
+    return false;
+  }
+  else if(data[0] === date.getFullYear() && date[1] < date.getMonth() + 1){
+    return false;
+  }
+  else if(data[0] === date.getFullYear() && date[1] === date.getMonth() + 1 && data[2] < date.getDate()){
+    return false;
+  }
+  return true;
+}
+
+app.post("/treinamento", async (req, res) => {   // Create novo treinamento
+  
+  const cadastro = req.body
+  try{
+    if(verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))){
+      pool.connect(function(err) {
+        if (err) throw err;
+        //console.log("conectou");
+    });
+    // Fazer a verificação se já existe um treinamento criado 
+    // o codigo eh auto incrementado a cada insert na tabela, nao eh mais gerado aleatoriamente 
+    pool.query(`INSERT INTO Treinamento (codigo, nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.codigo}', '${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
+    }
+    else{
+      console.log("data menor")
+    }
+  }catch(e){
+      console.log(e);
+  }
+  
+  
+  //console.log(cadastro)
+  
+})
+
+app.get('/ViewAllTreinamentos', async (req, res) => {
+  pool.query(`SELECT * FROM treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
+    res.json(response);
+  });
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

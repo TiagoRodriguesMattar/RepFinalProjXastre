@@ -35,7 +35,8 @@ function login(e) {
                             ipcRenderer.send('Janela_JobsAllOptions');
                         }
                         if(res.data === 'ADM'){
-                            ipcRenderer.send('Janela_QuizApp');
+                            ipcRenderer.send('janela_HomeAdmPerm');
+                            //ipcRenderer.send('Janela_QuizApp');
                         }
                     })
                 }

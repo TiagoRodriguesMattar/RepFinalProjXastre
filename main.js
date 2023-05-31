@@ -79,30 +79,6 @@ ipcMain.on("Janela_AlunoJobs", (event, arg) => {
   windowAlunoJobs();
 });
 
-function windowAlunoTreino() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("JobsAlunoHome.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
-ipcMain.on("Janela_AlunoTreinamentos", (event, arg) => {
-  windowAlunoTreino();
-});
-
 // Parte CRUD vagas de emprego
 
 function windowJobsAllOptions() {
@@ -118,7 +94,7 @@ function windowJobsAllOptions() {
       }, 
     });
 
-    childWindow.loadFile("jobs_home.html");
+    childWindow.loadFile("JobsEmpresaHome.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
@@ -128,31 +104,6 @@ function windowJobsAllOptions() {
 ipcMain.on("Janela_JobsAllOptions", (event, arg) => {
     windowJobsAllOptions();
 });
-// abrir crud 
-const janelaCrud = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./JobsPages/JobsEmpresaCrud.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
-ipcMain.on("display_crud", (event, args) => {
-  janelaCrud();
-});
-
 
 //Janela de cadastro de uma nova vaga de emprego (EMPRESA)
 
@@ -321,7 +272,7 @@ const AlunoTreinamentosWindow = () => {
       },
   });
 
-  childWindow.loadFile("./TreinamentosPages/TreinamentoTest.html");
+  childWindow.loadFile("./TreinamentoAlunoHome.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -331,6 +282,8 @@ const AlunoTreinamentosWindow = () => {
 ipcMain.on("Janela_AlunoTreinamentos", (event, args) => {
     AlunoTreinamentosWindow();
 });
+
+// Página que aparece para o aluno depois do LOGIN
 
 const HomeAluno = () => {
   childWindow = new BrowserWindow({
@@ -347,8 +300,6 @@ const HomeAluno = () => {
 
   childWindow.loadFile("./NiveisDePermissao/Aluno.html");
 
-  /// cafe
-
   childWindow.once("ready-to-show", () => {
       childWindow.show();
   });
@@ -356,6 +307,83 @@ const HomeAluno = () => {
 
 ipcMain.on("Janela_HomeAlunoPerm", (event, args) => {
     HomeAluno();
+});
+
+// Página que aparece para o administrador depois do LOGIN
+
+const HomeAdministrador = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./NiveisDePermissao/Administrador.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("janela_HomeAdmPerm", (event, args) => {
+    HomeAdministrador();
+});
+
+// Páginas CRUD treinamento
+// Create treinamento
+const NewTreinoWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/NewTreinamento.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("janela_NewTreinoWindow", (event, args) => {
+    NewTreinoWindow();
+});
+
+// Update treinamento
+const UpdateTreinoWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/EditTreinamento.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("janela_EditTreinoWindow", (event, args) => {
+    UpdateTreinoWindow();
 });
 
 // banco de dados (invokes)
