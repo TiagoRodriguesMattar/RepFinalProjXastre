@@ -40,8 +40,8 @@ if(submit_button_treino){
             if (verificar()) {
                 const cadastro = {
                     codigo: Math.floor(Math.random() * 10000),
-                    nome_comercial: nome_comercial.value,
-                    descricao: descricao.value,
+                    nome_comercial: nome_comercial.value.toUpperCase(),
+                    descricao: descricao.value.toUpperCase(),
                     carga_horaria: carga_horaria.value,
                     inicio_inscricoes: inicio_inscricoes.value,
                     fim_inscricoes: fim_inscricoes.value,

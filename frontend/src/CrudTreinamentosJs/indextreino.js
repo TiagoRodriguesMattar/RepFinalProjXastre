@@ -57,7 +57,7 @@ if(ReadTreino_button){
     ReadTreino_button.addEventListener('click', (e) => {
         try{
             if(verificar())
-                ipcRenderer.send("Janela_ReadJob");
+                ipcRenderer.send("janela_ReadTreinoWindow");
             else
                 console.log('acesso negado');
         }catch(e){

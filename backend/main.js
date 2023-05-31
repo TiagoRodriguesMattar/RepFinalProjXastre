@@ -323,7 +323,6 @@ function verificarData(data){
 }
 
 app.post("/treinamento", async (req, res) => {   // Create novo treinamento
-  
   const cadastro = req.body
   try{
     if(verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))){
@@ -341,21 +340,19 @@ app.post("/treinamento", async (req, res) => {   // Create novo treinamento
   }catch(e){
       console.log(e);
   }
-  
-  
-  //console.log(cadastro)
-  
 })
 
-app.get("/treinamento/:id", async (req, res) => {   // Read treinamento especifico
-  const id = req.params.id;
+app.post("/treinamento_read", async (req, res) => {   // Read treinamento especifico
+  //const id = req.params.id;
+  const nome = req.body;
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-    pool.query(`SELECT * FROM treinamento WHERE codigo = ?;`, [id], (err, response) => {
-      res.json(response);
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?;`, [nome.data], (err, response) => {
+      //res.json(response);
+      console.log(response);
     });
   }
   catch(e){
@@ -363,17 +360,19 @@ app.get("/treinamento/:id", async (req, res) => {   // Read treinamento especifi
   }
 })
 
-app.post("/treinamento/:id", async (req, res) => {   // Update treinamento especifico
-  const id = req.params.id;
+app.post("/treinamento_update", async (req, res) => {   // Update treinamento especifico
+  //const id = req.params.id;
   const cadastro = req.body;
+  console.log(cadastro);
+  console.log(cadastro.oldcodigo);
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-
-    var query = `UPDATE Treinamento
-    SET nome_comercial = ?,
+    /*var query = `UPDATE treinamento SET 
+        codigo = ?,
+        nome_comercial = ?, 
         descricao = ?,
         carga_horaria = ?,
         inicio_inscricoes = ?,
@@ -381,32 +380,33 @@ app.post("/treinamento/:id", async (req, res) => {   // Update treinamento espec
         inicio_treinamento = ?,
         fim_treinamento = ?,
         min_inscritos = ?,
-        max_inscritos = ?
+        max_inscritos = ?, 
     WHERE codigo = ?;`;
 
     pool.query(query, 
-      [cadastro.nome_comercial, 
-        cadastro.descricao, 
-        cadastro.carga_horaria, 
-        cadastro.inicio_inscricoes, 
-        cadastro.fim_inscricoes, 
-        cadastro.inicio_treinamento, 
-        cadastro.fim_treinamento, 
-        cadastro.min_inscritos,
-        cadastro.max_inscritos,
-        cadastro.codigo
+      [ cadastro.oldcodigo,
+        cadastro.newnome_comercial, 
+        cadastro.newdescricao, 
+        cadastro.newcarga_horaria, 
+        cadastro.newinicio_inscricoes, 
+        cadastro.newfim_inscricoes, 
+        cadastro.newinicio_treinamento, 
+        cadastro.newfim_treinamento, 
+        cadastro.newmin_inscritos,
+        cadastro.newmax_inscritos,
+        cadastro.oldcodigo,
       ]
     , (err, response) => {
-      res.json(response);
-      }
-    );
+        //console.log("Treinamento alterado com sucesso");
+      }*/
+      var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ? where codigo = ?`;
+      pool.query(query, [cadastro.oldcodigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos]);
+    //);
     
   }
   catch(e){
     console.log(e);
   }
-
-  res.json({status: "Updated"});
 })
 
 app.delete("/treinamento/:id", async (req, res) => {   // Delete treinamento especifico
@@ -427,10 +427,18 @@ app.delete("/treinamento/:id", async (req, res) => {   // Delete treinamento esp
 
 app.get('/ViewAllTreinamentos', async (req, res) => {
   pool.query(`SELECT * FROM treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
-    res.json(response);
+    console.log(response);
+    //res.json(response);
   });
 })
 
+app.post('/GetCodigo', async (req, res) => {
+  const obj = req.body;
+  var query = `SELECT codigo FROM treinamento WHERE nome_comercial = ?`;
+  pool.query(query, [obj.Nome], (err, response) => {
+    res.json(response);
+  });
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

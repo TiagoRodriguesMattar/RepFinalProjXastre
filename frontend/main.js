@@ -411,6 +411,31 @@ ipcMain.on("janela_EditTreinoWindow", (event, args) => {
     UpdateTreinoWindow();
 });
 
+// Read treinamento
+const ReadTreinoWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/ReadTreinamento.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("janela_ReadTreinoWindow", (event, args) => {
+  ReadTreinoWindow();
+});
+
 // banco de dados (invokes)
 
 ipcMain.handle('cadastro', async (event, dados) => {
