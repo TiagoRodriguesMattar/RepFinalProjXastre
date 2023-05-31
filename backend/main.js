@@ -15,13 +15,13 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-// const mysql_pool = require('mysql2')
-// const pool = mysql_pool.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'Acdcacdc16@',
-//     database: "xastreprojeto"
-// });
+const mysql_pool = require('mysql2')
+const pool = mysql_pool.createConnection({
+     host: 'localhost',
+     user: 'root',
+     password: 'Acdcacdc16@',
+     database: "xastreprojeto"
+});
 
 function Encrypt(dados){
   const saltRounds = 10;
@@ -63,15 +63,16 @@ app.post('/login', async (req, res) => {
         console.log("\nEMAIL CORRETO")
         const ver_pass = await bcrypt.compare(dados.password, ver_email.senha);
 
-        if(!ver_pass){
+        if(!ver_pass || ver_pass === undefined){
           console.log("\nSenha invalida!");
+          res.status(401).send("Login inválido!");
         }
         else{
           console.log("\nSENHA CORRETA, USUARIO LOGADO");
-        }
-       const token = jwt.sign({email: dados.email},process.env.SECRET);
+          const token = jwt.sign({email: dados.email},process.env.SECRET);
        
-       res.json({accessToken: token});
+          res.json({accessToken: token});
+        }
     }
 });
 
