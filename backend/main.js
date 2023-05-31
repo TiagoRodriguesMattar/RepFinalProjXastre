@@ -408,6 +408,21 @@ app.post("/treinamento/:id", async (req, res) => {   // Update treinamento espec
   res.json({status: "Updated"});
 })
 
+app.delete("/treinamento/:id", async (req, res) => {   // Delete treinamento especifico
+  const id = req.params.id;
+  try{
+    pool.connect(function(err) {
+      if (err) throw err;
+      //console.log("conectou");
+    });
+    pool.query(`DELETE FROM treinamento WHERE codigo = ?;`, [id], (err, response) => {
+      res.json(response);
+    });
+  }
+  catch(e){
+    console.log(e);
+  }
+});
 
 app.get('/ViewAllTreinamentos', async (req, res) => {
   pool.query(`SELECT * FROM treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
