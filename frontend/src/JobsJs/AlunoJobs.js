@@ -14,23 +14,27 @@ function displayVagas() {
             for(let i = 0; i < obj.length; i++) {
                 const div = document.createElement("div");
                 div.innerHTML = `<table>
-                <tr>
-                    <th><b>Nome da vaga</b></th>
-                    <th><b>Companhia</b></th>
-                    <th><b>Atividades</b></th>
-                    <th><b>Requisitos</b></th>
-                    <th><b>Salario</b></th>
-                    <th><b>Vagas Disponíveis</b></th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th><b>Nome da vaga</b></th>
+                        <th><b>Companhia</b></th>
+                        <th><b>Atividades</b></th>
+                        <th><b>Requisitos</b></th>
+                        <th><b>Salario</b></th>
+                        <th><b>Vagas Disponíveis</b></th>
+                    </tr>
+                </thead>
 
-                <tr>
-                    <th>${obj[i].JobTitle}</th>
-                    <th>${obj[i].Company}</th>
-                    <th>${obj[i].Activities}</th>
-                    <th>${obj[i].Requiriments}</th>
-                    <th>R$${obj[i].Salary}.00</th>
-                    <th>${obj[i].MaxNumber}</th>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>${obj[i].JobTitle}</th>
+                        <th>${obj[i].Company}</th>
+                        <th>${obj[i].Activities}</th>
+                        <th>${obj[i].Requiriments}</th>
+                        <th>R$${obj[i].Salary}.00</th>
+                        <th>${obj[i].MaxNumber}</th>
+                    </tr>
+                <tbody>
 
                 </table>`;
                 jobs.appendChild(div);
