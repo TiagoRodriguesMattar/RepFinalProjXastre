@@ -8,21 +8,22 @@
     <link rel="stylesheet" href="./css/vagas.css">
 </head>
 <body>
-    <div>
-        <button id="AllJobsList">Lista de todas as vagas disponíveis</button><br><br>
-    </div>
     
     <div>
+        <h2>Inscrição de Vaga de Emprego</h2>
         <label for="UserSigninJobName">Selecione o nome da vaga: </label>
         <input id ="UserSigninJobName" type="text"><br><br>
         <label for="UserSigninJobCompany">Selecione a empresa ofertante: </label>
         <input id ="UserSigninJobCompany" type="text"><br><br>
-        <button id="CadUser">Cadastrar a vaga</button>
+        <button id="CadUser" type="submit">Cadastrar a vaga</button>
     </div>
+
+    <div>
+        <button id="AllJobsList" type="submit">Lista de todas as vagas disponíveis</button>
+    </div>
+
     <main>
-    <div class="content">
         <div class="jobs"></div>
-    </div>
     </main>
 </body>
 <script src="./src/JobsJs/AlunoJobs.js"></script>
