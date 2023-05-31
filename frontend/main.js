@@ -119,14 +119,14 @@ function windowJobsHome() {
     }, 
   });
 
-  childWindow.loadFile("jobs_home.html");
+  childWindow.loadFile("HomeEmpresas.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
   });
 }
 
-ipcMain.on("Janela_JobsHome", (event, arg) => {
+ipcMain.on("Janela_HomeEmpresas", (event, arg) => {
   windowJobsHome();
 });
 
