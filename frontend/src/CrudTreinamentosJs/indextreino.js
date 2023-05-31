@@ -72,7 +72,7 @@ if(DeleteTreino_button){
     DeleteTreino_button.addEventListener('click', (e) => {
         try{
             if(verificar())
-                ipcRenderer.send("Janela_DeleteJob");
+                ipcRenderer.send("Janela_DeleteTreinamento");
             else
                 console.log('acesso negado');
         }catch(e){

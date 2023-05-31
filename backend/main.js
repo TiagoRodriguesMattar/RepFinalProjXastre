@@ -409,15 +409,16 @@ app.post("/treinamento_update", async (req, res) => {   // Update treinamento es
   }
 })
 
-app.delete("/treinamento/:id", async (req, res) => {   // Delete treinamento especifico
-  const id = req.params.id;
+app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento especifico
+  const objdelete = req.body;
+  console.log(objdelete);
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-    pool.query(`DELETE FROM treinamento WHERE codigo = ?;`, [id], (err, response) => {
-      res.json(response);
+    pool.query(`DELETE FROM treinamento WHERE codigo = ? and nome_comercial = ?;`, [objdelete.Cod, objdelete.Nome], (err, response) => {
+      //res.json(response);
     });
   }
   catch(e){
