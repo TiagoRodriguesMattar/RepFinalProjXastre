@@ -17,10 +17,11 @@ const port = 3000;
 
 const mysql_pool = require('mysql2')
 const pool = mysql_pool.createConnection({
-     host: 'localhost',
-     user: 'root',
-     password: 'Acdcacdc16@',
-     database: "xastreprojeto"
+    host: 'containers-us-west-162.railway.app',
+    port: 5458,
+    user: 'root',
+    database: 'railway',
+    password: 'Dxn6tqFShs3c94K63Pl2'
 });
 
 function Encrypt(dados){
@@ -121,9 +122,9 @@ app.post('/editjob', async (req, res) => {    // (UPDATE)
             //console.log("conectou");
         });
       
-        pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${newjob.oldJobTitle}' and Company = '${newjob.oldJobCompany}'`, (err, result) => {
+        pool.query(`SELECT * FROM job WHERE JobTitle = '${newjob.oldJobTitle}' and Company = '${newjob.oldJobCompany}'`, (err, result) => {
           if(!Objetovazio(result)) {
-            var query = `UPDATE xastreprojeto.job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ?`;
+            var query = `UPDATE job SET JobTitle = ?, Company = ?, Activities = ?, Requiriments = ?, Salary = ?, MaxNumber = ? where JobTitle = ?`;
             pool.query(query, [newjob.newJobTitle, newjob.oldJobCompany, newjob.newJobActivities, newjob.newJobRequiriments, newjob.newJobSalary, newjob.newJobMaxNumber, newjob.oldJobTitle]);
 
             var query2 = `UPDATE alunojob SET jobname = '${newjob.newJobTitle}' where jobname = '${newjob.oldJobTitle}' and jobcompany = '${newjob.oldJobCompany}'`;
@@ -149,7 +150,7 @@ app.post('/readjob', async (req, res) => {      // retorna as vagas cadastradas 
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM xastreprojeto.job WHERE Company = '${readjob.data}'`, (err, result) => {
+      pool.query(`SELECT * FROM job WHERE Company = '${readjob.data}'`, (err, result) => {
           return console.log(result);
       });
       console.log('Vagas cadastradas da empresa ' +  readjob.data + ':');
@@ -167,9 +168,9 @@ app.post('/deletejob', async (req, res) => {    // (DELETE)
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
+      pool.query(`SELECT * FROM job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
         if(!Objetovazio(result)) {
-          pool.query(`Delete FROM xastreprojeto.job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
+          pool.query(`Delete FROM job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
             console.log("Vaga deletada com sucesso!");
             //return console.log(result);
           });
@@ -206,7 +207,7 @@ app.post('/readAlljob', async (req, res) => {     // listagem pros alunos de tod
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM xastreprojeto.job ORDER BY Company`, (err, result) => {
+      pool.query(`SELECT * FROM job ORDER BY Company`, (err, result) => {
           console.log(result);
           res.json(result);
       });
@@ -225,7 +226,7 @@ app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga 
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {
+      pool.query(`SELECT * FROM job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {
         if(!Objetovazio(result)) {
           pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, res) => {
             if(Objetovazio(res)) {
@@ -258,7 +259,7 @@ function Objetovazio(obj) {
 app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados em uma determinada vaga da empresa logada
   const obj = req.body;
 
-  pool.query(`SELECT * FROM xastreprojeto.job WHERE JobTitle = '${obj.jobname}' and Company = '${obj.jobcompany}'`, (err, result) => {
+  pool.query(`SELECT * FROM job WHERE JobTitle = '${obj.jobname}' and Company = '${obj.jobcompany}'`, (err, result) => {
     if(!Objetovazio(result)) {
       pool.query(`SELECT alunoname FROM alunojob WHERE jobname = '${obj.jobname}' and jobcompany = '${obj.jobcompany}'`, (err, res) => {
         console.log("Lista de alunos cadastrados: ")
