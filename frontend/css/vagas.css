@@ -1,0 +1,23 @@
+.jobs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+main {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
