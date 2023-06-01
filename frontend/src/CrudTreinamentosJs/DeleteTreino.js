@@ -43,7 +43,7 @@ if (delete_button_treinamento) {
         try {
             obj = {
                 Nome: TreinamentoTitleDelete.value.toUpperCase(),
-                Cod: CodigoTreinoDelete.value.toUpperCase(),
+                Cod: CodigoTreinoDelete.value,
             }
             axios.post('http://localhost:3000/DeleteTreinamento', obj);
         }

@@ -39,7 +39,7 @@ if(submit_button_treino){
         try{
             if (verificar()) {
                 const cadastro = {
-                    codigo: Math.floor(Math.random() * 10000),
+                    //codigo: Math.floor(Math.random() * 10000),
                     nome_comercial: nome_comercial.value.toUpperCase(),
                     descricao: descricao.value.toUpperCase(),
                     carga_horaria: carga_horaria.value,
@@ -51,7 +51,7 @@ if(submit_button_treino){
                     max_inscritos: max_inscritos.value,  
                 }
                 //ipcRenderer.invoke("treino-bd", cadastro);
-                axios.post('http://localhost:3000/treinamento', cadastro)
+                axios.post('http://localhost:3000/treinamento_create', cadastro)
                 .then((res) => {
                 console.log(res);
                 })

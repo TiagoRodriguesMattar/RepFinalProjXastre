@@ -323,7 +323,7 @@ function verificarData(data){
   return true;
 }
 
-app.post("/treinamento", async (req, res) => {   // Create novo treinamento
+app.post("/treinamento_create", async (req, res) => {   // Create novo treinamento
   const cadastro = req.body
   try{
     if(verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))){
@@ -333,7 +333,7 @@ app.post("/treinamento", async (req, res) => {   // Create novo treinamento
     });
     // Fazer a verificação se já existe um treinamento criado 
     // o codigo eh auto incrementado a cada insert na tabela, nao eh mais gerado aleatoriamente 
-    pool.query(`INSERT INTO Treinamento (codigo, nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.codigo}', '${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
+    pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}');`);
     }
     else{
       console.log("data menor")
@@ -345,13 +345,13 @@ app.post("/treinamento", async (req, res) => {   // Create novo treinamento
 
 app.post("/treinamento_read", async (req, res) => {   // Read treinamento especifico
   //const id = req.params.id;
-  const nome = req.body;
+  const obj = req.body;
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?;`, [nome.data], (err, response) => {
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ?;`, [obj.nome, obj.cod], (err, response) => {
       //res.json(response);
       console.log(response);
     });
@@ -412,14 +412,15 @@ app.post("/treinamento_update", async (req, res) => {   // Update treinamento es
 
 app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento especifico
   const objdelete = req.body;
-  console.log(objdelete);
+  //console.log(objdelete);
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-    pool.query(`DELETE FROM treinamento WHERE codigo = ? and nome_comercial = ?;`, [objdelete.Cod, objdelete.Nome], (err, response) => {
+    pool.query(`DELETE FROM Treinamento WHERE codigo = ? and nome_comercial = ?;`, [objdelete.Cod, objdelete.Nome], (err, response) => {
       //res.json(response);
+      console.log('Treinamento deletado com sucesso');
     });
   }
   catch(e){
@@ -428,7 +429,7 @@ app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento esp
 });
 
 app.get('/ViewAllTreinamentos', async (req, res) => {
-  pool.query(`SELECT * FROM treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
+  pool.query(`SELECT * FROM Treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
     console.log(response);
     //res.json(response);
   });
@@ -436,7 +437,7 @@ app.get('/ViewAllTreinamentos', async (req, res) => {
 
 app.post('/GetCodigo', async (req, res) => {
   const obj = req.body;
-  var query = `SELECT codigo FROM treinamento WHERE nome_comercial = ?`;
+  var query = `SELECT codigo FROM Treinamento WHERE nome_comercial = ?`;
   pool.query(query, [obj.Nome], (err, response) => {
     res.json(response);
   });

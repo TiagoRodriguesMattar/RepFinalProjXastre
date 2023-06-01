@@ -2,6 +2,7 @@ const axios = require('axios');
 
 const read_button_treino = document.getElementById('read_button_treinamento');
 const TreinoNameForRead = document.querySelector('#TreinoNameForRead');
+const TreinoCodForRead = document.querySelector('#TreinoCodForRead');
 
 function verificar() {
     var auth = true;
@@ -28,7 +29,8 @@ if(read_button_treino){
         try{
             if(verificar()) {
                 obj = {
-                    data: TreinoNameForRead.value.toUpperCase(),
+                    nome: TreinoNameForRead.value.toUpperCase(),
+                    cod: TreinoCodForRead.value,
                 }
                 axios.post('http://localhost:3000/treinamento_read', obj)
                 .then((response)=> {
