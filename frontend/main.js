@@ -105,6 +105,31 @@ ipcMain.on("display_crud", (event, arg) => {
     windowJobsAllOptions();
 });
 
+// Parte CRUD treinamentos
+
+function TreinamentoCrudWindow() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./TreinamentosPages/indexTreinamentoCrud.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_crud_treinamento", (event, arg) => {
+  TreinamentoCrudWindow();
+});
 
 function windowJobsHome() {
   childWindow = new BrowserWindow({
@@ -119,7 +144,7 @@ function windowJobsHome() {
     }, 
   });
 
-  childWindow.loadFile("HomeEmpresas.html");
+  childWindow.loadFile("./NiveisDePermissao/HomeEmpresas.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
