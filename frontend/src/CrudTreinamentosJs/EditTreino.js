@@ -11,7 +11,7 @@ const new_fim_treinamento = document.querySelector('#new_fim_inscricoes');
 const new_min_inscritos = document.querySelector('#new_min_inscritos');
 const new_max_inscritos = document.querySelector('#new_max_inscritos');
 
-const button_edit_treino = document.getElementById("button_edit_treino");
+const button_edit_treino = document.getElementById("button_edit_treinamento");
 if (button_edit_treino) {
     button_edit_treino.addEventListener("click", () => {
         EditFunction();
