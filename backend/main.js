@@ -365,46 +365,13 @@ app.post("/treinamento_read", async (req, res) => {   // Read treinamento especi
 app.post("/treinamento_update", async (req, res) => {   // Update treinamento especifico
   //const id = req.params.id;
   const cadastro = req.body;
-  console.log(cadastro);
-  console.log(cadastro.oldcodigo);
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
-    /*var query = `UPDATE treinamento SET 
-        codigo = ?,
-        nome_comercial = ?, 
-        descricao = ?,
-        carga_horaria = ?,
-        inicio_inscricoes = ?,
-        fim_inscricoes = ?,
-        inicio_treinamento = ?,
-        fim_treinamento = ?,
-        min_inscritos = ?,
-        max_inscritos = ?, 
-    WHERE codigo = ?;`;
-
-    pool.query(query, 
-      [ cadastro.oldcodigo,
-        cadastro.newnome_comercial, 
-        cadastro.newdescricao, 
-        cadastro.newcarga_horaria, 
-        cadastro.newinicio_inscricoes, 
-        cadastro.newfim_inscricoes, 
-        cadastro.newinicio_treinamento, 
-        cadastro.newfim_treinamento, 
-        cadastro.newmin_inscritos,
-        cadastro.newmax_inscritos,
-        cadastro.oldcodigo,
-      ]
-    , (err, response) => {
-        //console.log("Treinamento alterado com sucesso");
-      }*/
-      var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ? where codigo = ?`;
-      pool.query(query, [cadastro.oldcodigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos]);
-    //);
-    
+    var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ?, min_inscritos = ?, max_inscritos = ? where codigo = ? and nome_comercial = ?;`;
+    pool.query(query, [cadastro.codigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos, cadastro.codigo, cadastro.oldnome_comercial]);
   }
   catch(e){
     console.log(e);
@@ -433,14 +400,6 @@ app.get('/ViewAllTreinamentos', async (req, res) => {
   pool.query(`SELECT * FROM Treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
     console.log(response);
     //res.json(response);
-  });
-})
-
-app.post('/GetCodigo', async (req, res) => {
-  const obj = req.body;
-  var query = `SELECT codigo FROM Treinamento WHERE nome_comercial = ?`;
-  pool.query(query, [obj.Nome], (err, response) => {
-    res.json(response);
   });
 })
 

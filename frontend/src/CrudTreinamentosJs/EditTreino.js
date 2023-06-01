@@ -63,39 +63,34 @@ if (ViewTreinamentos_button) {
 
 const OldTreinamentoTitle = document.querySelector('#OldTreinamentoTitle');
 const edit_button_treino = document.getElementById('edit_button_treino');
+const OldTreinamentoCodigo = document.querySelector('#OldTreinamentoCodigo');
 
 if (edit_button_treino) {
     edit_button_treino.addEventListener('click', (e) => {
         e.preventDefault();
         try {
             if (verificar()) {
-                const objcod = {
-                    Nome: OldTreinamentoTitle.value.toUpperCase()
+                const obj = {
+                    codigo: OldTreinamentoCodigo.value,
+                    oldnome_comercial: OldTreinamentoTitle.value.toUpperCase(),
+                    newnome_comercial: new_nome_comercial.value.toUpperCase(),
+                    newdescricao: new_descricao.value.toUpperCase(),
+                    newcarga_horaria: new_carga_horaria.value,
+                    newinicio_inscricoes: new_inicio_inscricoes.value,
+                    newfim_inscricoes: new_fim_inscricoes.value,
+                    newinicio_treinamento: new_inicio_treinamento.value,
+                    newfim_treinamento: new_fim_treinamento.value,
+                    newmin_inscritos: new_min_inscritos.value,
+                    newmax_inscritos: new_max_inscritos.value,
                 }
-                axios.post('http://localhost:3000/GetCodigo', objcod)
-                .then((response) => {
-                    const obj = {
-                        oldcodigo: response.data[0].codigo,
-                        newnome_comercial: new_nome_comercial.value.toUpperCase(),
-                        newdescricao: new_descricao.value.toUpperCase(),
-                        newcarga_horaria: new_carga_horaria.value,
-                        newinicio_inscricoes: new_inicio_inscricoes.value,
-                        newfim_inscricoes: new_fim_inscricoes.value,
-                        newinicio_treinamento: new_inicio_treinamento.value,
-                        newfim_treinamento: new_fim_treinamento.value,
-                        newmin_inscritos: new_min_inscritos.value,
-                        newmax_inscritos: new_max_inscritos.value,
-                    }
-                    axios.post('http://localhost:3000/treinamento_update', obj)
-                    .then((response)=> {
-                    }, (error) => {
-                        console.log(error);
-                    })
+                axios.post('http://localhost:3000/treinamento_update', obj)
+                .then((response)=> {
+                }, (error) => {
+                    console.log(error);
                 })
             }
         }
         catch(e) {
             console.log(e);
-        }
-    })
+        }})
 }
