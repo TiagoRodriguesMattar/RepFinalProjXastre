@@ -131,6 +131,32 @@ ipcMain.on("display_crud_treinamento", (event, arg) => {
   TreinamentoCrudWindow();
 });
 
+// Montagem do Quiz - parte do ADM
+
+function MontarQuizWindow() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./TreinamentosPages/MontarQuizAdm.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_montar_Quiz", (event, arg) => {
+  MontarQuizWindow();
+});
+
 function windowJobsHome() {
   childWindow = new BrowserWindow({
     width: 1000,

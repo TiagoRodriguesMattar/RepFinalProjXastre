@@ -34,3 +34,23 @@ if(button_crud){
         
     }
 }
+
+const button_montar_Quiz = document.getElementById("QuizMontagem");
+
+if (button_montar_Quiz) {
+    button_montar_Quiz.addEventListener('click', (e) => {
+        try {
+            if (verificar()) {
+                ipcRenderer.send('display_montar_Quiz');
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    })
+}
+
+
+
+
+
