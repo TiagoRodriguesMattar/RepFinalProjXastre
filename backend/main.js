@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
-const uri = "mongodb://mongo:kLE9591apUXPdGLyayMu@containers-us-west-44.railway.app:7658"
+const uri = "mongodb://mongo:kLE9591apUXPdGLyayMu@containers-us-west-44.railway.app:7658";
+//const uri = process.env.URI;
 
 //const uri = "mongodb://127.0.0.1:27017"
 const client = new MongoClient(uri);
@@ -17,11 +18,11 @@ const port = 3000;
 
 const mysql_pool = require('mysql2')
 const pool = mysql_pool.createConnection({
-    host: 'containers-us-west-162.railway.app',
-    port: 5458,
-    user: 'root',
-    database: 'railway',
-    password: 'Dxn6tqFShs3c94K63Pl2'
+    host: process.env.HOST,
+    port: process.env.PORT,
+    user: process.env.USER,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD
 });
 
 function Encrypt(dados){

@@ -27,6 +27,7 @@ function AtvFunction() {
     } else { 
       x.style.display = "none"; 
     } 
+    axios.get();
   } 
   
   function NotasFunction() { 
