@@ -3,11 +3,7 @@ const { ipcRenderer } = require('electron');
 
 function verificar() {
     var auth = true;
-    //console.log(User)
-    //console.log(email_login.value);
-    //console.log(password_login.value);
-    //token = User.token;
-    //console.log(token);
+
     const user = JSON.parse(localStorage.getItem('user'));
 
     axios.post('http://localhost:3000/auth', {}, {
@@ -21,24 +17,30 @@ function verificar() {
 }
 
 const NomeQuiz = document.querySelector('#QuizName');
-const NumPerg = document.querySelector('#QuizNumPerg');
-const button_proximo = document.getElementById('StartMontagem');
+const button_cadQuest = document.getElementById('cadquest');
+const perg = document.querySelector('#Perg');
+const resp1 = document.querySelector('#Resp1');
+const resp2 = document.querySelector('#Resp2');
+const resp3 = document.querySelector('#Resp3');
+const resp4 = document.querySelector('#Resp4');
+const respcor = document.querySelector('#RespCorreta');
+const codcurso = document.querySelector('#Codtreino');
 
-const PerguntasRespostas = [{
-    Resp1: '',
-    Resp2: '',
-    Resp3: '',
-    Resp4: '',
-    RespCorreta: '',
-}];
-
-if (button_proximo) {
-    button_proximo.addEventListener('click', () => {
+if (button_cadQuest) {
+    button_cadQuest.addEventListener('click', () => {
         try {
             if (verificar()) {
-                for (let i = 0; i < NumPerg.value; i++) {
-                    // innel HTML aqui dentro
-                }
+                const PerguntasRespostas = {
+                    Perg: perg.value.toUpperCase(),
+                    Resp1: resp1.value.toUpperCase(),
+                    Resp2: resp2.value.toUpperCase(),
+                    Resp3: resp3.value.toUpperCase(),
+                    Resp4: resp4.value.toUpperCase(),
+                    RespCorreta: respcor.value.toUpperCase(),
+                    nomequiz: NomeQuiz.value.toUpperCase(),
+                    codigo: codcurso.value, 
+                };
+                axios.post('http://localhost:3000/CadQuestaoQuiz', PerguntasRespostas);
             }
             else {
                 console.log('Acesso negado');
@@ -49,4 +51,3 @@ if (button_proximo) {
         }
     })
 }
-

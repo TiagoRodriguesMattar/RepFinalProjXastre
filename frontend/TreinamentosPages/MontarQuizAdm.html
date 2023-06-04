@@ -7,15 +7,27 @@
     <title>Montar um novo Quiz</title>
 </head>
 <body>
+    <h2>Cadastre as questões do Quiz:</h2><br>
     <div>
         <label for="QuizName">Nome do Quiz: </label>
         <input type="text" id="QuizName"/><br><br>
-        <label for="QuizNumPerg">Número de perguntas do Quiz: </label>
-        <input type="number" id="QuizNumPerg"/><br><br>
+        <label for="Codtreino">Código do curso: </label>
+        <input type="number" id="Codtreino"/><br><br>
+        <label for="Perg">Digite o nome da Pergunta: </label>
+        <input id ="Perg" type="text"><br><br>
+        <label for="Resp1">Resposta 1: </label>
+        <input id ="Resp1" type="text"><br><br>
+        <label for="Resp2">Resposta 2: </label>
+        <input id ="Resp2" type="text"><br><br>
+        <label for="Resp3">Resposta 3: </label>
+        <input id ="Resp3" type="text"><br><br>
+        <label for="Resp4">Resposta 4: </label>
+        <input id ="Resp4" type="text"><br><br>
+        <label for="RespCorreta">Resposta correta: </label>
+        <input id ="RespCorreta" type="text"><br><br>
+        <button id ="cadquest">Cadastrar questão</button>
     </div>
-    <div>
-        <button id="StartMontagem">Próximo</button>
-    </div>
+
 </body>
 <script src="../src/CrudTreinamentosJs/MontarQuiz.js"></script>
 </html>

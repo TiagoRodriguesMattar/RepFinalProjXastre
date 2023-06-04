@@ -10,6 +10,9 @@ const new_inicio_treinamento = document.querySelector('#new_inicio_inscricoes');
 const new_fim_treinamento = document.querySelector('#new_fim_inscricoes');
 const new_min_inscritos = document.querySelector('#new_min_inscritos');
 const new_max_inscritos = document.querySelector('#new_max_inscritos');
+const new_QuizAptidao = document.querySelector('#QuizAptidao');
+const new_Case1 = document.querySelector('#Case1');
+const new_Case2 = document.querySelector('#Case2');
 
 const button_edit_treino = document.getElementById("button_edit_treinamento");
 if (button_edit_treino) {
@@ -65,6 +68,22 @@ const OldTreinamentoTitle = document.querySelector('#OldTreinamentoTitle');
 const edit_button_treino = document.getElementById('edit_button_treino');
 const OldTreinamentoCodigo = document.querySelector('#OldTreinamentoCodigo');
 
+const VerAllQuiz_button = document.getElementById('VerAllQuiz');
+
+if (VerAllQuiz_button) {
+    VerAllQuiz_button.addEventListener('click', (e)=>{
+        e.preventDefault();
+        try {
+            if (verificar()) {
+                axios.get('http://localhost:3000/VerAllQuiz');
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    })
+}
+
 if (edit_button_treino) {
     edit_button_treino.addEventListener('click', (e) => {
         e.preventDefault();
@@ -82,6 +101,9 @@ if (edit_button_treino) {
                     newfim_treinamento: new_fim_treinamento.value,
                     newmin_inscritos: new_min_inscritos.value,
                     newmax_inscritos: new_max_inscritos.value,
+                    newQuizAptidao: new_QuizAptidao.value.toUpperCase(),
+                    newQuizCase1: new_Case1.value.toUpperCase(),
+                    newQuizCase2: new_Case2.value.toUpperCase(),
                 }
                 axios.post('http://localhost:3000/treinamento_update', obj)
                 .then((response)=> {

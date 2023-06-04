@@ -12,6 +12,10 @@ const fim_treinamento = document.querySelector('#fim_inscricoes');
 const min_inscritos = document.querySelector('#min_inscritos');
 const max_inscritos = document.querySelector('#max_inscritos');
 
+const QuizAptidao = document.querySelector('#QuizAptidao');
+const Case1 = document.querySelector('#Case1');
+const Case2 = document.querySelector('#Case2');
+
 const submit_button_treino = document.getElementById("submit_button_treino");
 
 function verificar() {
@@ -33,6 +37,23 @@ function verificar() {
     return auth;
 }
 
+const VerAllQuiz_button = document.getElementById('VerAllQuiz');
+
+if (VerAllQuiz_button) {
+    VerAllQuiz_button.addEventListener('click', (e)=>{
+        e.preventDefault();
+        try {
+            if (verificar()) {
+                axios.get('http://localhost:3000/VerAllQuiz');
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+
 if(submit_button_treino){
     submit_button_treino.addEventListener('click', (e) => {
         e.preventDefault();
@@ -48,7 +69,10 @@ if(submit_button_treino){
                     inicio_treinamento: inicio_treinamento.value,
                     fim_treinamento: fim_treinamento.value,
                     min_inscritos: min_inscritos.value,
-                    max_inscritos: max_inscritos.value,  
+                    max_inscritos: max_inscritos.value,
+                    Aptidao: QuizAptidao.value.toUpperCase(),
+                    case1: Case1.value.toUpperCase(),
+                    case2: Case2.value.toUpperCase(),   
                 }
                 //ipcRenderer.invoke("treino-bd", cadastro);
                 axios.post('http://localhost:3000/treinamento_create', cadastro)
