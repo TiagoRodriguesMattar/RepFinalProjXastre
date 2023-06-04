@@ -403,6 +403,13 @@ app.get('/ViewAllTreinamentos', async (req, res) => {
   });
 })
 
+app.get('/ViewTreinamentosAgora', async (req, res) => {
+  pool.query(`SELECT * FROM Treinamento WHERE inicio_inscricoes <= CURDATE() AND fim_inscricoes > CURDATE();`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
+    console.log(response);
+    //res.json(response);
+  });
+})
+
 app.post('/CadQuestaoQuiz', async (req, res) => {
   const obj = req.body;
   try{
@@ -430,6 +437,36 @@ app.get('/VerAllQuiz', async (req, res) => {
     });
   }
   catch(e){
+    console.log(e);
+  }
+})
+
+app.post('/CadUsuarioTreino', async (req, res) => {
+  const obj = req.body;
+  try {
+    pool.connect(function(err) {
+        if (err) throw err;
+        //console.log("conectou");
+    });
+
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {
+      if(!Objetovazio(result)) {
+        pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {
+          if(Objetovazio(res)) {
+            pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
+            console.log('Aluno cadastrado com sucesso no treinamento!');
+          }
+          else {
+            console.log('Aluno já cadastrado nesse treinamento!');
+          }
+        });
+      }
+      else {
+        console.log('Treinamento inexistente no sistema!');
+      }
+    });
+
+  } catch(e){
     console.log(e);
   }
 })
