@@ -288,21 +288,128 @@ app.post('/auth', (req,res) => {
 
 // Banco de dados Treinamentos -> Ricardo
 
-app.get('/get-quiz', (req,res) => {
-    pool.query(`SELECT * FROM quiz;`, (err, response, fields) => {    // Select todos os quiz
-      res.json(response); // enviar como response
-    });
+app.post('/get-quiz', (req,res) => {      // retorna o quiz de aptidao
+    const obj = req.body;
+
+    pool.query(
+      `SELECT QAptidao FROM Treinamento WHERE nome_comercial = ? AND codigo = ?`,
+      [obj.Nome, obj.Cod],
+      (err, result) => {
+        if (err) {
+          // Trate o erro aqui, se necessário
+          console.error(err);
+          return;
+        }
+    
+        const { QAptidao } = result[0]; // Obtém os valores da primeira linha do resultado
+    
+        pool.query(
+          `SELECT * FROM quiz WHERE NomeQuiz = ?`,
+          [QAptidao],
+          (err, response, fields) => {
+            if (err) {
+              // Trate o erro aqui, se necessário
+              console.error(err);
+              return;
+            }
+    
+            //console.log(response);
+            res.json(response);
+          }
+        );
+      }
+    );
+    
 })
+
+app.post('/get-case1', (req,res) => {        // retorna o quiz do case 1
+  const obj = req.body;
+
+  pool.query(
+    `SELECT QCase1 FROM Treinamento WHERE nome_comercial = ? AND codigo = ?`,
+    [obj.Nome, obj.Cod],
+    (err, result) => {
+      if (err) {
+        // Trate o erro aqui, se necessário
+        console.error(err);
+        return;
+      }
+
+      const { QCase1 } = result[0]; // Obtém os valores da primeira linha do resultado
+  
+      pool.query(
+        `SELECT * FROM quiz WHERE NomeQuiz = ?`,
+        [QCase1],
+        (err, response, fields) => {
+          if (err) {
+            // Trate o erro aqui, se necessário
+            console.error(err);
+            return;
+          }
+  
+          //console.log(response);
+          res.json(response);
+        }
+      );
+    }
+  );
+  
+})
+
+app.post('/get-case2', (req,res) => {        // retorna o quiz do case 2
+  const obj = req.body;
+
+  pool.query(
+    `SELECT QCase2 FROM Treinamento WHERE nome_comercial = ? AND codigo = ?`,
+    [obj.Nome, obj.Cod],
+    (err, result) => {
+      if (err) {
+        // Trate o erro aqui, se necessário
+        console.error(err);
+        return;
+      }
+
+      const { QCase2 } = result[0]; // Obtém os valores da primeira linha do resultado
+  
+      pool.query(
+        `SELECT * FROM quiz WHERE NomeQuiz = ?`,
+        [QCase2],
+        (err, response, fields) => {
+          if (err) {
+            // Trate o erro aqui, se necessário
+            console.error(err);
+            return;
+          }
+  
+          //console.log(response);
+          res.json(response);
+        }
+      );
+    }
+  );
+  
+})
+
 
 app.post('/HistAcertosQuiz', (req, res) => {        // Histórico de acertos de um aluno em determinado quiz
     const obj = req.body;
-    console.log(obj);
+    //console.log(obj);
     try {
         pool.connect(function(err) {
           if (err) throw err;
           //console.log("conectou");
         });
-        pool.query(`INSERT into histacertos (NomeAluno, NomeQuiz, NumAcertos) values ('${obj.NomeAluno}','${obj.NomeQuiz}','${obj.NumAcertos}');`)
+        pool.query(`SELECT * from histacertos where NomeAluno = ? and NomeQuiz = ?`, [obj.NomeAluno, obj.NomeQuiz], (err, result) => {
+          if (Objetovazio(result)) {
+            pool.query(`INSERT into histacertos (NomeAluno, NomeQuiz, NumAcertos) values ('${obj.NomeAluno}','${obj.NomeQuiz}','${obj.NumAcertos}');`)
+          }
+          else {
+            console.log('Usuário já realizou o Quiz');
+          }
+        })
+        pool.query(`SELECT * FROM histacertos`, (err, response, fields) => {
+          console.log(response);
+        })
     }
 
     catch(e){
@@ -410,17 +517,27 @@ app.get('/ViewTreinamentosAgora', async (req, res) => {
   });
 })
 
-app.post('/CadQuestaoQuiz', async (req, res) => {
+app.post('/ViewTreinamentos_alunosCadastrados', async (req, res) => {    // seleciona todos os treinamentos em que o usuário está cadastrado
+  const obj = req.body;
+  pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ? and status = 0;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
+    console.log(response);
+    //res.json(response);
+  });
+})
+
+app.post('/CadQuestaoQuiz', async (req, res) => {           // Cadastra um quiz, parte do ADM
   const obj = req.body;
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
+    
+    //pool.query(`DELETE FROM quiz WHERE NomeQuiz = 'MATEMÁTICA INTERMEDIÁRIA'`);
     pool.query(`INSERT INTO quiz (NomeQuiz, PerguntaQuiz, CodigoTreino, RespostaCorreta, RespostaE1, RespostaE2, RespostaE3, RespostaE4) VALUES ('${obj.nomequiz}','${obj.Perg}','${obj.codigo}', '${obj.RespCorreta}', '${obj.Resp1}', '${obj.Resp2}', '${obj.Resp3}', '${obj.Resp4}');`);
-    /*pool.query(`SELECT * FROM quiz`, (err, result) => {
+    pool.query(`SELECT * FROM quiz`, (err, result) => {
       console.log(result);
-    });*/
+    });
   }
   catch(e){
     console.log(e);
@@ -448,6 +565,10 @@ app.post('/CadUsuarioTreino', async (req, res) => {
         if (err) throw err;
         //console.log("conectou");
     });
+
+    /*pool.query(`SELECT * FROM alunoTreinamento`, (err, result) => {
+      console.log(result);
+    })*/
 
     pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {
       if(!Objetovazio(result)) {

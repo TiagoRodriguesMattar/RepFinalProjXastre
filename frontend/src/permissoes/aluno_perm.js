@@ -55,3 +55,21 @@ if (ShowTreinamentos) {
         }
     })
 }
+
+const ShowTestes = document.getElementById('show_testes');
+
+if (ShowTestes) {
+    ShowTestes.addEventListener('click', (e) => {
+        try{
+            if (verificar()) {
+                ipcRenderer.send("Janela_alunoTestes");
+            }
+            else {
+                console.log('acesso negado');
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    })
+}

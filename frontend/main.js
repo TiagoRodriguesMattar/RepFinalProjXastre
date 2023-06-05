@@ -324,7 +324,7 @@ const QuizAppWindow = () => {
       },
   });
 
-  childWindow.loadFile("./TreinamentosPages/quiz.html");
+  childWindow.loadFile("./QuizPages/quiz.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -333,6 +333,126 @@ const QuizAppWindow = () => {
 
 ipcMain.on("Janela_QuizApp", (event, args) => {
     QuizAppWindow();
+});
+
+const QuizCurso1Window = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./QuizPages/Curso1.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_QuizCurso1", (event, args) => {
+    QuizCurso1Window();
+});
+
+const QuizCase1AppWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./QuizPages/case1.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_QuizCase1APP", (event, args) => {
+  QuizCase1AppWindow();
+});
+
+const QuizCurso2Window = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./QuizPages/Curso2.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_QuizCurso2", (event, args) => {
+    QuizCurso2Window();
+});
+
+const QuizCase2AppWindow = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./QuizPages/case2.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_QuizCase2APP", (event, args) => {
+  QuizCase2AppWindow();
+});
+
+const SelectTestesAluno = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./TreinamentosPages/TestesAluno.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_alunoTestes", (event, args) => {
+    SelectTestesAluno();
 });
 
 const AlunoTreinamentosWindow = () => {

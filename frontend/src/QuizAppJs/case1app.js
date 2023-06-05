@@ -10,12 +10,12 @@ const contentFinish = document.querySelector(".finish");
 const btnContinuar = document.querySelector(".finish button");
 
 function saveData(data) {
-    localStorage.setItem('dataQuiz', JSON.stringify(data));
+    localStorage.setItem('dataCase1', JSON.stringify(data));
 }
 
 const TreinoInfos = JSON.parse(localStorage.getItem('SpecificTreinamento'));
 
-axios.post("http://localhost:3000/get-quiz", TreinoInfos)
+axios.post("http://localhost:3000/get-case1", TreinoInfos)
 .then((res) => {
     saveData(res.data);
 })
@@ -40,7 +40,7 @@ let questionsCorrect = 0;
 
 function nextQuestion(e, ItemClick) {
     if(verificar()) {
-        const questions = JSON.parse(localStorage.getItem('dataQuiz'));
+        const questions = JSON.parse(localStorage.getItem('dataCase1'));
         if (e.target.getAttribute("data-correct") === ItemClick) {
             questionsCorrect++;
         }
@@ -56,7 +56,7 @@ function nextQuestion(e, ItemClick) {
 
 function finish() {
     if (verificar()) {
-        const questions = JSON.parse(localStorage.getItem('dataQuiz'));
+        const questions = JSON.parse(localStorage.getItem('dataCase1'));
         textFinish.innerHTML = `você acertou ${questionsCorrect} de ${questions.length}`;
         content.style.display = "none";
         contentFinish.style.display = "flex";
@@ -72,7 +72,7 @@ function finish() {
                     NomeQuiz: questions[0].NomeQuiz,
                     NumAcertos: questionsCorrect
                 }
-                //console.log(objeto)
+                console.log(objeto);
                 axios.post('http://localhost:3000/HistAcertosQuiz', objeto);
             })
             btnContinuar.onclick = () => {
@@ -80,7 +80,7 @@ function finish() {
                     content.style.display = "flex";
                     contentFinish.style.display = "none";
                     
-                    ipcRenderer.send('Janela_QuizCurso1')
+                    ipcRenderer.send('Janela_QuizCurso2')
                 }
             };
         }
@@ -92,7 +92,7 @@ function finish() {
 
 function loadQuestion() {
     if (verificar()){
-        const questions = JSON.parse(localStorage.getItem('dataQuiz'));
+        const questions = JSON.parse(localStorage.getItem('dataCase1'));
         //console.log(questions);
         spnQtd.innerHTML = `${currentIndex + 1}/${questions.length}`;
         const item = questions[currentIndex];
