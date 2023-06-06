@@ -13,6 +13,8 @@ const new_max_inscritos = document.querySelector('#new_max_inscritos');
 const new_QuizAptidao = document.querySelector('#QuizAptidao');
 const new_Case1 = document.querySelector('#Case1');
 const new_Case2 = document.querySelector('#Case2');
+const new_Curso1_text = document.querySelector('#Curso1text');
+const new_Curso2_text = document.querySelector('#Curso2text');
 
 const button_edit_treino = document.getElementById("button_edit_treinamento");
 if (button_edit_treino) {
@@ -104,6 +106,8 @@ if (edit_button_treino) {
                     newQuizAptidao: new_QuizAptidao.value.toUpperCase(),
                     newQuizCase1: new_Case1.value.toUpperCase(),
                     newQuizCase2: new_Case2.value.toUpperCase(),
+                    newCurso1: new_Curso1_text.value.toUpperCase(),
+                    newCurso2: new_Curso2_text.value.toUpperCase(),
                 }
                 axios.post('http://localhost:3000/treinamento_update', obj)
                 .then((response)=> {

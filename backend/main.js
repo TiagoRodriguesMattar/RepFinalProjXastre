@@ -390,6 +390,43 @@ app.post('/get-case2', (req,res) => {        // retorna o quiz do case 2
   
 })
 
+app.post('/Curso1texto', (req, res) => {      // retorna o texto para o curso introdutório de um determinado treinamento
+  const obj = req.body;
+  try {
+    pool.connect(function(err) {
+      if (err) throw err;
+      //console.log("conectou");
+    });
+    pool.query(`SELECT Curso1 FROM Treinamento where nome_comercial = ? and codigo = ?`, [obj.Name, obj.Code] , (err, result, fields) => {
+      //console.log(result);
+      res.json(result);
+    })
+  }
+
+  catch(e){
+    console.log(e);
+  }
+})
+
+app.post('/Curso2texto', (req, res) => {        // retorna o texto para o curso avançado e mentoria de um determinado treinamento
+  const obj = req.body;
+  try {
+    pool.connect(function(err) {
+      if (err) throw err;
+      //console.log("conectou");
+    });
+    pool.query(`SELECT Curso2 FROM Treinamento where nome_comercial = ? and codigo = ?`, [obj.Name, obj.Code] , (err, result, fields) => {
+      //console.log(result);
+      res.json(result);
+    })
+  }
+
+  catch(e){
+    console.log(e);
+  }
+})
+
+
 
 app.post('/HistAcertosQuiz', (req, res) => {        // Histórico de acertos de um aluno em determinado quiz
     const obj = req.body;
@@ -441,7 +478,7 @@ app.post("/treinamento_create", async (req, res) => {   // Create novo treinamen
     });
     // Fazer a verificação se já existe um treinamento criado 
     // o codigo eh auto incrementado a cada insert na tabela, nao eh mais gerado aleatoriamente 
-    pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}');`);
+    pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
     }
     else{
       console.log("data menor")
@@ -459,7 +496,7 @@ app.post("/treinamento_read", async (req, res) => {   // Read treinamento especi
       if (err) throw err;
       //console.log("conectou");
     });
-    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ?;`, [obj.nome, obj.cod], (err, response) => {
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial =?  and codigo = ?;`, [obj.nome, obj.cod], (err, response) => {
       //res.json(response);
       console.log(response);
     });
@@ -477,8 +514,8 @@ app.post("/treinamento_update", async (req, res) => {   // Update treinamento es
       if (err) throw err;
       //console.log("conectou");
     });
-    var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ?, min_inscritos = ?, max_inscritos = ?, QAptidao = ?, QCase1 = ?, QCase2 = ? where codigo = ? and nome_comercial = ?;`;
-    pool.query(query, [cadastro.codigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos, cadastro.newQuizAptidao, cadastro.newQuizCase1, cadastro.newQuizCase2, cadastro.codigo, cadastro.oldnome_comercial]);
+    var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ?, min_inscritos = ?, max_inscritos = ?, QAptidao = ?, QCase1 = ?, QCase2 = ?, Curso1 = ?, Curso2 = ? where codigo = ? and nome_comercial = ?;`;
+    pool.query(query, [cadastro.codigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos, cadastro.newQuizAptidao, cadastro.newQuizCase1, cadastro.newQuizCase2, cadastro.newCurso1, cadastro.newCurso2, cadastro.codigo, cadastro.oldnome_comercial]);
   }
   catch(e){
     console.log(e);
@@ -519,6 +556,10 @@ app.get('/ViewTreinamentosAgora', async (req, res) => {
 
 app.post('/ViewTreinamentos_alunosCadastrados', async (req, res) => {    // seleciona todos os treinamentos em que o usuário está cadastrado
   const obj = req.body;
+  /*pool.query(`DELETE FROM alunoTreinamento`);
+  pool.query(`SELECT * FROM alunoTreinamento`, (err, res) => {
+    console.log(res);
+  })*/
   pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ? and status = 0;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
     console.log(response);
     //res.json(response);
