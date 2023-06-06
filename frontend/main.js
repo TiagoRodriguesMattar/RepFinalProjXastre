@@ -504,6 +504,30 @@ ipcMain.on("Janela_alunoTestes", (event, args) => {
     SelectTestesAluno();
 });
 
+const SelectProfileAluno = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./AlunoProfile/Aluno_profile.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("Janela_alunoProfile", (event, args) => {
+  SelectProfileAluno();
+});
+
 const AlunoTreinamentosWindow = () => {
   childWindow = new BrowserWindow({
       width: 1000,

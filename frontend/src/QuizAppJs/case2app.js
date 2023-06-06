@@ -56,13 +56,15 @@ function nextQuestion(e, ItemClick) {
 
 function finish() {
     if (verificar()) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const SpecificTreinamento = JSON.parse(localStorage.getItem('SpecificTreinamento'));  
         const questions = JSON.parse(localStorage.getItem('dataCase2'));
         textFinish.innerHTML = `você acertou ${questionsCorrect} de ${questions.length}`;
         content.style.display = "none";
         contentFinish.style.display = "flex";
         let res = questionsCorrect/questions.length;
         if (res > 0.7) {
-            const user = JSON.parse(localStorage.getItem('user'));
+                     
             const UserInfos = { email: user.email, password: user.password };
             axios.post('http://localhost:3000/viewjobs', UserInfos)
             .then(response => {
@@ -73,6 +75,13 @@ function finish() {
                     NumAcertos: questionsCorrect
                 }
                 axios.post('http://localhost:3000/HistAcertosQuiz', objeto);
+
+                const TreinoInfo = {
+                    treinoname: SpecificTreinamento.Nome,
+                    nomeuser: response.data,
+                    status: '2' 
+                };
+                axios.post('http://localhost:3000/UpdateStatusTreino', TreinoInfo);
             })
             btnContinuar.onclick = () => {
                 if (verificar()) {
@@ -85,6 +94,16 @@ function finish() {
         }
         else {
             console.log('Nota insuficiente');
+            const UserInfos = { email: user.email, password: user.password };
+            axios.post('http://localhost:3000/viewjobs', UserInfos)
+            .then(response => {
+                const TreinoInfo = {
+                    treinoname: SpecificTreinamento.Nome,
+                    nomeuser: response.data,
+                    status: '3' 
+                };
+                axios.post('http://localhost:3000/UpdateStatusTreino', TreinoInfo);
+            })
         }
     }
 }

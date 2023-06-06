@@ -73,3 +73,22 @@ if (ShowTestes) {
         }
     })
 }
+
+const Show_profile = document.getElementById('show_profile');
+
+if (Show_profile) {
+    Show_profile.addEventListener('click', (e) => {
+        try{
+            if (verificar()) {
+                ipcRenderer.send("Janela_alunoProfile");
+            }
+            else {
+                console.log('acesso negado');
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    })
+}
+

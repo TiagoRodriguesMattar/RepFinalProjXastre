@@ -627,7 +627,12 @@ app.post('/CadUsuarioTreino', async (req, res) => {
     /*pool.query(`SELECT * FROM alunoTreinamento`, (err, result) => {
       console.log(result);
     })*/
-
+    /*
+      0 ==> nao cadastrado
+      1 ==> cadastrado e em curso
+      2 ==> terminou e aprovado 
+      3 ==> terminou e reprovado
+    */
     pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {
       if(!Objetovazio(result)) {
         pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {
@@ -650,6 +655,56 @@ app.post('/CadUsuarioTreino', async (req, res) => {
   }
 })
 
+app.post('/UpdateStatusTreino', async (req,res) => {
+
+  const obj = req.body;
+
+  pool.query(`UPDATE alunoTreinamento SET status = ? WHERE alunoname = ? and treinoname = ?`, [obj.status, obj.nomeuser, obj.treinoname])
+  pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
+    console.log(res); 
+   });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
+
+// endpoint para retornar o historico do aluno
+
+app.post('/Show_Hist_Aluno', async (req,res) => {
+  var Aprovados = {};
+  var Reprovados = {};
+  var obj = req.body;
+
+  var obj2 = {
+    Aprovados,
+    Reprovados
+  }
+
+    /*response.forEach( i => {
+      switch(i.status){
+        case '0': i.status = 'Treinamento não iniciado';  break;
+        case '1': i.status = 'Treinamento em andamento'; break;
+        case '2': i.status = 'Aprovado'; break;
+        case '3': i.status = 'Reprovado'; break;
+      }
+    })*/
+
+    pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '2'], (err, result) => {
+      result.forEach( i => {
+          i.status = 'Aprovado';
+      })
+      //console.log(result)
+      obj2.Aprovados = result;
+    })
+
+    pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '3'], (err, result) => {
+      result.forEach( i => {
+        i.status = 'Reprovados';
+    })
+      //console.log(result)
+      obj2.Reprovados = result;
+      console.log(obj2);
+      //res.json(obj2);
+    })
+})

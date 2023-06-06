@@ -53,7 +53,19 @@ if (IrParaQuiz_button) {
                     Nome: NomeTreinamentoForQuiz.value.toUpperCase(),
                     Cod: CodTreinamentoForQuiz.value,
                 }
+                const user = JSON.parse(localStorage.getItem('user'));
+                const obj1 = { email: user.email, password: user.password }
+                axios.post('http://localhost:3000/viewjobs', obj1)
+                .then((response) => {
+                    const Usuario = {
+                        nomeuser: response.data,
+                        treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
+                        status: '1'
+                    }
+                    axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
+                })
                 localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
+                
                 ipcRenderer.send('Janela_QuizApp');
             }
         } 
