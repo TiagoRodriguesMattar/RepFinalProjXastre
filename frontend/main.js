@@ -68,7 +68,7 @@ function windowAlunoJobs() {
     }, 
   });
 
-  childWindow.loadFile("JobsAlunoHome.html");
+  childWindow.loadFile("./JobsPages/JobsAlunoHome.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -94,7 +94,7 @@ function windowJobsAllOptions() {
       }, 
     });
 
-    childWindow.loadFile("JobsEmpresaAllOptions.html");
+    childWindow.loadFile("./JobsPages/JobsEmpresaAllOptions.html");
 
     childWindow.once("ready-to-show", () => {
         childWindow.show();
