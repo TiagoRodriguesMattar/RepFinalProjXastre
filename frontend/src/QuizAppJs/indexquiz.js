@@ -18,33 +18,33 @@ function verificar() {
             auth = false;
     })
     return auth;
-} 
-const button_crud = document.getElementById("CRUDtreinamentos");
+}
 
-if(button_crud){
-    if(verificar()){
-        try{
-            button_crud.addEventListener("click", (e) => {
-                ipcRenderer.send('display_crud_treinamento');
-        });
+const button_montar_Quiz = document.getElementById("QuizMontagem");
+
+if (button_montar_Quiz) {
+    button_montar_Quiz.addEventListener('click', (e) => {
+        try {
+            if (verificar()) {
+                ipcRenderer.send('display_montar_Quiz');
+            }
         }
         catch(e){
             console.log(e);
         }
-        
-    }
+    })
 }
 
-const button_CRUD_quiz = document.getElementById("CRUDquiz");
+const button_delete_Quiz = document.getElementById("QuizDelete");
 
-if (button_CRUD_quiz) {
-    button_CRUD_quiz.addEventListener('click', (e) => {
-        try {
-            if (verificar()) {
-                ipcRenderer.send('display_crud_quiz');
-            }
-        }
-        catch(e){
+if(button_delete_Quiz){
+    button_delete_Quiz.addEventListener('click', (e) => {
+        try{
+            if(verificar())
+                ipcRenderer.send("display_delete_Quiz");
+            else
+                console.log('acesso negado');
+        }catch(e){
             console.log(e);
         }
     })

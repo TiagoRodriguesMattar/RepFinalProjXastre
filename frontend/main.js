@@ -133,6 +133,30 @@ ipcMain.on("display_crud_treinamento", (event, arg) => {
 
 // Montagem do Quiz - parte do ADM
 
+function QuizCrudWindow() {             // CRUD quiz
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./TreinamentosPages/QuizAdm/indexQuizCrud.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_crud_quiz", (event, arg) => {
+  QuizCrudWindow();
+});
+
 function MontarQuizWindow() {
   childWindow = new BrowserWindow({
     width: 1000,
@@ -146,7 +170,7 @@ function MontarQuizWindow() {
     }, 
   });
 
-  childWindow.loadFile("./TreinamentosPages/MontarQuizAdm.html");
+  childWindow.loadFile("./TreinamentosPages/QuizAdm/MontarQuizAdm.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();
@@ -156,6 +180,31 @@ function MontarQuizWindow() {
 ipcMain.on("display_montar_Quiz", (event, arg) => {
   MontarQuizWindow();
 });
+
+function DeleteQuizWindow() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./TreinamentosPages/QuizAdm/DeleteQuizAdm.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_delete_Quiz", (event, arg) => {
+  DeleteQuizWindow();
+});
+
 
 function windowJobsHome() {
   childWindow = new BrowserWindow({
@@ -468,7 +517,7 @@ const AlunoTreinamentosWindow = () => {
       },
   });
 
-  childWindow.loadFile("./TreinamentoAlunoHome.html");
+  childWindow.loadFile("./TreinamentosPages/TreinamentoAlunoHome.html");
 
   childWindow.once("ready-to-show", () => {
       childWindow.show();

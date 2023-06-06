@@ -140,4 +140,3 @@ if (IrParaCase2_button) {
         }
     })
 }
-

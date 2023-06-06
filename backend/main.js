@@ -590,6 +590,9 @@ app.get('/VerAllQuiz', async (req, res) => {
     pool.connect(function(err) {
       if (err) throw err;
     });
+    /*pool.query(`SELECT * FROM quiz`, (err, result) => {
+      console.log(result);
+    });*/
     pool.query(`SELECT NomeQuiz FROM quiz GROUP BY NomeQuiz`, (err, result) => {
       console.log(result);
     });
@@ -597,6 +600,20 @@ app.get('/VerAllQuiz', async (req, res) => {
   catch(e){
     console.log(e);
   }
+})
+
+app.post('/DeleteQuiz', async (req, res) => {
+  const obj = req.body;
+  
+  pool.query(`SELECT * FROM quiz where NomeQuiz = ?`, [obj.Nome] , (err, result) => {
+    if (!Objetovazio(result)) {
+      pool.query(`DELETE from quiz where NomeQuiz = ?`, [obj.Nome], (err, res) => {
+        console.log('Quiz deletado com sucesso!');
+      });
+      pool.query(`DELETE from histacertos where NomeQuiz = ?`, [obj.Nome])
+      pool.query(`DELETE FROM Treinamento where QAptidao = ? or QCase1 = ? or QCase2 = ?`, [obj.Nome, obj.Nome, obj.Nome])
+    }
+  })
 })
 
 app.post('/CadUsuarioTreino', async (req, res) => {
