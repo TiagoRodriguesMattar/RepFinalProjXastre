@@ -105,6 +105,30 @@ ipcMain.on("display_crud", (event, arg) => {
     windowJobsAllOptions();
 });
 
+function windowJobsAdm() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./JobsPages/JobsAdmHome.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_vagas_adm", (event, arg) => {
+  windowJobsAdm();
+});
+
 // display atividades alunos parte da empresa
 
 function windowAlunosInfoEmpresa() {
@@ -155,6 +179,30 @@ function TreinamentoCrudWindow() {
 
 ipcMain.on("display_crud_treinamento", (event, arg) => {
   TreinamentoCrudWindow();
+});
+
+function HistoricoAlunoWindow() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./AlunoProfile/HistAlunoAdm.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_hist_alunos", (event, arg) => {
+  HistoricoAlunoWindow();
 });
 
 // Montagem do Quiz - parte do ADM

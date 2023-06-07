@@ -94,7 +94,7 @@ if (show_vagas_button) {
 
 // PARTE EMPRESA DE ACESSO AO PERFIL DO ALUNO
 
-const ViewAtividadesConcluidasAlunos_button = document.getElementById('VerAtividadesAlunos');
+const ViewAtividadesConcluidasAlunos_button = document.getElementById('VerAtividadesAlunos');       // EMPRESA E ADM
 
 if (ViewAtividadesConcluidasAlunos_button) {
     ViewAtividadesConcluidasAlunos_button.addEventListener('click', (e) => {
@@ -125,6 +125,22 @@ if (ViewNotasAlunos_button) {
                 }
                 axios.post('http://localhost:3000/ViewNotasAlunos', Usuario);
             })
+        }
+        catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+// PARTE ADM DE ACESSO AO PERFIL DO ALUNO
+
+const ViewNotasAlunos_button_adm = document.getElementById('VerNotasAlunosAdm');
+
+if (ViewNotasAlunos_button_adm) {
+    ViewNotasAlunos_button_adm.addEventListener('click', (e) => {
+        e.preventDefault();
+        try {
+            axios.get('http://localhost:3000/get-NotasAllAlunos');
         }
         catch (e) {
             console.log(e);

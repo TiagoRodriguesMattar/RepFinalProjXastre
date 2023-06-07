@@ -36,7 +36,6 @@ function login(e) {
                         }
                         if(res.data === 'ADM'){
                             ipcRenderer.send('janela_HomeAdmPerm');
-                            //ipcRenderer.send('Janela_QuizApp');
                         }
                     })
                 }

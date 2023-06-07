@@ -18,7 +18,40 @@ function verificar() {
             auth = false;
     })
     return auth;
-} 
+}
+
+const button_ViewHistAlunos = document.getElementById("HistAlunos");
+
+if(button_ViewHistAlunos){
+    if(verificar()){
+        try{
+            button_ViewHistAlunos.addEventListener("click", (e) => {
+                ipcRenderer.send('display_hist_alunos');
+        });
+        }
+        catch(e){
+            console.log(e);
+        }
+        
+    }
+}
+
+const button_ViewVagas = document.getElementById("ViewVagasAdm");
+
+if(button_ViewVagas){
+    if(verificar()){
+        try{
+            button_ViewVagas.addEventListener("click", (e) => {
+                ipcRenderer.send('display_vagas_adm');
+        });
+        }
+        catch(e){
+            console.log(e);
+        }
+        
+    }
+}
+
 const button_crud = document.getElementById("CRUDtreinamentos");
 
 if(button_crud){

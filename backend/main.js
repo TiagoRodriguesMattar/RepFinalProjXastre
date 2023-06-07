@@ -693,9 +693,9 @@ app.post('/UpdateStatusTreino', async (req,res) => {
   const obj = req.body;
 
   pool.query(`UPDATE alunoTreinamento SET status = ? WHERE alunoname = ? and treinoname = ?`, [obj.status, obj.nomeuser, obj.treinoname])
-  pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
+  /*pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
     console.log(res); 
-   });
+   });*/
 });
 
 // endpoint para retornar o historico de todos os alunos
@@ -756,6 +756,12 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
     obj2.Reprovados = result;
     console.log(obj2);
     //res.json(obj2);
+  })
+})
+
+app.get('/get-NotasAllAlunos', (req, res) => {
+  pool.query(`SELECT * FROM histacertos`, (err, result) => {
+    console.log(result);
   })
 })
 
