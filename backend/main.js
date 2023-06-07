@@ -273,6 +273,39 @@ app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados
   });
 })
 
+app.post('/ShowVagas_alunosInscritos', (req, res) => {    // retorna as vagas que um determinado aluno está cadastrado
+  const obj = req.body;
+
+  pool.query(`SELECT jobname, jobcompany FROM alunojob WHERE alunoname = ?`, [obj.nomeAluno], (err, res) => {
+    console.log('Você está inscritos em tais vagas: ');
+    console.log(res);
+  })
+})
+
+// retorna os números de acertos nos quizzes dos alunos cadastrados em alguma vaga de uma empresa -> parte empresa
+app.post('/ViewNotasAlunos', (req, res) => {
+  const obj = req.body;
+  pool.query(`SELECT * FROM job WHERE Company = ?`, [obj.nomeuser], (err, res) => {
+    if(!Objetovazio(res)) {
+      pool.query(`SELECT alunoname FROM alunojob WHERE jobcompany = ?`, [obj.nomeuser], (err, result) => {
+        if(!Objetovazio(result)) {
+          pool.query(`SELECT nome_comercial, QAptidao, QCase1 , QCase2 FROM Treinamento`, (err, r) => {
+            console.log('Treinamentos cadastrados no sistema e seus respectivos testes: ')
+            console.log(r);
+          })
+          result.forEach( i => {
+            pool.query(`SELECT * FROM histacertos WHERE NomeAluno = ?`, [i.alunoname], (err, response) => {
+              console.log('Histórico de acertos dos alunos nos Quizzes: ')
+              console.log(response);
+            })
+          } )
+        }
+      })
+    }
+  })
+
+})
+
 app.post('/auth', (req,res) => {
     //console.log(req.headers)
     const token  = req.headers['authorization'];
@@ -476,9 +509,23 @@ app.post("/treinamento_create", async (req, res) => {   // Create novo treinamen
         if (err) throw err;
         //console.log("conectou");
     });
-    // Fazer a verificação se já existe um treinamento criado 
-    // o codigo eh auto incrementado a cada insert na tabela, nao eh mais gerado aleatoriamente 
-    pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
+
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?`, [cadastro.nome_comercial], (err, result) => {
+      if(Objetovazio(result)) {
+        pool.query(`SELECT * FROM quiz WHERE QAptidao = ? and QCase1 = ? and QCase2 = ?`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, res) => {
+          if (!Objetovazio(res)) {
+            pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
+            console.log('Treinamento cadastrado com sucesso');
+          }
+          else {
+            console.log('Quiz inexistente. Impossível realizar o cadastro!');
+          }
+        })
+      }
+      else {
+        console.log('Treinamento já existente. Impossível realizar o cadastro!');
+      }
+    })
     }
     else{
       console.log("data menor")
@@ -532,6 +579,7 @@ app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento esp
     });
     pool.query(`DELETE FROM Treinamento WHERE codigo = ? and nome_comercial = ?;`, [objdelete.Cod, objdelete.Nome], (err, response) => {
       //res.json(response);
+      pool.query(`DELETE FROM alunoTreinamento WHERE treinoname = ? and treinocodigo = ?`, [objdelete.Nome, objdelete.Cod]);
       console.log('Treinamento deletado com sucesso');
     });
   }
@@ -560,7 +608,7 @@ app.post('/ViewTreinamentos_alunosCadastrados', async (req, res) => {    // sele
   pool.query(`SELECT * FROM alunoTreinamento`, (err, res) => {
     console.log(res);
   })*/
-  pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ? and status = 0;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
+  pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ?;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
     console.log(response);
     //res.json(response);
   });
@@ -660,16 +708,42 @@ app.post('/UpdateStatusTreino', async (req,res) => {
   const obj = req.body;
 
   pool.query(`UPDATE alunoTreinamento SET status = ? WHERE alunoname = ? and treinoname = ?`, [obj.status, obj.nomeuser, obj.treinoname])
-  pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
+  /*pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
     console.log(res); 
-   });
+   });*/
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-});
+// endpoint para retornar o historico de todos os alunos
 
-// endpoint para retornar o historico do aluno
+app.get('/Show_Hist_All_Alunos', async (req,res) => {
+    var Aprovados = {};
+    var Reprovados = {};
+
+    var obj2 = {
+      Aprovados,
+      Reprovados
+    }
+
+    pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '2';`, (err, result) => {
+      result.forEach( i => {
+          i.status = 'Aprovado';
+      })
+      //console.log(result)
+      obj2.Aprovados = result;
+    })
+
+    pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '3'`, (err, result) => {
+      result.forEach( i => {
+        i.status = 'Reprovados';
+    })
+      //console.log(result)
+      obj2.Reprovados = result;
+      console.log(obj2);
+      //res.json(obj2);
+    })
+})
+
+// endpoint para retornar o historico de 1 aluno
 
 app.post('/Show_Hist_Aluno', async (req,res) => {
   var Aprovados = {};
@@ -681,30 +755,61 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
     Reprovados
   }
 
-    /*response.forEach( i => {
-      switch(i.status){
-        case '0': i.status = 'Treinamento não iniciado';  break;
-        case '1': i.status = 'Treinamento em andamento'; break;
-        case '2': i.status = 'Aprovado'; break;
-        case '3': i.status = 'Reprovado'; break;
-      }
-    })*/
+  pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '2'], (err, result) => {
+    result.forEach( i => {
+        i.status = 'Aprovado';
+    })
+    //console.log(result)
+    obj2.Aprovados = result;
+  })
 
-    pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '2'], (err, result) => {
-      result.forEach( i => {
-          i.status = 'Aprovado';
-      })
-      //console.log(result)
-      obj2.Aprovados = result;
-    })
-
-    pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '3'], (err, result) => {
-      result.forEach( i => {
-        i.status = 'Reprovados';
-    })
-      //console.log(result)
-      obj2.Reprovados = result;
-      console.log(obj2);
-      res.json(obj2);
-    })
+  pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '3'], (err, result) => {
+    result.forEach( i => {
+      i.status = 'Reprovados';
+  })
+    //console.log(result)
+    obj2.Reprovados = result;
+    console.log(obj2);
+    //res.json(obj2);
+  })
 })
+
+// endpoint para retornar o historico das ultimas 10 atividades dos alunos - MENTOR
+
+app.get('/get-atividades-mentor', async (req,res) => {
+  var Aprovados = {};
+  var Reprovados = {};
+
+  var obj2 = {
+    Aprovados,
+    Reprovados
+  }
+
+  pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '2' LIMIT 0, 10;`, (err, result) => {
+    result.forEach( i => {
+        i.status = 'Aprovado';
+    })
+    //console.log(result)
+    obj2.Aprovados = result;
+  })
+
+  pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '3' LIMIT 0, 10`, (err, result) => {
+    result.forEach( i => {
+      i.status = 'Reprovados';
+  })
+    //console.log(result)
+    obj2.Reprovados = result;
+    console.log(obj2);
+    res.json(obj2);
+  })
+})
+
+app.get('/get-NotasAllAlunos', (req, res) => {
+  pool.query(`SELECT * FROM histacertos`, (err, result) => {
+    console.log(result);
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+});

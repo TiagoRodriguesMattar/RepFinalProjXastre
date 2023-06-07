@@ -20,38 +20,32 @@ function verificar() {
     return auth;
 }
 
-function AtvFunction() { 
-    var x = document.getElementById("atvs"); 
-    if (x.style.display === "none") { 
-      x.style.display = "block"; 
-    } else { 
-      x.style.display = "none"; 
-    } 
-    axios.get();
-  } 
-  
-  function NotasFunction() { 
-    var x = document.getElementById("nota"); 
-    if (x.style.display === "none") { 
-      x.style.display = "block"; 
-    } else { 
-      x.style.display = "none"; 
-    } 
-  } 
-  
-  const button_crud = document.getElementById("display_crud_vagas");
+const button_info_alunos = document.getElementById("display_info_alunos");
 
-  if(button_crud){
-    if(verificar()){
-        try{
-            button_crud.addEventListener("click", (e) => {
-                ipcRenderer.send('display_crud');
-        });
-        }
-        catch(e){
-            console.log(e);
-        }
-        
-    }
-        
-  }
+if(button_info_alunos){
+  if(verificar()){
+      try{
+        button_info_alunos.addEventListener("click", (e) => {
+              ipcRenderer.send('display_info_alunos');
+      });
+      }
+      catch(e){
+          console.log(e);
+      }     
+  }        
+}
+
+const button_crud = document.getElementById("display_crud_vagas");
+
+if(button_crud){
+  if(verificar()){
+      try{
+          button_crud.addEventListener("click", (e) => {
+              ipcRenderer.send('display_crud');
+      });
+      }
+      catch(e){
+          console.log(e);
+      }     
+  }        
+}
