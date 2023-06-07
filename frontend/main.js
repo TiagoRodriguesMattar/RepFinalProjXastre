@@ -105,6 +105,32 @@ ipcMain.on("display_crud", (event, arg) => {
     windowJobsAllOptions();
 });
 
+// display atividades alunos parte da empresa
+
+function windowAlunosInfoEmpresa() {
+  childWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    modal: true,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    }, 
+  });
+
+  childWindow.loadFile("./AlunoProfile/AlunoInfo.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("display_info_alunos", (event, arg) => {
+  windowAlunosInfoEmpresa();
+});
+
 // Parte CRUD treinamentos
 
 function TreinamentoCrudWindow() {
