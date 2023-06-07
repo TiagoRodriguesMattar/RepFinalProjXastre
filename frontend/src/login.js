@@ -37,6 +37,9 @@ function login(e) {
                         if(res.data === 'ADM'){
                             ipcRenderer.send('janela_HomeAdmPerm');
                         }
+                        if(res.data === 'MENTOR'){
+                            ipcRenderer.send('janela_HomeMentor');
+                        }
                     })
                 }
                 saveUser(User)

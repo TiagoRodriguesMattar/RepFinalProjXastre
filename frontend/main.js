@@ -678,6 +678,33 @@ ipcMain.on("janela_HomeAdmPerm", (event, args) => {
     HomeAdministrador();
 });
 
+// Página que aparece para o mentor depois do LOGIN
+
+const HomeMentor = () => {
+  childWindow = new BrowserWindow({
+      width: 1000,
+      height: 700,
+      modal: true,
+      show: false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+      },
+  });
+
+  childWindow.loadFile("./NiveisDePermissao/Mentor.html");
+
+  childWindow.once("ready-to-show", () => {
+      childWindow.show();
+  });
+}
+
+ipcMain.on("janela_HomeMentor", (event, args) => {
+  HomeMentor();
+});
+
+
 // Páginas CRUD treinamento
 // Create treinamento
 const NewTreinoWindow = () => {

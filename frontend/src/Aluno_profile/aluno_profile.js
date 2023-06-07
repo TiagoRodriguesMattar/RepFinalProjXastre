@@ -147,3 +147,19 @@ if (ViewNotasAlunos_button_adm) {
         }
     })
 }
+
+// PARTE MENTOR DE ACESSO AO PERFIL DO ALUNO
+
+const Ver10utimasAtividadesALunos_b = document.getElementById('Ver10utimasAtividadesALunos');
+
+if (Ver10utimasAtividadesALunos_b) {
+    Ver10utimasAtividadesALunos_b.addEventListener('click', (e) => {
+        e.preventDefault();
+        try {
+            axios.get('http://localhost:3000/get-atividades-mentor');
+        }
+        catch (e) {
+            console.log(e);
+        }
+    })
+}

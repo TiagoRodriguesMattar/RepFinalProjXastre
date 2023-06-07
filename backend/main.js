@@ -509,9 +509,23 @@ app.post("/treinamento_create", async (req, res) => {   // Create novo treinamen
         if (err) throw err;
         //console.log("conectou");
     });
-    // Fazer a verificação se já existe um treinamento criado 
-    // o codigo eh auto incrementado a cada insert na tabela, nao eh mais gerado aleatoriamente 
-    pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
+
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?`, [cadastro.nome_comercial], (err, result) => {
+      if(Objetovazio(result)) {
+        pool.query(`SELECT * FROM quiz WHERE QAptidao = ? and QCase1 = ? and QCase2 = ?`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, res) => {
+          if (!Objetovazio(res)) {
+            pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
+            console.log('Treinamento cadastrado com sucesso');
+          }
+          else {
+            console.log('Quiz inexistente. Impossível realizar o cadastro!');
+          }
+        })
+      }
+      else {
+        console.log('Treinamento já existente. Impossível realizar o cadastro!');
+      }
+    })
     }
     else{
       console.log("data menor")
@@ -565,6 +579,7 @@ app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento esp
     });
     pool.query(`DELETE FROM Treinamento WHERE codigo = ? and nome_comercial = ?;`, [objdelete.Cod, objdelete.Nome], (err, response) => {
       //res.json(response);
+      pool.query(`DELETE FROM alunoTreinamento WHERE treinoname = ? and treinocodigo = ?`, [objdelete.Nome, objdelete.Cod]);
       console.log('Treinamento deletado com sucesso');
     });
   }
@@ -749,6 +764,36 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
   })
 
   pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '3'], (err, result) => {
+    result.forEach( i => {
+      i.status = 'Reprovados';
+  })
+    //console.log(result)
+    obj2.Reprovados = result;
+    console.log(obj2);
+    //res.json(obj2);
+  })
+})
+
+// endpoint para retornar o historico das ultimas 10 atividades dos alunos - MENTOR
+
+app.get('/get-atividades-mentor', async (req,res) => {
+  var Aprovados = {};
+  var Reprovados = {};
+
+  var obj2 = {
+    Aprovados,
+    Reprovados
+  }
+
+  pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '2' LIMIT 0, 10;`, (err, result) => {
+    result.forEach( i => {
+        i.status = 'Aprovado';
+    })
+    //console.log(result)
+    obj2.Aprovados = result;
+  })
+
+  pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '3' LIMIT 0, 10`, (err, result) => {
     result.forEach( i => {
       i.status = 'Reprovados';
   })
