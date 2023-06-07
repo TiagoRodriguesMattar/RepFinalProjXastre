@@ -21,6 +21,54 @@ function verificar() {
 }
 
 
+const status = document.querySelector(".status");
+
+
+function displayStatus(obj) {
+    status.innerHTML = "";
+        for(let i = 0; i < obj.Aprovados.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome da treino</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Aprovados[i].treinoname}</th>
+                    <th>${obj.Aprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            status.appendChild(div);
+        }
+        for(let i = 0; i < obj.Reprovados.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<br><table>
+            <thead>
+                <tr>
+                    <th><b>Nome da treino</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Reprovados[i].treinoname}</th>
+                    <th>${obj.Reprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            status.appendChild(div);
+        }
+}
+
+
 const show_hist = document.getElementById('show_hist');
 
 if (show_hist) {
@@ -32,6 +80,10 @@ if (show_hist) {
                 axios.post('http://localhost:3000/viewjobs', UserInfos)
                 .then(response => {
                     axios.post('http://localhost:3000/Show_Hist_Aluno', { nomeAluno: response.data })
+                    .then((res) => {
+                        console.log(res.data)
+                        displayStatus(res.data);
+                    })
                 })
             }
             else {
@@ -43,6 +95,8 @@ if (show_hist) {
         }
     })
 }
+
+
 
 const ViewCadTreinamentosAlunos_button = document.getElementById('ViewCadTreinamentosAlunos');
 
@@ -58,7 +112,10 @@ if (ViewCadTreinamentosAlunos_button) {
                     const Usuario = {
                         nomeuser: response.data,
                     }
-                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario);
+                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario)
+                    .then((res) => {
+                        console.log(res.data)
+                    })
                 })
             }
         }
