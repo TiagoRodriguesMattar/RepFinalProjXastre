@@ -770,7 +770,7 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
     //console.log(result)
     obj2.Reprovados = result;
     console.log(obj2);
-    //res.json(obj2);
+    res.json(obj2);
   })
 })
 
