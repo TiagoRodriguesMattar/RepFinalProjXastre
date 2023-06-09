@@ -25,6 +25,8 @@ const pool = mysql_pool.createConnection({
     password: process.env.PASSWORD
 });
 
+const Objetovazio = require('./tests/Objetovazio');
+
 function Encrypt(dados){
   const saltRounds = 10;
   const pass = dados;
@@ -249,13 +251,13 @@ app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga 
     }
 });
 
-function Objetovazio(obj) {
+/*function Objetovazio(obj) {
   for (var prop in obj) {
     if(obj.hasOwnProperty(prop)) 
       return false
   }
   return true;
-}
+}*/
 
 app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados em uma determinada vaga da empresa logada
   const obj = req.body;
@@ -458,8 +460,6 @@ app.post('/Curso2texto', (req, res) => {        // retorna o texto para o curso 
     console.log(e);
   }
 })
-
-
 
 app.post('/HistAcertosQuiz', (req, res) => {        // Histórico de acertos de um aluno em determinado quiz
     const obj = req.body;
