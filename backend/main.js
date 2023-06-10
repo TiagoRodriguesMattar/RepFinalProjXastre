@@ -265,9 +265,10 @@ app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados
 
   pool.query(`SELECT * FROM job WHERE JobTitle = '${obj.jobname}' and Company = '${obj.jobcompany}'`, (err, result) => {
     if(!Objetovazio(result)) {
-      pool.query(`SELECT alunoname FROM alunojob WHERE jobname = '${obj.jobname}' and jobcompany = '${obj.jobcompany}'`, (err, res) => {
-        console.log("Lista de alunos cadastrados: ")
-        return console.log(res);
+      pool.query(`SELECT alunoname FROM alunojob WHERE jobname = '${obj.jobname}' and jobcompany = '${obj.jobcompany}'`, (err, response) => {
+        //console.log("Lista de alunos cadastrados: ")
+        //console.log(response);
+        res.json(response);
       })
     }
     else {

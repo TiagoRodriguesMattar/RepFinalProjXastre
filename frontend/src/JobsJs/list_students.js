@@ -71,6 +71,32 @@ if(ViewJobs_button) {
     })
 }
 
+const ListStudentsClass2 = document.querySelector('.ViewStudentsClass_2');
+
+function displayStudents(obj) {
+    ListStudentsClass2.innerHTML = "";
+    const user = JSON.parse(localStorage.getItem('user'));
+    const Email = { email: user.email}
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do Aluno</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].alunoname}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            ListStudentsClass2.appendChild(div);
+        }
+}
+
 if (ViewStudents_button) {
     ViewStudents_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -80,7 +106,11 @@ if (ViewStudents_button) {
                     jobname: JobForList.value.toUpperCase(),
                     jobcompany: JSON.parse(localStorage.getItem('Username'))
                 }
-                axios.post('http://localhost:3000/viewstudents', obj);
+                axios.post('http://localhost:3000/viewstudents', obj)
+                .then((response) => {
+                    console.log(response.data)
+                    displayStudents(response.data)
+                })
             }
         }
         catch(e) {
