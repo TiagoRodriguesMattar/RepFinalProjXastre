@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { response } = require('express');
 
 function verificar() {
     var auth = true;
@@ -19,6 +20,30 @@ function verificar() {
     return auth;
 }
 
+const DeleteQuizAdm = document.querySelector(".DeleteQuizAdm");
+
+function displayQuiz(obj) {
+    DeleteQuizAdm.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do Quiz</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].NomeQuiz}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            DeleteQuizAdm.appendChild(div);
+        }
+}
+
 const ViewQuizzes_button = document.getElementById('ViewQuizzes');
 
 if (ViewQuizzes_button) {
@@ -26,7 +51,10 @@ if (ViewQuizzes_button) {
         e.preventDefault();
         try {
             if (verificar()) {
-                axios.get('http://localhost:3000/VerAllQuiz');
+                axios.get('http://localhost:3000/VerAllQuiz')
+                .then(response => {
+                    displayQuiz(response.data)
+                })
             }
         }
         catch(e) {

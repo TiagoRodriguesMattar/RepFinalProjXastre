@@ -51,13 +51,68 @@ function verificar() {
     return auth;
 }
 
+const ViewTreinamentosAdm = document.querySelector(".ViewTreinamentosAdm");
+
+function displayTreinamentos(obj) {
+    ViewTreinamentosAdm.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do treino</b></th>
+                    <th><b>Descrição</b></th>
+                    <th><b>Carga Horária</b></th>
+                    <th><b>Início das inscrições</b></th>
+                    <th><b>Fim das inscrições</b></th>
+                    <th><b>Início dos treinamentos</b></th>
+                    <th><b>Fim dos treinamentos</b></th>
+                    <th><b>Mínimo de inscritos</b></th>
+                    <th><b>Máximo de inscritos</b></th>
+                    <th><b>Nome Quiz de Aptidao</b></th>
+                    <th><b>Nome Case 1</b></th>
+                    <th><b>Nome Case 2</b></th>
+                    <th><b>Texto Curso 1</b></th>
+                    <th><b>Texto Curso 2</b></th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <tr>
+                    <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].descricao}</th>
+                    <th>${obj[i].carga_horaria}</th>
+                    <th>${obj[i].inicio_inscricoes}</th>
+                    <th>${obj[i].fim_inscricoes}</th>
+                    <th>${obj[i].inicio_treinamento}</th>
+                    <th>${obj[i].fim_treinamento}</th>
+                    <th>${obj[i].min_inscritos}</th>
+                    <th>${obj[i].max_inscritos}</th>
+                    <th>${obj[i].QAptidao}</th>
+                    <th>${obj[i].QCase1}</th>
+                    <th>${obj[i].QCase2}</th>
+                    <th>${obj[i].Curso1}</th>
+                    <th>${obj[i].Curso2}</th>
+                </tr>
+
+            <tbody>
+    
+            </table>`;
+            ViewTreinamentosAdm.appendChild(div);
+        }
+}
+
+
 const ViewTreinamentos_button = document.getElementById('Viewtreinamentos');
 
 if (ViewTreinamentos_button) {
     ViewTreinamentos_button.addEventListener('click', (e) => {
         try {
             if (verificar()) {
-                axios.get('http://localhost:3000/ViewAllTreinamentos');
+                axios.get('http://localhost:3000/ViewAllTreinamentos')
+                .then(response => {
+                    displayTreinamentos(response.data)
+                })
             }
         }
         catch(e) {
@@ -70,6 +125,30 @@ const OldTreinamentoTitle = document.querySelector('#OldTreinamentoTitle');
 const edit_button_treino = document.getElementById('edit_button_treino');
 const OldTreinamentoCodigo = document.querySelector('#OldTreinamentoCodigo');
 
+const ViewQuizAdm = document.querySelector(".ViewQuizAdm");
+
+function displayQuiz(obj) {
+    ViewQuizAdm.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do Quiz</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].NomeQuiz}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            ViewQuizAdm.appendChild(div);
+        }
+}
+
 const VerAllQuiz_button = document.getElementById('VerAllQuiz');
 
 if (VerAllQuiz_button) {
@@ -77,7 +156,10 @@ if (VerAllQuiz_button) {
         e.preventDefault();
         try {
             if (verificar()) {
-                axios.get('http://localhost:3000/VerAllQuiz');
+                axios.get('http://localhost:3000/VerAllQuiz')
+                .then((response) => {
+                    displayQuiz(response.data)
+                })
             }
         }
         catch (e) {

@@ -545,8 +545,8 @@ app.post("/treinamento_read", async (req, res) => {   // Read treinamento especi
       //console.log("conectou");
     });
     pool.query(`SELECT * FROM Treinamento WHERE nome_comercial =?  and codigo = ?;`, [obj.nome, obj.cod], (err, response) => {
-      //res.json(response);
-      console.log(response);
+      res.json(response);
+      //console.log(response);
     });
   }
   catch(e){
@@ -591,8 +591,8 @@ app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento esp
 
 app.get('/ViewAllTreinamentos', async (req, res) => {
   pool.query(`SELECT * FROM Treinamento;`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
-    console.log(response);
-    //res.json(response);
+    //console.log(response);
+    res.json(response);
   });
 })
 
@@ -655,7 +655,8 @@ app.get('/VerAllQuiz', async (req, res) => {
       console.log(result);
     });*/
     pool.query(`SELECT NomeQuiz FROM quiz GROUP BY NomeQuiz`, (err, result) => {
-      console.log(result);
+      res.json(result);
+      //console.log(result);
     });
   }
   catch(e){

@@ -2,11 +2,7 @@ const axios = require('axios');
 
 function verificar() {
     var auth = true;
-    //console.log(User)
-    //console.log(email_login.value);
-    //console.log(password_login.value);
-    //token = User.token;
-    //console.log(token);
+    
     const user = JSON.parse(localStorage.getItem('user'));
 
     axios.post('http://localhost:3000/auth', {}, {
@@ -19,13 +15,43 @@ function verificar() {
     return auth;
 }
 
+const ViewTreinamentosDelete = document.querySelector(".ViewTreinamentosDelete");
+
+function displayTreinamentosRead(obj) {
+    ViewTreinamentosDelete.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do treino</b></th>
+                    <th><b>Código</b></th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <tr>
+                    <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].codigo}</th>
+                </tr>
+
+            <tbody>
+    
+            </table>`;
+            ViewTreinamentosDelete.appendChild(div);
+        }
+}
+
 const ViewTreinamentos_button = document.getElementById('ViewTreinamentos');
 
 if (ViewTreinamentos_button) {
     ViewTreinamentos_button.addEventListener('click', () => {
         try {
             if (verificar()) {
-                axios.get('http://localhost:3000/ViewAllTreinamentos');
+                axios.get('http://localhost:3000/ViewAllTreinamentos')
+                .then(response => {
+                    displayTreinamentosRead(response.data)
+                })
             }
         }
         catch (e) {
