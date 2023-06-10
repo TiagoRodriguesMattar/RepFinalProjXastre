@@ -278,9 +278,8 @@ app.post('/viewstudents', (req, res) => {     // listagem dos alunos cadastrados
 app.post('/ShowVagas_alunosInscritos', (req, res) => {    // retorna as vagas que um determinado aluno está cadastrado
   const obj = req.body;
 
-  pool.query(`SELECT jobname, jobcompany FROM alunojob WHERE alunoname = ?`, [obj.nomeAluno], (err, res) => {
-    console.log('Você está inscritos em tais vagas: ');
-    console.log(res);
+  pool.query(`SELECT jobname, jobcompany FROM alunojob WHERE alunoname = ?`, [obj.nomeAluno], (err, result) => {
+    res.json(result)
   })
 })
 
@@ -503,6 +502,7 @@ function verificarData(data){
 
 app.post("/treinamento_create", async (req, res) => {   // Create novo treinamento
   const cadastro = req.body
+  console.log(cadastro)
   try{
     if(verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))){
       pool.connect(function(err) {
@@ -512,7 +512,7 @@ app.post("/treinamento_create", async (req, res) => {   // Create novo treinamen
 
     pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?`, [cadastro.nome_comercial], (err, result) => {
       if(Objetovazio(result)) {
-        pool.query(`SELECT * FROM quiz WHERE QAptidao = ? and QCase1 = ? and QCase2 = ?`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, res) => {
+        pool.query(`SELECT * FROM quiz WHERE NomeQuiz IN (?, ?, ?)`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, res) => {
           if (!Objetovazio(res)) {
             pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
             console.log('Treinamento cadastrado com sucesso');
@@ -596,9 +596,9 @@ app.get('/ViewAllTreinamentos', async (req, res) => {
 })
 
 app.get('/ViewTreinamentosAgora', async (req, res) => {
-  pool.query(`SELECT * FROM Treinamento WHERE inicio_inscricoes <= CURDATE() AND fim_inscricoes > CURDATE();`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
+  pool.query(`SELECT * FROM Treinamento WHERE inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE();`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
     console.log(response);
-    //res.json(response);
+    res.json(response);
   });
 })
 
@@ -609,8 +609,8 @@ app.post('/ViewTreinamentos_alunosCadastrados', async (req, res) => {    // sele
     console.log(res);
   })*/
   pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ?;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
-    console.log(response);
-    //res.json(response);
+    //console.log(response);
+    res.json(response);
   });
 })
 
@@ -749,6 +749,8 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
   var Aprovados = {};
   var Reprovados = {};
   var obj = req.body;
+
+  console.log(obj.nomeAluno);
 
   var obj2 = {
     Aprovados,

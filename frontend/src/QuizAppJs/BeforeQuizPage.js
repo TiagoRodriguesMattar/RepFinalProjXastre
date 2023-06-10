@@ -16,6 +16,33 @@ function verificar() {
     return auth;
 }
 
+const treinamentosCadAlunos = document.querySelector(".treinamentosCadAlunos");
+
+function displayTreinamentos(obj) {
+    console.log(obj);
+    treinamentosCadAlunos.innerHTML = "";
+    for(let i = 0; i < obj.length; i++) {
+        const div = document.createElement("div");
+        div.innerHTML = `<table>
+        <thead>
+            <tr>
+                <th><b>Nome do treino</b></th>
+                <th><b>Código</b></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th>${obj[i].treinoname}</th>
+                <th>${obj[i].treinocodigo}</th>
+            </tr>
+        <tbody>
+
+        </table>`;
+        treinamentosCadAlunos.appendChild(div);
+    }
+}
+
 const ViewCadTreinamentosAlunos_button = document.getElementById('ViewCadTreinamentosAlunos');
 
 if (ViewCadTreinamentosAlunos_button) {
@@ -30,7 +57,10 @@ if (ViewCadTreinamentosAlunos_button) {
                     const Usuario = {
                         nomeuser: response.data,
                     }
-                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario);
+                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario)
+                    .then((response) => {
+                        displayTreinamentos(response.data)
+                    })
                 })
             }
         }

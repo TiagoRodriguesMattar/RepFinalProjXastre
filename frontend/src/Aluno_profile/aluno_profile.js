@@ -24,12 +24,12 @@ function verificar() {
 
 const status = document.querySelector(".status");
 
-
 function displayStatus(obj) {
     status.innerHTML = "";
         for(let i = 0; i < obj.Aprovados.length; i++) {
             const div = document.createElement("div");
-            div.innerHTML = `<table>
+            div.innerHTML = `<h3> STATUS DOS TREINAMENTOS </h3>
+            <table>
             <thead>
                 <tr>
                     <th><b>Nome da treino</b></th>
@@ -69,6 +69,59 @@ function displayStatus(obj) {
         }
 }
 
+const TreinamentosInscritos = document.querySelector(".TreinamentosInscritos");
+
+function displayTreinamentosInscritos(obj) {
+    TreinamentosInscritos.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> TREINAMENTOS INSCRITOS </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome da treino</b></th>
+                    <th><b>Código do treino</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].treinoname}</th>
+                    <th>${obj[i].treinocodigo}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            TreinamentosInscritos.appendChild(div);
+        }
+}
+
+const VagasDeEmprego = document.querySelector(".VagasDeEmprego");
+
+function displayVagasDeEmprego(obj) {
+    VagasDeEmprego.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> VAGAS DE EMPREGO INSCRITAS </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome da vaga</b></th>
+                    <th><b>Nome da empresa</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].jobname}</th>
+                    <th>${obj[i].jobcompany}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            VagasDeEmprego.appendChild(div);
+        }
+}
 
 const show_hist = document.getElementById('show_hist');
 
@@ -97,8 +150,6 @@ if (show_hist) {
     })
 }
 
-
-
 const ViewCadTreinamentosAlunos_button = document.getElementById('ViewCadTreinamentosAlunos');
 
 if (ViewCadTreinamentosAlunos_button) {
@@ -115,7 +166,7 @@ if (ViewCadTreinamentosAlunos_button) {
                     }
                     axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario)
                     .then((res) => {
-                        console.log(res.data)
+                        displayTreinamentosInscritos(res.data)
                     })
                 })
             }
@@ -137,6 +188,9 @@ if (show_vagas_button) {
                 axios.post('http://localhost:3000/viewjobs', UserInfos)
                 .then(response => {
                     axios.post('http://localhost:3000/ShowVagas_alunosInscritos', { nomeAluno: response.data })
+                    .then(response => {
+                        displayVagasDeEmprego(response.data);
+                    })
                 })
             }
             else {

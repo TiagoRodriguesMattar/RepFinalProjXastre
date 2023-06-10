@@ -3,11 +3,7 @@ const e = require('express');
 
 function verificar() {
     var auth = true;
-    //console.log(User)
-    //console.log(email_login.value);
-    //console.log(password_login.value);
-    //token = User.token;
-    //console.log(token);
+
     const user = JSON.parse(localStorage.getItem('user'));
 
     axios.post('http://localhost:3000/auth', {}, {
@@ -20,6 +16,57 @@ function verificar() {
     return auth;
 }
 
+const treinamentos = document.querySelector(".treinamentos");
+
+function displayTreinamentos() {
+    treinamentos.innerHTML = "";
+    axios.get('http://localhost:3000/ViewTreinamentosAgora')
+    .then(response => {
+        const obj = response.data;
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do treino</b></th>
+                    <th><b>Descrição</b></th>
+                    <th><b>Carga Horária</b></th>
+                    <th><b>Início das inscrições</b></th>
+                    <th><b>Fim das inscrições</b></th>
+                    <th><b>Início dos treinamentos</b></th>
+                    <th><b>Fim dos treinamentos</b></th>
+                    <th><b>Mínimo de inscritos</b></th>
+                    <th><b>Máximo de inscritos</b></th>
+                    <th><b>Quiz de aptidão</b></th>
+                    <th><b>Case 1</b></th>
+                    <th><b>Case 2</b></th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <tr>
+                    <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].descricao}</th>
+                    <th>${obj[i].carga_horaria}</th>
+                    <th>${obj[i].inicio_inscricoes}</th>
+                    <th>${obj[i].fim_inscricoes}</th>
+                    <th>${obj[i].inicio_treinamento}</th>
+                    <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].fim_treinamento}</th>
+                    <th>${obj[i].min_inscritos}</th>
+                    <th>${obj[i].max_inscritos}</th>
+                    <th>${obj[i].QAptidao}</th>
+                    <th>${obj[i].QCase1}</th>
+                    <th>${obj[i].QCase2}</th>
+                </tr>
+            <tbody>
+    
+            </table>`;
+            treinamentos.appendChild(div);
+        }
+    })
+}
+
 const ViewTreinamentosAgora_button = document.getElementById('ViewTreinamentosAgora');
 
 if (ViewTreinamentosAgora_button) {
@@ -27,7 +74,7 @@ if (ViewTreinamentosAgora_button) {
         e.preventDefault();
         try {
             if(verificar()) {
-                axios.get('http://localhost:3000/ViewTreinamentosAgora');
+                displayTreinamentos()
             }
         }
         catch (e) {
