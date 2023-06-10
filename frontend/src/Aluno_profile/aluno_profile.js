@@ -164,7 +164,7 @@ if (ViewCadTreinamentosAlunos_button) {
                     const Usuario = {
                         nomeuser: response.data,
                     }
-                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario)
+                    axios.post('http://localhost:3000/ViewTreinamentos_status_0_1', Usuario)
                     .then((res) => {
                         displayTreinamentosInscritos(res.data)
                     })

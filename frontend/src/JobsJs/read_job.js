@@ -22,6 +22,39 @@ function verificar() {
     return auth;
 }
 
+const ReadJobClass = document.querySelector('.ReadJobClass');
+
+function displayVagasDeEmprego(obj) {
+    ReadJobClass.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> VAGAS DE EMPREGO CRIADAS DA EMPRESA ${obj[i].Company}</h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome da vaga</b></th>
+                    <th><b>Atividades</b></th>
+                    <th><b>Requisitos</b></th>
+                    <th><b>Salário</b></th>
+                    <th><b>Número máximo</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].JobTitle}</th>
+                    <th>${obj[i].Activities}</th>
+                    <th>${obj[i].Requiriments}</th>
+                    <th>${obj[i].Salary}</th>
+                    <th>${obj[i].MaxNumber}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            ReadJobClass.appendChild(div);
+        }
+}
+
 if(read_button){
     read_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -32,6 +65,7 @@ if(read_button){
                 }
                 axios.post('http://localhost:3000/readjob', obj)
                 .then((response)=> {
+                    displayVagasDeEmprego(response.data)
                 },(error) => {
                   console.log(error);
                 })

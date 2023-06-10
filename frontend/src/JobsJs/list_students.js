@@ -23,6 +23,30 @@ function verificar() {
     return auth;
 }
 
+const ListStudentsClass = document.querySelector('.ListStudentsClass');
+
+function displayVagasDeEmprego(obj) {
+    ListStudentsClass.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Título da vaga</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].JobTitle}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            ListStudentsClass.appendChild(div);
+        }
+}
+
 if(ViewJobs_button) {
     ViewJobs_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -35,6 +59,9 @@ if(ViewJobs_button) {
                 .then((response) => {
                     localStorage.setItem('Username', JSON.stringify(response.data));
                     axios.post('http://localhost:3000/readjob', response)
+                    .then((response) => {
+                        displayVagasDeEmprego(response.data);
+                    })
                 })
             }
         }

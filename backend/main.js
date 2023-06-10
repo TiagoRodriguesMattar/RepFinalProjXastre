@@ -154,9 +154,10 @@ app.post('/readjob', async (req, res) => {      // retorna as vagas cadastradas 
       });
 
       pool.query(`SELECT * FROM job WHERE Company = '${readjob.data}'`, (err, result) => {
-          return console.log(result);
+          res.json(result);
+          //return console.log(result);
       });
-      console.log('Vagas cadastradas da empresa ' +  readjob.data + ':');
+      //console.log('Vagas cadastradas da empresa ' +  readjob.data + ':');
 
     } catch(e){
       console.log(e);
@@ -597,7 +598,7 @@ app.get('/ViewAllTreinamentos', async (req, res) => {
 
 app.get('/ViewTreinamentosAgora', async (req, res) => {
   pool.query(`SELECT * FROM Treinamento WHERE inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE();`, (err, response) => {    // Select todos os treinamentos criados pelos administradores
-    console.log(response);
+    //console.log(response);
     res.json(response);
   });
 })
@@ -609,6 +610,18 @@ app.post('/ViewTreinamentos_alunosCadastrados', async (req, res) => {    // sele
     console.log(res);
   })*/
   pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ?;`, [obj.nomeuser], (err, response) => {    // Select todos os treinamentos criados pelos administradores
+    //console.log(response);
+    res.json(response);
+  });
+})
+
+app.post('/ViewTreinamentos_status_0_1', async (req, res) => {    // seleciona todos os treinamentos em que o usuário está cadastrado e não tenha concluído
+  const obj = req.body;
+  /*pool.query(`DELETE FROM alunoTreinamento`);
+  pool.query(`SELECT * FROM alunoTreinamento`, (err, res) => {
+    console.log(res);
+  })*/
+  pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ? AND status IN (?, ?);`, [obj.nomeuser, '0', '1'], (err, response) => {    // Select todos os treinamentos criados pelos administradores
     //console.log(response);
     res.json(response);
   });

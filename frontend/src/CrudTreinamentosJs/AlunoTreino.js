@@ -29,36 +29,28 @@ function displayTreinamentos() {
             <thead>
                 <tr>
                     <th><b>Nome do treino</b></th>
+                    <th><b>Código</b></th>
                     <th><b>Descrição</b></th>
                     <th><b>Carga Horária</b></th>
                     <th><b>Início das inscrições</b></th>
                     <th><b>Fim das inscrições</b></th>
                     <th><b>Início dos treinamentos</b></th>
                     <th><b>Fim dos treinamentos</b></th>
-                    <th><b>Mínimo de inscritos</b></th>
-                    <th><b>Máximo de inscritos</b></th>
-                    <th><b>Quiz de aptidão</b></th>
-                    <th><b>Case 1</b></th>
-                    <th><b>Case 2</b></th>
                 </tr>
             </thead>
     
             <tbody>
                 <tr>
                     <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].codigo}</th>
                     <th>${obj[i].descricao}</th>
                     <th>${obj[i].carga_horaria}</th>
                     <th>${obj[i].inicio_inscricoes}</th>
                     <th>${obj[i].fim_inscricoes}</th>
                     <th>${obj[i].inicio_treinamento}</th>
-                    <th>${obj[i].nome_comercial}</th>
                     <th>${obj[i].fim_treinamento}</th>
-                    <th>${obj[i].min_inscritos}</th>
-                    <th>${obj[i].max_inscritos}</th>
-                    <th>${obj[i].QAptidao}</th>
-                    <th>${obj[i].QCase1}</th>
-                    <th>${obj[i].QCase2}</th>
                 </tr>
+
             <tbody>
     
             </table>`;

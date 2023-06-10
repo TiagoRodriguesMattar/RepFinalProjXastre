@@ -24,6 +24,38 @@ function verificar() {
     return auth;
 }
 
+const DeleteJobsClass = document.querySelector('.DeleteJobsClass');
+
+function displayVagasDeEmprego(obj) {
+    DeleteJobsClass.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome da vaga</b></th>
+                    <th><b>Atividades</b></th>
+                    <th><b>Requisitos</b></th>
+                    <th><b>Salário</b></th>
+                    <th><b>Número máximo</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].JobTitle}</th>
+                    <th>${obj[i].Activities}</th>
+                    <th>${obj[i].Requiriments}</th>
+                    <th>${obj[i].Salary}</th>
+                    <th>${obj[i].MaxNumber}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            DeleteJobsClass.appendChild(div);
+        }
+}
+
 if(ViewJobs_button) {
     ViewJobs_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -36,6 +68,9 @@ if(ViewJobs_button) {
                 .then((response) => {
                     localStorage.setItem('Username', JSON.stringify(response.data));
                     axios.post('http://localhost:3000/readjob', response)
+                    .then(res => {
+                        displayVagasDeEmprego(res.data)
+                    })
                 })
             }
         }
