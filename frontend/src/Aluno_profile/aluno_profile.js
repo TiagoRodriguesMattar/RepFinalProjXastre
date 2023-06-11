@@ -277,6 +277,37 @@ if (ViewAtividadesConcluidasAlunos_button) {
     })
 }
 
+const VerNotasAlunosClass = document.querySelector(".VerNotasAlunosClass");
+
+function displayNotasAlunos(obj) {
+    console.log(obj.NomeAluno.length)
+    VerNotasAlunosClass.innerHTML = "";
+        for(let i = 0; i < obj.NomeAluno.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> Notas dos alunos </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Nome do Quiz</b></th>
+                    <th><b>Número de acertos</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.NomeAluno[i]}</th>
+                    <th>${obj.NomeQuiz[i]}</th>
+                    <th>${obj.NumAcertos[i]}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            VerNotasAlunosClass.appendChild(div);
+        }
+}
+
+
 const ViewNotasAlunos_button = document.getElementById('VerNotasAlunos');
 
 if (ViewNotasAlunos_button) {
@@ -293,6 +324,7 @@ if (ViewNotasAlunos_button) {
                 axios.post('http://localhost:3000/ViewNotasAlunos', Usuario)
                 .then((response) => {
                     console.log(response.data)
+                    displayNotasAlunos(response.data)
                 })
             })
         }
@@ -304,13 +336,47 @@ if (ViewNotasAlunos_button) {
 
 // PARTE ADM DE ACESSO AO PERFIL DO ALUNO
 
+const VerNotasAlunosAdmClass = document.querySelector(".VerNotasAlunosAdmClass");
+
+function displayNotasAlunosAdm(obj) {
+    VerNotasAlunosAdmClass.innerHTML = "";
+        for(let i = 0; i < obj.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> Notas dos alunos </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Nome do Quiz</b></th>
+                    <th><b>Número de acertos</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj[i].NomeAluno}</th>
+                    <th>${obj[i].NomeQuiz}</th>
+                    <th>${obj[i].NumAcertos}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            VerNotasAlunosAdmClass.appendChild(div);
+        }
+}
+
+
 const ViewNotasAlunos_button_adm = document.getElementById('VerNotasAlunosAdm');
 
 if (ViewNotasAlunos_button_adm) {
     ViewNotasAlunos_button_adm.addEventListener('click', (e) => {
         e.preventDefault();
         try {
-            axios.get('http://localhost:3000/get-NotasAllAlunos');
+            axios.get('http://localhost:3000/get-NotasAllAlunos')
+            .then(response => {
+                //console.log(response)
+                displayNotasAlunosAdm(response.data)
+            })
         }
         catch (e) {
             console.log(e);

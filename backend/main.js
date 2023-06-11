@@ -299,42 +299,42 @@ app.post('/ShowVagas_alunosInscritos', (req, res) => {    // retorna as vagas qu
 app.post('/ViewNotasAlunos', (req, res) => {
   const obj = req.body;
 
-  pool.query(`SELECT * FROM job WHERE Company = ?`, [obj.nomeuser], (err, res) => {
-    if (!Objetovazio(res)) {
-      pool.query(`SELECT alunoname FROM alunojob WHERE jobcompany = ?`, [obj.nomeuser], (err, result) => {
+  pool.query(`SELECT * FROM job WHERE Company = ?`, [obj.nomeuser], (err, r) => {
+    if (!Objetovazio(r)) {
+      pool.query(`SELECT alunoname FROM alunojob WHERE jobcompany = ? group by alunoname`, [obj.nomeuser], (err, result) => {
         if (!Objetovazio(result)) {
-          const responses = [];
-          const numResults = result.length;
-          let count = 0;
-  
-          result.forEach(i => {
-            pool.query(`SELECT * FROM histacertos WHERE NomeAluno = ?`, [i.alunoname], (err, response) => {
-              if (err) {
-                // Lide com o erro de forma apropriada
-                console.error(err);
-                return res.status(500).json({ error: 'Internal server error' });
-              }
-              
-              responses.push(response);
-  
-              count++;
-              if (count === numResults) {
-                res.json(responses);
-              }
+          const promises = result.map(i => {
+            return new Promise((resolve, reject) => {
+              pool.query(`SELECT * FROM histacertos WHERE NomeAluno = ?`, [i.alunoname], (err, response) => {
+                resolve(response); // Resolve a promessa com o resultado da consulta
+              });
             });
           });
-        } else {
-          res.json([]); // Retorna um array vazio se não houver resultados
+  
+          Promise.all(promises).then(results => {
+            const combinedResult = arrayToSingleObject(results.flat()); // Combina todos os resultados em um único array e transforma em objeto
+  
+            console.log(combinedResult);
+            res.json(combinedResult)
+          });
         }
       });
-    } else {
-      res.json([]); // Retorna um array vazio se não houver resultados
     }
   });
   
   
-
 })
+
+function arrayToSingleObject(arr) {
+  const result = {};
+  if (arr.length > 0) {
+    Object.keys(arr[0]).forEach(key => {
+      result[key] = arr.map(obj => obj[key]);
+    });
+  }
+  return result;
+}
+
 
 app.post('/auth', (req,res) => {
     //console.log(req.headers)
@@ -895,7 +895,7 @@ app.get('/get-atividades-mentor', async (req,res) => {
 
 app.get('/get-NotasAllAlunos', (req, res) => {
   pool.query(`SELECT * FROM histacertos`, (err, result) => {
-    console.log(result);
+    res.json(result);
   })
 })
 
