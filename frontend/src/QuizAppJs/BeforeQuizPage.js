@@ -100,16 +100,24 @@ if (IrParaQuiz_button) {
                             alert('aluno já realizou esse treinamento')
                         }
                         else {
-                            const Usuario = {
-                                nomeuser: response.data,
-                                treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
-                                status: '1'
-                            }
-                            axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
-
-                            localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
-                
-                            ipcRenderer.send('Janela_QuizApp');
+                            axios.post('http://localhost:3000/VerifyDateInicioFim', GetStatusAluno)
+                            .then(response => {
+                                if (response.data) {
+                                    const Usuario = {
+                                        nomeuser: response.data,
+                                        treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
+                                        status: '1'
+                                    }
+                                    axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
+        
+                                    localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
+                        
+                                    ipcRenderer.send('Janela_QuizApp');
+                                }
+                                else {
+                                    alert('Data fora do período de realização do teste!')
+                                }
+                            })
                         }
                     })
                 })

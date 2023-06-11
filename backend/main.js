@@ -622,10 +622,23 @@ app.post('/ViewTreinamentos_status_0_1', async (req, res) => {    // seleciona t
   pool.query(`SELECT * FROM alunoTreinamento`, (err, res) => {
     console.log(res);
   })*/
+
   pool.query(`SELECT treinoname, treinocodigo FROM alunoTreinamento WHERE alunoname = ? AND status IN (?, ?);`, [obj.nomeuser, '0', '1'], (err, response) => {    // Select todos os treinamentos criados pelos administradores
-    //console.log(response);
-    res.json(response);
+    res.json(response)
   });
+})
+
+app.post('/VerifyDateInicioFim', (req, res) => {
+  const obj = req.body;
+
+  pool.query(`SELECT inicio_treinamento, fim_treinamento from Treinamento where nome_comercial = ? and codigo = ? and inicio_treinamento < CURDATE() and fim_treinamento > CURDATE()`, [obj.treino, obj.codigo], (err, response) => {
+    if (!Objetovazio(response)) {
+      res.json(true)
+    }
+    else {
+      res.json(false)
+    }
+  })
 })
 
 app.post('/CadQuestaoQuiz', async (req, res) => {           // Cadastra um quiz, parte do ADM
@@ -700,8 +713,8 @@ app.post('/CadUsuarioTreino', async (req, res) => {
       if(!Objetovazio(result)) {
         pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {
           if(Objetovazio(res)) {
-            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()'`, [obj.treinoname, obj.treinocodigo] , (err, r) => {
-              if(!Objetovazio(r)) {
+            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()`, [obj.treinoname, obj.treinocodigo] , (err, response) => {
+              if(!Objetovazio(response)) {
                 pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
                 console.log('Aluno cadastrado com sucesso no treinamento!');
               }
