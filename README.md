@@ -35,7 +35,7 @@ O código usa diversos pacotes e dependências que são necessárias para rodar 
 * mysql2
 * mongodb
 * dotenv
-Para baixá-las, basta aprir o terminal no VsCode e inserir o comando abaixo, seguido pelo nome da dependência:
+<br>Para baixá-las, basta aprir o terminal no VsCode e inserir o comando abaixo, seguido pelo nome da dependência:
 ```
 npm install 
 ```
