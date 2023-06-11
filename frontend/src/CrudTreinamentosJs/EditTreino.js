@@ -57,7 +57,7 @@ function displayTreinamentos(obj) {
     ViewTreinamentosAdm.innerHTML = "";
         for(let i = 0; i < obj.length; i++) {
             const div = document.createElement("div");
-            div.innerHTML = `<table>
+            div.innerHTML = `<table class="page-break">
             <thead>
                 <tr>
                     <th><b>Nome do treino</b></th>

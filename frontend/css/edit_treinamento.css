@@ -99,3 +99,7 @@ thead tr{
 tbody tr{
     border-bottom: 1px solid #dddddd;
 }
+
+table.page-break{
+    page-break-after:always
+  }
