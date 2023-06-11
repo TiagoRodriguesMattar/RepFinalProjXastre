@@ -42,7 +42,7 @@ npm install
 ```
 
 ## Rodando o aplicativo
-Tendo seguido todos os passos apresentados nos passos para inicialização acima, o programa já está pronto para ser executado. Para executar o programa, deve-se criar dois terminais no VsCode. Um dos terminais terá como objetivo realizar a conexão com o banco de dados para que os dados inseridos na aplicação sejam salvos no banco. Já o segundo terminal é aquele responsável por abrir a janela da aplicação. No primeiro terminal, insira os comandos: 
+Tendo seguido todos os passos apresentados nos passos para inicialização acima, o programa já está pronto para ser executado. Para executar o programa, deve-se criar dois terminais no VsCode. Um dos terminais terá como objetivo realizar a conexão com o banco de dados para que os dados inseridos na aplicação sejam salvos no banco. Já o segundo terminal é aquele responsável por abrir a janela da aplicação.<br>No primeiro terminal, insira os comandos: 
 ```
 cd backend
 ```
