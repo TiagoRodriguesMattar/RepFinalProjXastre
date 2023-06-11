@@ -14,7 +14,7 @@ Por fim, existem os admnistradores, que podem visualizar treinamentos e vagas cr
 ## Objetivo
 Tendo em vista que o código faz parte de um projeto de faculdade, nosso objetivo foi agrupar nossos conhecimentos prévios com aqueles aprendidos em sala de aula na disciplina de Projeto de Aplicativos, para que assim pudessemos desenvolver este aplicativo.
 
-## Passos para inicializção
+## Passos Para Inicialização
 ### Plataformas
 É necessário ter a Visual Studio Code instalado em seu computador para abrir os arquivos e rodar o programa.
 ### Node.js
@@ -27,7 +27,18 @@ O programa utiliza um framework chamado electron para criar uma janela de aplica
 npm install --save-dev electron
 ```
 ### Pacotes e Dependências
-O código usa diversos pacotes e dependências que são necessárias para rodar o código. Para baixá-las, basta aprir o terminal no VsCode e 
+O código usa diversos pacotes e dependências que são necessárias para rodar o código. As dependências utilizadas foram:
+* axios
+* bcrypt
+* jwtotoken
+* express
+* mysql2
+* mongodb
+* dotenv
+Para baixá-las, basta aprir o terminal no VsCode e inserir o comando abaixo, seguido pelo nome da dependência:
+```
+npm install 
+```
 
 
 ## Autores
