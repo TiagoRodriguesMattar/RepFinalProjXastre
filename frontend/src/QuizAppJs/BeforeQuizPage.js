@@ -57,7 +57,7 @@ if (ViewCadTreinamentosAlunos_button) {
                     const Usuario = {
                         nomeuser: response.data,
                     }
-                    axios.post('http://localhost:3000/ViewTreinamentos_alunosCadastrados', Usuario)
+                    axios.post('http://localhost:3000/ViewTreinamentos_status_0_1', Usuario)
                     .then((response) => {
                         displayTreinamentos(response.data)
                     })
@@ -85,18 +85,34 @@ if (IrParaQuiz_button) {
                 }
                 const user = JSON.parse(localStorage.getItem('user'));
                 const obj1 = { email: user.email, password: user.password }
+
                 axios.post('http://localhost:3000/viewjobs', obj1)
-                .then((response) => {
-                    const Usuario = {
+                .then(response => {
+                    const GetStatusAluno = {
                         nomeuser: response.data,
-                        treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
-                        status: '1'
+                        treino: NomeTreinamentoForQuiz.value.toUpperCase(),
+                        codigo: CodTreinamentoForQuiz.value,
                     }
-                    axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
-                })
-                localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
+                    axios.post('http://localhost:3000/get-status', GetStatusAluno)
+                    .then(res => {
+                        const teste = res.data;
+                        if (teste[0].status === '2' || teste[0].status === '3') {
+                            alert('aluno já realizou esse treinamento')
+                        }
+                        else {
+                            const Usuario = {
+                                nomeuser: response.data,
+                                treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
+                                status: '1'
+                            }
+                            axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
+
+                            localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
                 
-                ipcRenderer.send('Janela_QuizApp');
+                            ipcRenderer.send('Janela_QuizApp');
+                        }
+                    })
+                })
             }
         } 
         catch (e) {

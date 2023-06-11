@@ -235,10 +235,10 @@ app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga 
           pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, res) => {
             if(Objetovazio(res)) {
               pool.query(`INSERT into alunojob (alunoname, jobname, jobcompany) values ('${jobdata.nomeuser}','${jobdata.jobname}','${jobdata.jobcompany}');`);
-              console.log('Aluno cadastrado com sucesso!');
+              console.log('Aluno cadastrado com sucesso!')
             }
             else {
-              console.log('Aluno já cadastrado nessa vaga!');
+              console.log('Aluno já cadastrado nessa vaga!')
             }
           });
         }
@@ -700,8 +700,15 @@ app.post('/CadUsuarioTreino', async (req, res) => {
       if(!Objetovazio(result)) {
         pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {
           if(Objetovazio(res)) {
-            pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
-            console.log('Aluno cadastrado com sucesso no treinamento!');
+            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()'`, [obj.treinoname, obj.treinocodigo] , (err, r) => {
+              if(!Objetovazio(r)) {
+                pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
+                console.log('Aluno cadastrado com sucesso no treinamento!');
+              }
+              else {
+                console.log('fora do período de inscrição')
+              }
+            })
           }
           else {
             console.log('Aluno já cadastrado nesse treinamento!');
@@ -726,6 +733,15 @@ app.post('/UpdateStatusTreino', async (req,res) => {
   /*pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
     console.log(res); 
    });*/
+});
+
+app.post('/get-status', async (req,res) => {
+  const obj = req.body;
+
+  pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ? and treinocodigo = ?`, [obj.nomeuser, obj.treino, obj.codigo], (err,response) => {
+    console.log(response);
+    res.json(response);
+  })
 });
 
 // endpoint para retornar o historico de todos os alunos

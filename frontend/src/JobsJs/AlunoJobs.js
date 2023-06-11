@@ -42,6 +42,8 @@ function displayVagas() {
         });
 }
 
+const StatusCad = document.querySelector(".StatusCad");
+
 function verificar() {
     var auth = true;
     //console.log(User)
@@ -96,7 +98,7 @@ if (CadUser) {
                         jobname: UserSigninJobName.value.toUpperCase(),
                         jobcompany: UserSigninJobCompany.value.toUpperCase()
                     }
-                    axios.post('http://localhost:3000/CadUsuario', jobdata);
+                    axios.post('http://localhost:3000/CadUsuario', jobdata)
                 })
             }
             catch(e) {
