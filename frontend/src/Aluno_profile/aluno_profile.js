@@ -205,6 +205,58 @@ if (show_vagas_button) {
 
 // PARTE EMPRESA DE ACESSO AO PERFIL DO ALUNO
 
+const VerAtividadesAlunosClass = document.querySelector(".VerAtividadesAlunosClass");
+
+function VerAtividadesAlunosClass_f(obj) {
+    VerAtividadesAlunosClass.innerHTML = "";
+        for(let i = 0; i < obj.Aprovados.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> Atividades concluídas </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Atividade</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Aprovados[i].alunoname}</th>
+                    <th>${obj.Aprovados[i].treinoname}</th>
+                    <th>${obj.Aprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            VerAtividadesAlunosClass.appendChild(div);
+        }
+
+        for(let i = 0; i < obj.Reprovados.length; i++) {
+            const div2 = document.createElement("div");
+            div2.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Atividade</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Reprovados[i].alunoname}</th>
+                    <th>${obj.Reprovados[i].treinoname}</th>
+                    <th>${obj.Reprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            VerAtividadesAlunosClass.appendChild(div2);
+        }
+}
+
 const ViewAtividadesConcluidasAlunos_button = document.getElementById('VerAtividadesAlunos');       // EMPRESA E ADM
 
 if (ViewAtividadesConcluidasAlunos_button) {
@@ -213,6 +265,10 @@ if (ViewAtividadesConcluidasAlunos_button) {
         try {
             if (verificar()) {
                 axios.get('http://localhost:3000/Show_Hist_All_Alunos')
+                .then((response) => {
+                    VerAtividadesAlunosClass_f(response.data)
+                    console.log(response.data)
+                })
             }
         }
         catch (e) {
@@ -234,7 +290,10 @@ if (ViewNotasAlunos_button) {
                 const Usuario = {
                     nomeuser: response.data,
                 }
-                axios.post('http://localhost:3000/ViewNotasAlunos', Usuario);
+                axios.post('http://localhost:3000/ViewNotasAlunos', Usuario)
+                .then((response) => {
+                    console.log(response.data)
+                })
             })
         }
         catch (e) {
@@ -261,13 +320,68 @@ if (ViewNotasAlunos_button_adm) {
 
 // PARTE MENTOR DE ACESSO AO PERFIL DO ALUNO
 
+const Ver10utimasAtividadesALunosClass = document.querySelector(".Ver10utimasAtividadesALunosClass");
+
+function VerAtividadesAlunosClass_f_mentor(obj) {
+    Ver10utimasAtividadesALunosClass.innerHTML = "";
+        for(let i = 0; i < obj.Aprovados.length; i++) {
+            const div = document.createElement("div");
+            div.innerHTML = `<h3> Atividades concluídas </h3>
+            <table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Atividade</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Aprovados[i].alunoname}</th>
+                    <th>${obj.Aprovados[i].treinoname}</th>
+                    <th>${obj.Aprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            Ver10utimasAtividadesALunosClass.appendChild(div);
+        }
+
+        for(let i = 0; i < obj.Reprovados.length; i++) {
+            const div2 = document.createElement("div");
+            div2.innerHTML = `<table>
+            <thead>
+                <tr>
+                    <th><b>Nome do aluno</b></th>
+                    <th><b>Atividade</b></th>
+                    <th><b>Status</b></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th>${obj.Reprovados[i].alunoname}</th>
+                    <th>${obj.Reprovados[i].treinoname}</th>
+                    <th>${obj.Reprovados[i].status}</th>
+                </tr>
+            <tbody>
+
+            </table>`;
+            Ver10utimasAtividadesALunosClass.appendChild(div2);
+        }
+}
+
 const Ver10utimasAtividadesALunos_b = document.getElementById('Ver10utimasAtividadesALunos');
 
 if (Ver10utimasAtividadesALunos_b) {
     Ver10utimasAtividadesALunos_b.addEventListener('click', (e) => {
         e.preventDefault();
         try {
-            axios.get('http://localhost:3000/get-atividades-mentor');
+            axios.get('http://localhost:3000/get-atividades-mentor')
+            .then((response) => {
+                VerAtividadesAlunosClass_f_mentor(response.data)
+            })
         }
         catch (e) {
             console.log(e);

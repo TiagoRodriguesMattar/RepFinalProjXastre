@@ -298,24 +298,41 @@ app.post('/ShowVagas_alunosInscritos', (req, res) => {    // retorna as vagas qu
 // retorna os números de acertos nos quizzes dos alunos cadastrados em alguma vaga de uma empresa -> parte empresa
 app.post('/ViewNotasAlunos', (req, res) => {
   const obj = req.body;
+
   pool.query(`SELECT * FROM job WHERE Company = ?`, [obj.nomeuser], (err, res) => {
-    if(!Objetovazio(res)) {
+    if (!Objetovazio(res)) {
       pool.query(`SELECT alunoname FROM alunojob WHERE jobcompany = ?`, [obj.nomeuser], (err, result) => {
-        if(!Objetovazio(result)) {
-          pool.query(`SELECT nome_comercial, QAptidao, QCase1 , QCase2 FROM Treinamento`, (err, r) => {
-            console.log('Treinamentos cadastrados no sistema e seus respectivos testes: ')
-            console.log(r);
-          })
-          result.forEach( i => {
+        if (!Objetovazio(result)) {
+          const responses = [];
+          const numResults = result.length;
+          let count = 0;
+  
+          result.forEach(i => {
             pool.query(`SELECT * FROM histacertos WHERE NomeAluno = ?`, [i.alunoname], (err, response) => {
-              console.log('Histórico de acertos dos alunos nos Quizzes: ')
-              console.log(response);
-            })
-          } )
+              if (err) {
+                // Lide com o erro de forma apropriada
+                console.error(err);
+                return res.status(500).json({ error: 'Internal server error' });
+              }
+              
+              responses.push(response);
+  
+              count++;
+              if (count === numResults) {
+                res.json(responses);
+              }
+            });
+          });
+        } else {
+          res.json([]); // Retorna um array vazio se não houver resultados
         }
-      })
+      });
+    } else {
+      res.json([]); // Retorna um array vazio se não houver resultados
     }
-  })
+  });
+  
+  
 
 })
 
@@ -809,7 +826,7 @@ app.get('/Show_Hist_All_Alunos', async (req,res) => {
       //console.log(result)
       obj2.Reprovados = result;
       console.log(obj2);
-      //res.json(obj2);
+      res.json(obj2);
     })
 })
 
