@@ -782,8 +782,9 @@ app.post('/CadUsuarioTreino', async (req, res) => {
 })
 
 app.post('/UpdateStatusTreino', async (req,res) => {
-
+  
   const obj = req.body;
+  console.log(obj);
 
   pool.query(`UPDATE alunoTreinamento SET status = ? WHERE alunoname = ? and treinoname = ?`, [obj.status, obj.nomeuser, obj.treinoname])
   /*pool.query(`SELECT status from alunoTreinamento WHERE alunoname = ? and treinoname = ?`, [obj.nomeuser, obj.treinoname], (err,response) => {
@@ -821,7 +822,7 @@ app.get('/Show_Hist_All_Alunos', async (req,res) => {
 
     pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '3'`, (err, result) => {
       result.forEach( i => {
-        i.status = 'Reprovados';
+        i.status = 'Reprovado';
     })
       //console.log(result)
       obj2.Reprovados = result;

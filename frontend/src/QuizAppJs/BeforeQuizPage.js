@@ -103,16 +103,19 @@ if (IrParaQuiz_button) {
                             axios.post('http://localhost:3000/VerifyDateInicioFim', GetStatusAluno)
                             .then(response => {
                                 if (response.data) {
-                                    const Usuario = {
-                                        nomeuser: response.data,
-                                        treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
-                                        status: '1'
-                                    }
-                                    axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
+                                    axios.post('http://localhost:3000/viewjobs', obj1)
+                                    .then(res => {
+                                        const Usuario = {
+                                            nomeuser: res.data,
+                                            treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
+                                            status: '1'
+                                        }
+                                        axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
         
-                                    localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
-                        
-                                    ipcRenderer.send('Janela_QuizApp');
+                                        localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
+
+                                        ipcRenderer.send('Janela_QuizApp');
+                                    })
                                 }
                                 else {
                                     alert('Data fora do período de realização do teste!')

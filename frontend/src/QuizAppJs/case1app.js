@@ -56,7 +56,9 @@ function nextQuestion(e, ItemClick) {
 
 function finish() {
     if (verificar()) {
+        const user = JSON.parse(localStorage.getItem('user'));
         const questions = JSON.parse(localStorage.getItem('dataCase1'));
+        const SpecificTreinamento = JSON.parse(localStorage.getItem('SpecificTreinamento'));  
         textFinish.innerHTML = `você acertou ${questionsCorrect} de ${questions.length}`;
         content.style.display = "none";
         contentFinish.style.display = "flex";
@@ -86,6 +88,16 @@ function finish() {
         }
         else {
             console.log('Nota insuficiente');
+            const UserInfos = { email: user.email, password: user.password };
+            axios.post('http://localhost:3000/viewjobs', UserInfos)
+            .then(response => {
+                const TreinoInfo = {
+                    treinoname: SpecificTreinamento.Nome,
+                    nomeuser: response.data,
+                    status: '3' 
+                };
+                axios.post('http://localhost:3000/UpdateStatusTreino', TreinoInfo);
+            })
         }
     }
 }
