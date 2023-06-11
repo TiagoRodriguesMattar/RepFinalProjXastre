@@ -230,12 +230,22 @@ app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga 
           //console.log("conectou");
       });
 
-      pool.query(`SELECT * FROM job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {
+      pool.query(`SELECT * FROM job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {    // verifica se existe uma vaga com o titulo da vaga e nome da empresa passados
         if(!Objetovazio(result)) {
-          pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, res) => {
+          pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, res) => {    // verifica se o aluno já está ou não cadastrado na vaga
             if(Objetovazio(res)) {
-              pool.query(`INSERT into alunojob (alunoname, jobname, jobcompany) values ('${jobdata.nomeuser}','${jobdata.jobname}','${jobdata.jobcompany}');`);
-              console.log('Aluno cadastrado com sucesso!')
+              pool.query(`SELECT MaxNumber from job where JobTitle = ? and Company = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r1) => {   // verifica o maximo e minimo de inscritos para cadastro do aluno
+                pool.query(`SELECT count(*) as contagem from alunojob where jobname = ? and jobcompany = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r2) => {
+                  if (r2[0].contagem >= r1[0].MaxNumber) {
+                    console.log('falhou')
+                  }
+                  else {
+                    pool.query(`INSERT into alunojob (alunoname, jobname, jobcompany) values ('${jobdata.nomeuser}','${jobdata.jobname}','${jobdata.jobcompany}');`);
+                    //console.log('Aluno cadastrado com sucesso!')
+                  }
+                })
+              })
+                
             }
             else {
               console.log('Aluno já cadastrado nessa vaga!')
@@ -709,14 +719,30 @@ app.post('/CadUsuarioTreino', async (req, res) => {
       2 ==> terminou e aprovado 
       3 ==> terminou e reprovado
     */
-    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {    // verifica se existe um treinamento com o nome e código passados para cadastro
       if(!Objetovazio(result)) {
-        pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {
+        pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {    // verifica se o aluno já está cadastrado nesse treinamento
           if(Objetovazio(res)) {
-            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()`, [obj.treinoname, obj.treinocodigo] , (err, response) => {
+            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()`, [obj.treinoname, obj.treinocodigo] , (err, response) => {    // verifica se a data de inicio e fim das inscrições é válida
               if(!Objetovazio(response)) {
-                pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
-                console.log('Aluno cadastrado com sucesso no treinamento!');
+                pool.query(`SELECT min_inscritos, max_inscritos from Treinamento where nome_comercial = ? and codigo = ?`, [obj.treinoname, obj.treinocodigo], (err, r1) => {   // verifica o maximo e minimo de inscritos para cadastro do aluno
+                  pool.query(`SELECT count(*) as contagem from alunoTreinamento where treinoname = ? and treinocodigo = ?`, [obj.treinoname, obj.treinocodigo], (err, r2) => {
+                    /*console.log(r1);
+                    console.log(r2);
+                    console.log(r1[0].max_inscritos)
+                    console.log(r1[0].min_inscritos)
+                    console.log(r2[0].contagem)*/
+
+                    if (r2[0].contagem >= r1[0].max_inscritos || r2[0].contagem < r1[0].min_inscritos) {
+                      console.log('falhou')
+                    }
+                    else {
+                      pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
+                    }
+                  })
+                })
+
+                //.log('Aluno cadastrado com sucesso no treinamento!');
               }
               else {
                 console.log('fora do período de inscrição')
