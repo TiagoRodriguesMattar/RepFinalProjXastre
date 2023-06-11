@@ -49,7 +49,10 @@ cd backend
 ```
 node main.js
 ```
-Sendo assim, a conexão com o banco de dados já foi estabelecida. Agora, para abrir a aplicação, basta inserir no segundo terminal o seguinte comando:
+Sendo assim, a conexão com o banco de dados já foi estabelecida. Agora, para abrir a aplicação, basta inserir no segundo terminal os seguintes comandos:
+```
+cd frontend
+```
 ```
 npm run start
 ```
