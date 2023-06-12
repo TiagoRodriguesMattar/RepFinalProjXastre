@@ -16,6 +16,10 @@ function verificar() {
     return auth;
 }
 
+/*function saveData(data) {
+    localStorage.setItem('dataQuiz', JSON.stringify(data));
+}*/
+
 const treinamentosCadAlunos = document.querySelector(".treinamentosCadAlunos");
 
 function displayTreinamentos(obj) {
@@ -113,6 +117,12 @@ if (IrParaQuiz_button) {
                                         axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);
         
                                         localStorage.setItem('SpecificTreinamento', JSON.stringify(SpecificTreino));
+
+                                        axios.post("http://localhost:3000/get-quiz", SpecificTreino)
+                                        .then((res) => {
+                                            //saveData(res.data);
+                                            localStorage.setItem('dataQuiz', JSON.stringify(res.data));
+                                        })
 
                                         ipcRenderer.send('Janela_QuizApp');
                                     })

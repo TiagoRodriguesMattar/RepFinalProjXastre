@@ -9,13 +9,24 @@ const content = document.querySelector(".content");
 const contentFinish = document.querySelector(".finish");
 const btnContinuar = document.querySelector(".finish button");
 
-function saveData(data) {
+/*function saveData(data) {
     localStorage.setItem('dataQuiz', JSON.stringify(data));
 }
 
 const TreinoInfos = JSON.parse(localStorage.getItem('SpecificTreinamento'));
 
 axios.post("http://localhost:3000/get-quiz", TreinoInfos)
+.then((res) => {
+    saveData(res.data);
+})*/
+  
+function saveData(data) {
+    localStorage.setItem('dataCase1', JSON.stringify(data));
+}
+
+const TreinoInfos = JSON.parse(localStorage.getItem('SpecificTreinamento'));
+
+axios.post("http://localhost:3000/get-case1", TreinoInfos)
 .then((res) => {
     saveData(res.data);
 })
@@ -105,8 +116,8 @@ function finish() {
 
 function loadQuestion() {
     if (verificar()){
-        const questions = JSON.parse(localStorage.getItem('dataQuiz'));
-        //console.log(questions);
+        var questions = JSON.parse(localStorage.getItem('dataQuiz'));
+        console.log(questions);
         spnQtd.innerHTML = `${currentIndex + 1}/${questions.length}`;
         const item = questions[currentIndex];
         answers.innerHTML = "";

@@ -61,6 +61,7 @@ function displayTreinamentos(obj) {
             <thead>
                 <tr>
                     <th><b>Nome do treino</b></th>
+                    <th><b>Código</b></th>
                     <th><b>Descrição</b></th>
                     <th><b>Carga Horária</b></th>
                     <th><b>Início das inscrições</b></th>
@@ -80,6 +81,7 @@ function displayTreinamentos(obj) {
             <tbody>
                 <tr>
                     <th>${obj[i].nome_comercial}</th>
+                    <th>${obj[i].codigo}</th>
                     <th>${obj[i].descricao}</th>
                     <th>${obj[i].carga_horaria}</th>
                     <th>${obj[i].inicio_inscricoes}</th>

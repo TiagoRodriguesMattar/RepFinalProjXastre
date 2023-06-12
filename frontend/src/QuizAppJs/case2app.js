@@ -9,7 +9,7 @@ const content = document.querySelector(".content");
 const contentFinish = document.querySelector(".finish");
 const btnContinuar = document.querySelector(".finish button");
 
-function saveData(data) {
+/*function saveData(data) {
     localStorage.setItem('dataCase2', JSON.stringify(data));
 }
 
@@ -18,7 +18,7 @@ const TreinoInfos = JSON.parse(localStorage.getItem('SpecificTreinamento'));
 axios.post("http://localhost:3000/get-case2", TreinoInfos)
 .then((res) => {
     saveData(res.data);
-})
+})*/
 
 function verificar() {
     var auth = true;
