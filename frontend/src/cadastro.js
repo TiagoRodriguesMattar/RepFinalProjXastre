@@ -8,6 +8,7 @@ const email = document.getElementById('user');
 const password = document.getElementById('password');
 const nome = document.getElementById('nome');
 
+
 if(button_signup) { 
     button_signup.addEventListener('submit', (e) => {
         var select = document.getElementById('cargo');
@@ -34,3 +35,19 @@ if(button_signup) {
     })
 }
 
+
+const button_lastPage = document.getElementById("last_page");
+
+
+if(button_lastPage) { 
+    button_lastPage.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            console.log("entrei")
+            //ipcRenderer.send('Voltar_Login');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}

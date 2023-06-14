@@ -1,8 +1,17 @@
-const { app, BrowserWindow, ipcMain } = require('electron');  
+const { app, BrowserWindow, ipcMain, remote } = require('electron');  
 const { authPlugins } = require('mysql2');
 const axios = require('axios').default;
 
+
 let mainwindow;
+
+function navegate(name,window){
+    window.loadFile(name);
+}
+
+ipcMain.on("Voltar", (event, arg) => {
+  window.history.back()
+});
 
 function createWindow () {
     mainwindow = new BrowserWindow({
@@ -15,7 +24,8 @@ function createWindow () {
     }
   })
 
-  mainwindow.loadFile('index.html')
+  
+  mainwindow.loadFile('./index.html')
 }
 
 app.whenReady().then(() => {
@@ -28,782 +38,180 @@ app.whenReady().then(() => {
   })
 })
 
-function window_signup() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    parent: mainwindow, 
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-  
-  childWindow.loadFile("./cadastro.html");
-  
-  childWindow.once("ready-to-show", () => {
-    childWindow.show();
-  });
-}
-
 ipcMain.on("janela_signup", (event, arg) => {
-  window_signup();
+  navegate('./cadastro.html',mainwindow);
+
 });
 
 // Parte do aluno das vagas de emprego
 
-function windowAlunoJobs() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./JobsPages/JobsAlunoHome.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("Janela_AlunoJobs", (event, arg) => {
-  windowAlunoJobs();
+  navegate("./JobsPages/JobsAlunoHome.html",mainwindow)
+
 });
 
 // Parte CRUD vagas de emprego
 
-function windowJobsAllOptions() {
-    childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      }, 
-    });
-
-    childWindow.loadFile("./JobsPages/JobsEmpresaAllOptions.html");
-
-    childWindow.once("ready-to-show", () => {
-        childWindow.show();
-    });
-}
 
 ipcMain.on("display_crud", (event, arg) => {
-    windowJobsAllOptions();
+  navegate("./JobsPages/JobsEmpresaAllOptions.html",mainwindow)
+ 
 });
 
-function windowJobsAdm() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./JobsPages/JobsAdmHome.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("display_vagas_adm", (event, arg) => {
-  windowJobsAdm();
+  navegate("./JobsPages/JobsAdmHome.html",mainwindow)
+
 });
 
 // display atividades alunos parte da empresa
 
-function windowAlunosInfoEmpresa() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./AlunoProfile/AlunoInfo.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("display_info_alunos", (event, arg) => {
-  windowAlunosInfoEmpresa();
+  navegate("./AlunoProfile/AlunoInfo.html",mainwindow)
 });
 
 // Parte CRUD treinamentos
 
-function TreinamentoCrudWindow() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./TreinamentosPages/indexTreinamentoCrud.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("display_crud_treinamento", (event, arg) => {
-  TreinamentoCrudWindow();
+  navegate("./TreinamentosPages/indexTreinamentoCrud.html",mainwindow)
 });
 
-function HistoricoAlunoWindow() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./AlunoProfile/HistAlunoAdm.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("display_hist_alunos", (event, arg) => {
-  HistoricoAlunoWindow();
+  navegate("./AlunoProfile/HistAlunoAdm.html",mainwindow)
 });
 
 // Montagem do Quiz - parte do ADM
 
-function QuizCrudWindow() {             // CRUD quiz
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./TreinamentosPages/QuizAdm/indexQuizCrud.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("display_crud_quiz", (event, arg) => {
-  QuizCrudWindow();
+  navegate("./TreinamentosPages/QuizAdm/indexQuizCrud.html",mainwindow)
 });
 
-function MontarQuizWindow() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./TreinamentosPages/QuizAdm/MontarQuizAdm.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("display_montar_Quiz", (event, arg) => {
-  MontarQuizWindow();
+  navegate("./TreinamentosPages/QuizAdm/MontarQuizAdm.html",mainwindow)
 });
 
-function DeleteQuizWindow() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./TreinamentosPages/QuizAdm/DeleteQuizAdm.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("display_delete_Quiz", (event, arg) => {
-  DeleteQuizWindow();
+  navegate("./TreinamentosPages/QuizAdm/DeleteQuizAdm.html",mainwindow)
 });
 
-
-function windowJobsHome() {
-  childWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    modal: true,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-    }, 
-  });
-
-  childWindow.loadFile("./NiveisDePermissao/HomeEmpresas.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("Janela_HomeEmpresas", (event, arg) => {
-  windowJobsHome();
+  navegate("./NiveisDePermissao/HomeEmpresas.html",mainwindow);
 });
 
 //Janela de cadastro de uma nova vaga de emprego (EMPRESA)
 
-const NewJobWindow = () => {
-    childWindow = new BrowserWindow({
-        width: 1000,
-        height: 700,
-        modal: true,
-        show: false,
-        webPreferences: {
-          nodeIntegration: true,
-          contextIsolation: false,
-          enableRemoteModule: true,
-        },
-    });
-
-    childWindow.loadFile("./JobsPages/newJob.html");
-  
-    childWindow.once("ready-to-show", () => {
-        childWindow.show();
-    });
-}
-
 ipcMain.on("Janela_NewJob", (event, args) => {
-    NewJobWindow();
+  navegate("./JobsPages/newJob.html",mainwindow);
 });
 
 //Janela de edição de uma nova vaga de emprego (EMPRESA)
 
-const editJobWindow = () => {
-    childWindow = new BrowserWindow({
-        width: 1000,
-        height: 700,
-        modal: true,
-        show: false,
-        webPreferences: {
-          nodeIntegration: true,
-          contextIsolation: false,
-          enableRemoteModule: true,
-        },
-    });
-
-    childWindow.loadFile("./JobsPages/editJob.html");
-
-    childWindow.once("ready-to-show", () => {
-        childWindow.show();
-    });
-}
-
 ipcMain.on("Janela_EditJob", (event, args) => {
-    editJobWindow();
+  navegate("./JobsPages/editJob.html",mainwindow);
 });
 
 //Janela de leitura das vagas de emprego (EMPRESA)
 
-const ReadJobWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./JobsPages/readJob.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_ReadJob", (event, args) => {
-    ReadJobWindow();
+  navegate("./JobsPages/readJob.html",mainwindow);
 });
 
 //Janela de deleção das vagas de emprego (EMPRESA)
 
-const DeleteJobWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./JobsPages/deleteJob.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_DeleteJob", (event, args) => {
-    DeleteJobWindow();
+  navegate("./JobsPages/deleteJob.html",mainwindow);
 });
 
 //Janela de deleção das vagas de emprego (EMPRESA)
 
-const ListStudentsJobWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./JobsPages/listStudents.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_ListStudents", (event, args) => {
-    ListStudentsJobWindow();
+  navegate("./JobsPages/listStudents.html",mainwindow);
 });
-
-const QuizAppWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./QuizPages/quiz.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_QuizApp", (event, args) => {
-    QuizAppWindow();
+  navegate("./QuizPages/quiz.html",mainwindow);
 });
-
-const QuizCurso1Window = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./QuizPages/Curso1.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_QuizCurso1", (event, args) => {
-    QuizCurso1Window();
+  navegate("./QuizPages/Curso1.html",mainwindow);
 });
-
-const QuizCase1AppWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./QuizPages/case1.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_QuizCase1APP", (event, args) => {
-  QuizCase1AppWindow();
+  navegate("./QuizPages/case1.html",mainwindow);
 });
-
-const QuizCurso2Window = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./QuizPages/Curso2.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_QuizCurso2", (event, args) => {
-    QuizCurso2Window();
+  navegate("./QuizPages/Curso2.html",mainwindow);
 });
 
-const QuizCase2AppWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./QuizPages/case2.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_QuizCase2APP", (event, args) => {
-  QuizCase2AppWindow();
+  navegate("./QuizPages/case2.html",mainwindow);
 });
-
-const SelectTestesAluno = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/TestesAluno.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_alunoTestes", (event, args) => {
-    SelectTestesAluno();
+  navegate("./TreinamentosPages/TestesAluno.html",mainwindow);
 });
-
-const SelectProfileAluno = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./AlunoProfile/Aluno_profile.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_alunoProfile", (event, args) => {
-  SelectProfileAluno();
+  navegate("./AlunoProfile/Aluno_profile.html",mainwindow);
 });
 
-const AlunoTreinamentosWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/TreinamentoAlunoHome.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("Janela_AlunoTreinamentos", (event, args) => {
-    AlunoTreinamentosWindow();
+  navegate("./TreinamentosPages/TreinamentoAlunoHome.html",mainwindow);
 });
 
 // Página que aparece para o aluno depois do LOGIN
 
-const HomeAluno = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./NiveisDePermissao/Aluno.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("Janela_HomeAlunoPerm", (event, args) => {
-    HomeAluno();
+  navegate("./NiveisDePermissao/Aluno.html", mainwindow);
+
 });
 
 // Página que aparece para o administrador depois do LOGIN
 
-const HomeAdministrador = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./NiveisDePermissao/Administrador.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
-
 ipcMain.on("janela_HomeAdmPerm", (event, args) => {
-    HomeAdministrador();
+  navegate("./NiveisDePermissao/Administrador.html",mainwindow);
 });
 
 // Página que aparece para o mentor depois do LOGIN
 
-const HomeMentor = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./NiveisDePermissao/Mentor.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("janela_HomeMentor", (event, args) => {
-  HomeMentor();
+  navegate("./NiveisDePermissao/Mentor.html",mainwindow)
 });
 
 
 // Páginas CRUD treinamento
 // Create treinamento
-const NewTreinoWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/NewTreinamento.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("janela_NewTreinoWindow", (event, args) => {
-    NewTreinoWindow();
+  navegate("./TreinamentosPages/NewTreinamento.html",mainwindow);
 });
 
 // Update treinamento
-const UpdateTreinoWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/EditTreinamento.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("janela_EditTreinoWindow", (event, args) => {
-    UpdateTreinoWindow();
+  navegate("./TreinamentosPages/EditTreinamento.html",mainwindow);
 });
 
 // Delete treinamento
-const DeleteTreinoWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/DeleteTreinamento.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("Janela_DeleteTreinamento", (event, args) => {
-  DeleteTreinoWindow();
+  navegate("./TreinamentosPages/DeleteTreinamento.html",mainwindow);
 });
 
 // Read treinamento
-const ReadTreinoWindow = () => {
-  childWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      modal: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
-      },
-  });
-
-  childWindow.loadFile("./TreinamentosPages/ReadTreinamento.html");
-
-  childWindow.once("ready-to-show", () => {
-      childWindow.show();
-  });
-}
 
 ipcMain.on("janela_ReadTreinoWindow", (event, args) => {
-  ReadTreinoWindow();
+  navegate("./TreinamentosPages/ReadTreinamento.html",mainwindow);
 });
 
 // banco de dados (invokes)

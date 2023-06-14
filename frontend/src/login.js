@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, } = require('electron');
 const axios = require('axios');
 
 const email_login = document.getElementById('user_login');
@@ -28,7 +28,8 @@ function login(e) {
                     User.token = res.data.accessToken;
                     axios.post('http://localhost:3000/verifycargo', User)
                     .then((res) => {
-                        if(res.data === 'ALUNO'){
+                        if(res.data === 'ALUNO'){    
+                            //ipcRenderer.send("OpenAluno")               
                             ipcRenderer.send('Janela_HomeAlunoPerm');
                         }
                         if(res.data === 'EMPRESA'){

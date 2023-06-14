@@ -40,7 +40,8 @@ app.post('/signup', async (req, res) => {
     console.log(req.body);
     const dados = req.body;
     dados.password = Encrypt(dados.password);
-    try {
+    if(Objetovazio(dados)){
+      try {
         await client.connect();
         const query = {
           email: dados.email,
@@ -54,6 +55,7 @@ app.post('/signup', async (req, res) => {
         console.log(e);
       }
       res.send('Sucessfull sign in!');
+    }   
 });
 
 app.post('/login', async (req, res) => {
@@ -224,7 +226,9 @@ app.post('/readAlljob', async (req, res) => {     // listagem pros alunos de tod
 
 app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga de emprego
   const jobdata = req.body;
+  
   try {
+      console.log(jobdata)
       pool.connect(function(err) {
           if (err) throw err;
           //console.log("conectou");

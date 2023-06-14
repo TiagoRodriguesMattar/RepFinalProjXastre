@@ -80,8 +80,29 @@ if(AllJobsList){
     })
 }
 
-const UserSigninJobName = document.querySelector('#UserSigninJobName');
-const UserSigninJobCompany = document.querySelector('#UserSigninJobCompany');
+
+
+function updateOption(select){
+    axios.post("http://localhost:3000/readAlljob")
+    .then(response => {
+        const obj = response.data;
+        for(let i=0;i<select.length;i++){
+            select.options.remove(0)
+        }
+        for(let i=0; i<obj.length;i++){
+            var c = document.createElement("option");
+            c.value = `${obj[i].JobTitle}_${obj[i].Company}`;
+            c.text = obj[i].JobTitle;
+            console.log(c)
+            select.options.add(c,i);
+        }
+    })
+}
+
+const UserSigninJobName = document.querySelector('#UserSigninJobName')
+
+updateOption(UserSigninJobName);
+//const UserSigninJobCompany = document.querySelector('#UserSigninJobCompany');
 const CadUser = document.getElementById('CadUser');
 
 if (CadUser) {
@@ -89,14 +110,21 @@ if (CadUser) {
         e.preventDefault();
         if(verificar()) {
             try {
+                console.log("to no botao")
+                var select = document.getElementById('UserSigninJobName');
+	            var option = select.options[select.selectedIndex];
+                var nome = option.value.split("_")[0];
+                console.log("\n"+nome)
+                var empresa = option.value.split("_")[1];
+                console.log("\n"+empresa)
                 const user = JSON.parse(localStorage.getItem('user'));
                 const obj = { email: user.email, password: user.password }
                 axios.post('http://localhost:3000/viewjobs', obj)
                 .then((response) => {
                     const jobdata = {
                         nomeuser: response.data,
-                        jobname: UserSigninJobName.value.toUpperCase(),
-                        jobcompany: UserSigninJobCompany.value.toUpperCase()
+                        jobname: nome.toUpperCase(),
+                        jobcompany: empresa.toUpperCase()
                     }
                     axios.post('http://localhost:3000/CadUsuario', jobdata)
                 })
