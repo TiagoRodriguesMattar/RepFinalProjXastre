@@ -50,7 +50,7 @@ app.post('/signup', async (req, res) => {
           nome:  dados.nome
         }; 
         const a = await user.insertOne(query);
-        console.log(a);
+        //console.log(a);
       } catch(e){
         console.log(e);
       }
@@ -224,47 +224,55 @@ app.post('/readAlljob', async (req, res) => {     // listagem pros alunos de tod
     }
 });
 
-app.post('/CadUsuario', async (req, res) => {   // cadastra o aluno em uma vaga de emprego
+app.post('/CadUsuario', async (req, res) => {
   const jobdata = req.body;
-  
+  const retorno = {
+    valor: '',
+  }
+
   try {
-      console.log(jobdata)
-      pool.connect(function(err) {
-          if (err) throw err;
-          //console.log("conectou");
-      });
+    pool.connect(function(err) {
+      if (err) throw err;
+    });
 
-      pool.query(`SELECT * FROM job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {    // verifica se existe uma vaga com o titulo da vaga e nome da empresa passados
-        if(!Objetovazio(result)) {
-          pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, res) => {    // verifica se o aluno já está ou não cadastrado na vaga
-            if(Objetovazio(res)) {
-              pool.query(`SELECT MaxNumber from job where JobTitle = ? and Company = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r1) => {   // verifica o maximo e minimo de inscritos para cadastro do aluno
-                pool.query(`SELECT count(*) as contagem from alunojob where jobname = ? and jobcompany = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r2) => {
-                  if (r2[0].contagem >= r1[0].MaxNumber) {
-                    console.log('falhou')
-                  }
-                  else {
-                    pool.query(`INSERT into alunojob (alunoname, jobname, jobcompany) values ('${jobdata.nomeuser}','${jobdata.jobname}','${jobdata.jobcompany}');`);
-                    //console.log('Aluno cadastrado com sucesso!')
-                  }
-                })
-              })
-                
-            }
-            else {
-              console.log('Aluno já cadastrado nessa vaga!')
-            }
-          });
-        }
-        else {
-          console.log('Vaga inexistente no sistema!');
-        }
-      });
-
-    } catch(e){
-      console.log(e);
-    }
+    pool.query(`SELECT * FROM job WHERE JobTitle = '${jobdata.jobname}' and Company = '${jobdata.jobcompany}'`, (err, result) => {
+      if (!Objetovazio(result)) {
+        pool.query(`SELECT * FROM alunojob WHERE alunoname = '${jobdata.nomeuser}' and jobname = '${jobdata.jobname}' and jobcompany = '${jobdata.jobcompany}'`, (err, alunoResult) => {
+          if (Objetovazio(alunoResult)) {
+            pool.query(`SELECT MaxNumber from job where JobTitle = ? and Company = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r1) => {
+              pool.query(`SELECT count(*) as contagem from alunojob where jobname = ? and jobcompany = ?`, [jobdata.jobname, jobdata.jobcompany], (err, r2) => {
+                if (r2[0].contagem >= r1[0].MaxNumber) {
+                  console.log('falhou');
+                  res.json({ valor: '0' });
+                } else {
+                  pool.query(`INSERT into alunojob (alunoname, jobname, jobcompany) values ('${jobdata.nomeuser}','${jobdata.jobname}','${jobdata.jobcompany}');`, (err, r3) => {
+                    if (r3.affectedRows === 1) {
+                      retorno.valor = '1';
+                      res.json(retorno);
+                    } else {
+                      retorno.valor = '0';
+                      res.json(retorno);
+                    }
+                  });
+                }
+              });
+            });
+          } else {
+            console.log('Aluno já cadastrado nessa vaga!');
+            res.json({ valor: '0' });
+          }
+        });
+      } else {
+        console.log('Vaga inexistente no sistema!');
+        res.json({ valor: '0' });
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ valor: '0' });
+  }
 });
+
 
 /*function Objetovazio(obj) {
   for (var prop in obj) {

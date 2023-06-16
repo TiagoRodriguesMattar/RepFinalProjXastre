@@ -28,7 +28,7 @@ if(button_signup) {
             then((res) => {
                 console.log(res.status);
             });
-            ipcRenderer.send('Voltar_Login');
+            //ipcRenderer.send('Voltar_Login');
         }
         catch{
             console.log(e);

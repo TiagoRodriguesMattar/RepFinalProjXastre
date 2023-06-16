@@ -3,6 +3,14 @@ const {ipcRenderer} = require('electron');
 
 const jobs = document.querySelector(".jobs");
 
+function Objetovazio(obj) {
+    for (var prop in obj) {
+      if(obj.hasOwnProperty(prop)) 
+        return false
+    }
+    return true;
+}
+
 function displayVagas() {
         /*const questions = JSON.parse(localStorage.getItem('dataQuiz'));
         spnQtd.innerHTML = `${currentIndex + 1}/${questions.length}`;
@@ -109,7 +117,6 @@ if (CadUser) {
         e.preventDefault();
         if(verificar()) {
             try {
-                console.log("to no botao")
                 var select = document.getElementById('UserSigninJobName');
 	            var option = select.options[select.selectedIndex];
                 var nome = option.value.split("_")[0];
@@ -126,6 +133,12 @@ if (CadUser) {
                         jobcompany: empresa.toUpperCase()
                     }
                     axios.post('http://localhost:3000/CadUsuario', jobdata)
+                    .then(response => {
+                        if (response.data.valor === '1')
+                            alert('Aluno Cadastrado com sucesso!')
+                        else
+                            alert('Erro no cadastro do aluno!')
+                    })
                 })
             }
             catch(e) {
