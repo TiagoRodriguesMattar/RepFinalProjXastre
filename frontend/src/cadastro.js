@@ -28,6 +28,7 @@ if(button_signup) {
             then((res) => {
                 console.log(res.status);
             });
+            ipcRenderer.send('Voltar_Login');
         }
         catch{
             console.log(e);
@@ -44,7 +45,7 @@ if(button_lastPage) {
         e.preventDefault();
         try{
             console.log("entrei")
-            //ipcRenderer.send('Voltar_Login');
+
         }
         catch{
             console.log(e);

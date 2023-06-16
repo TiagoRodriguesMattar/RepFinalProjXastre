@@ -63,7 +63,25 @@ if (ViewQuizzes_button) {
     })
 }
 
+function updateOption(select){
+    axios.get('http://localhost:3000/VerAllQuiz')
+                .then(response => {
+                    const obj = response.data;
+            for(let i=0;i<select.length;i++){
+                select.options.remove(0)
+            }
+            for(let i=0; i<obj.length;i++){
+                var c = document.createElement("option");
+                c.value = `${obj[i].NomeQuiz}`;
+                c.text = obj[i].NomeQuiz;
+                select.options.add(c,i);
+        }
+                })
+}
+
 const QuizTitle = document.querySelector('#QuizTitle');
+
+updateOption(QuizTitle);
 const delete_button_quiz = document.getElementById('delete_button_quiz');
 
 if (delete_button_quiz) {

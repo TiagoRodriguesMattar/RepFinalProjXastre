@@ -40,7 +40,7 @@ app.post('/signup', async (req, res) => {
     console.log(req.body);
     const dados = req.body;
     dados.password = Encrypt(dados.password);
-    if(Objetovazio(dados)){
+    if(!Objetovazio(dados)){
       try {
         await client.connect();
         const query = {
@@ -49,8 +49,8 @@ app.post('/signup', async (req, res) => {
           cargo: dados.cargo,
           nome:  dados.nome
         }; 
-        await user.insertOne(query);
-        //console.log(user);
+        const a = await user.insertOne(query);
+        console.log(a);
       } catch(e){
         console.log(e);
       }

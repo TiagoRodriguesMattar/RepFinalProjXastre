@@ -74,8 +74,38 @@ if (ViewCadTreinamentosAlunos_button) {
     })
 }
 
+
+function updateOption(select){
+    const user = JSON.parse(localStorage.getItem('user'));
+    const obj = { email: user.email, password: user.password }
+    axios.post('http://localhost:3000/viewjobs', obj)
+        .then((response) => {
+            const Usuario = {
+                nomeuser: response.data,
+            }
+            axios.post('http://localhost:3000/ViewTreinamentos_status_0_1', Usuario)
+                .then((response) => {
+                    const obj = response.data;
+                    for (let i = 0; i < select.length; i++) {
+                        select.options.remove(0)
+                    }
+                    for (let i = 0; i < obj.length; i++) {
+                        var c = document.createElement("option");
+                        c.value = `${obj[i].treinoname}_${obj[i].treinocodigo}`;
+                        c.text = obj[i].treinoname;
+                        select.options.add(c, i);
+                    }
+                    //displayTreinamentos(response.data)
+                })
+        })
+}
+
+
+
 const NomeTreinamentoForQuiz = document.querySelector('#NomeTreinamentoForQuiz');
-const CodTreinamentoForQuiz = document.querySelector('#CodTreinamentoForQuiz');
+
+updateOption(NomeTreinamentoForQuiz);
+
 const IrParaQuiz_button = document.getElementById('IrParaQuiz');
 
 if (IrParaQuiz_button) {
@@ -83,9 +113,13 @@ if (IrParaQuiz_button) {
         e.preventDefault();
         try {
             if (verificar()) {
+                var select = document.getElementById('NomeTreinamentoForQuiz');
+	            var option = select.options[select.selectedIndex];
+                var nome = option.value.split("_")[0];
+                var cod = option.value.split("_")[1];
                 let SpecificTreino = {
-                    Nome: NomeTreinamentoForQuiz.value.toUpperCase(),
-                    Cod: CodTreinamentoForQuiz.value,
+                    Nome: nome.toUpperCase(),
+                    Cod: cod,
                 }
                 const user = JSON.parse(localStorage.getItem('user'));
                 const obj1 = { email: user.email, password: user.password }
@@ -94,8 +128,8 @@ if (IrParaQuiz_button) {
                 .then(response => {
                     const GetStatusAluno = {
                         nomeuser: response.data,
-                        treino: NomeTreinamentoForQuiz.value.toUpperCase(),
-                        codigo: CodTreinamentoForQuiz.value,
+                        treino: nome.toUpperCase(),
+                        codigo: cod,
                     }
                     axios.post('http://localhost:3000/get-status', GetStatusAluno)
                     .then(res => {
@@ -111,7 +145,7 @@ if (IrParaQuiz_button) {
                                     .then(res => {
                                         const Usuario = {
                                             nomeuser: res.data,
-                                            treinoname: NomeTreinamentoForQuiz.value.toUpperCase(),
+                                            treinoname: nome.toUpperCase(),
                                             status: '1'
                                         }
                                         axios.post('http://localhost:3000/UpdateStatusTreino', Usuario);

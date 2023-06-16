@@ -2,7 +2,33 @@ const axios = require('axios');
 
 const ViewJobs_button = document.getElementById("ViewJobs");
 const ViewStudents_button = document.getElementById("ViewStudents");
+
+function updateOption(select){
+    const user = JSON.parse(localStorage.getItem('user'));
+    const obj = { email: user.email, password: user.password }
+    //console.log(obj);
+    axios.post('http://localhost:3000/viewjobs', obj)
+        .then((response) => {
+            localStorage.setItem('Username', JSON.stringify(response.data));
+            axios.post('http://localhost:3000/readjob', response)
+                .then((response) => {
+                    const obj = response.data;
+                    for (let i = 0; i < select.length; i++) {
+                        select.options.remove(0)
+                    }
+                    for (let i = 0; i < obj.length; i++) {
+                        var c = document.createElement("option");
+                        c.value = `${obj[i].JobTitle}`;
+                        c.text = obj[i].JobTitle;
+                        select.options.add(c, i);
+                    }
+                })
+        })
+}
+
 const JobForList = document.querySelector('#JobForList');
+
+updateOption(JobForList);
 
 function verificar() {
     var auth = true;
@@ -101,9 +127,12 @@ if (ViewStudents_button) {
     ViewStudents_button.addEventListener('click', (e) => {
         e.preventDefault();
         try {
+            var select = document.getElementById('JobForList');
+	        var option = select.options[select.selectedIndex];
+            var nome = option.value;
             if(verificar()) {
                 const obj = {
-                    jobname: JobForList.value.toUpperCase(),
+                    jobname: nome.toUpperCase(),
                     jobcompany: JSON.parse(localStorage.getItem('Username'))
                 }
                 axios.post('http://localhost:3000/viewstudents', obj)

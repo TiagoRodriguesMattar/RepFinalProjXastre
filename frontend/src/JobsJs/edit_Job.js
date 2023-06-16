@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron');
 const edit_button = document.getElementById("edit_button");
 const ViewJobs_button = document.getElementById("ViewJobs");
 
-const OldJobTitleName = document.querySelector('#OldJobTitle');
+
 const newJobTitle = document.querySelector('#newJobTitle');
 const newActivities = document.querySelector('#newActivities');
 const newRequiriments = document.querySelector('#newRequiriments');
@@ -101,6 +101,35 @@ if(ViewJobs_button) {
         }
     })
 }
+
+function updateOption(select) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const obj = { email: user.email, password: user.password }
+    //console.log(obj);
+    axios.post('http://localhost:3000/viewjobs', obj)
+        .then((response) => {
+            localStorage.setItem('Username', JSON.stringify(response.data));
+            axios.post('http://localhost:3000/readjob', response)
+                .then((response) => {
+                    const obj = response.data;
+                    for (let i = 0; i < select.length; i++) {
+                        select.options.remove(0)
+                    }
+                    for (let i = 0; i < obj.length; i++) {
+                        var c = document.createElement("option");
+                        c.value = `${obj[i].JobTitle}`;
+                        c.text = obj[i].JobTitle;
+                        select.options.add(c, i);
+                    }
+                })
+        })
+
+}
+
+
+const OldJobTitleName = document.querySelector('#OldJobTitle');
+updateOption(OldJobTitleName);
+
 
 if(edit_button){
     edit_button.addEventListener('click', (e) => {

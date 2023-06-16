@@ -9,9 +9,6 @@ function navegate(name,window){
     window.loadFile(name);
 }
 
-ipcMain.on("Voltar", (event, arg) => {
-  window.history.back()
-});
 
 function createWindow () {
     mainwindow = new BrowserWindow({
@@ -37,6 +34,10 @@ app.whenReady().then(() => {
     }
   })
 })
+
+ipcMain.on("Voltar_Login", (event, arg) => {
+  navegate("./index.html", mainwindow)
+});
 
 ipcMain.on("janela_signup", (event, arg) => {
   navegate('./cadastro.html',mainwindow);
