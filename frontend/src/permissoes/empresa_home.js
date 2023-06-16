@@ -49,3 +49,18 @@ if(button_crud){
       }     
   }        
 }
+
+const button_LogOut = document.getElementById("LogOut");
+
+if (button_LogOut) {
+    button_LogOut.addEventListener('click', (e) => {
+        try {
+            if (verificar()) {
+                ipcRenderer.send('Voltar_Login');
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    })
+}
