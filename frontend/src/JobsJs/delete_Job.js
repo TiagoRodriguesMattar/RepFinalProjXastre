@@ -4,6 +4,8 @@ const { ipcRenderer } = require('electron');
 const ViewJobs_button = document.getElementById("ViewJobs");
 const delete_button = document.getElementById('delete_button');
 
+const printStatus = document.querySelector('.printStatus')
+
 function updateOption(select){
     const user = JSON.parse(localStorage.getItem('user'));
     const obj = { email: user.email, password: user.password }
@@ -106,6 +108,23 @@ if(ViewJobs_button) {
     })
 }
 
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3> Vaga deletada com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro na deleção da vaga </h3>
+    `;
+    }
+    printStatus.appendChild(div);
+}
+
 if(delete_button) {
     delete_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -117,7 +136,7 @@ if(delete_button) {
                 }
                 axios.post('http://localhost:3000/deletejob', obj)                
                 .then((response)=> {
-                    alert('Vaga Deletada!');
+                    PrintStatusCad(response.data.valor)
                 }, (error) => {
                     console.log(error);
                 })

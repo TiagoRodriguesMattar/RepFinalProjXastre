@@ -96,14 +96,17 @@ app.post('/newjob', async (req, res) => {     // (CREATE)
           if (Objetovazio(result)) {
             pool.query(`INSERT into job (JobTitle, Company, Activities, Requiriments, Salary, MaxNumber) values ('${job.JobTitle}','${job.JobCompany}','${job.JobActivities}','${job.JobRequiriments}','${job.JobSalary}','${job.JobMaxNumber}');`);
             console.log('Vaga cadastrada com sucesso!');
+            res.status(200).json({ valor: '1' })
           }
           else {
             console.log('Erro: Vaga já cadastrada!');
+            res.status(200).json({ valor: '0' })
           }
         });
 
       } catch(e){
             console.log(e);
+            res.status(500).json({ valor: '0' });
       }
 });
 
@@ -136,14 +139,17 @@ app.post('/editjob', async (req, res) => {    // (UPDATE)
             pool.query(query2, function (err, result) {
             });
             console.log("Vaga alterada com sucesso");
+            res.status(200).json({ valor: '1' })
           }
           else {
             console.log('Vaga antiga inexistente no sistema!');
+            res.status(200).json({ valor: '0' })
           }
         });
 
       } catch(e){
         console.log(e);
+        res.status(500).json({ valor: '0' })
       }
 });
 
@@ -178,17 +184,20 @@ app.post('/deletejob', async (req, res) => {    // (DELETE)
         if(!Objetovazio(result)) {
           pool.query(`Delete FROM job WHERE JobTitle = '${DeleteJob.JobName}' and Company = '${DeleteJob.JobCompany}'`, (err, result) => {
             console.log("Vaga deletada com sucesso!");
-            //return console.log(result);
+            //return console.log(result);]
           });
           pool.query(`Delete FROM alunojob WHERE jobname = '${DeleteJob.JobName}' and jobcompany = '${DeleteJob.JobCompany}'`, (err, result) => {});
+          res.status(200).json({ valor: '1' })
         }
         else {
           console.log('Vaga inexistente no sistema!');
+          res.status(200).json({ valor: '0' })
         }
       });
 
     } catch(e){
       console.log(e);
+      res.status(500).json({ valor: '0' })
     }
 });
 

@@ -4,12 +4,13 @@ const { ipcRenderer } = require('electron');
 const edit_button = document.getElementById("edit_button");
 const ViewJobs_button = document.getElementById("ViewJobs");
 
-
 const newJobTitle = document.querySelector('#newJobTitle');
 const newActivities = document.querySelector('#newActivities');
 const newRequiriments = document.querySelector('#newRequiriments');
 const newSalary = document.querySelector('#newSalary');
 const newMaxNumber = document.querySelector('#newMaxNumber');
+
+const printStatus = document.querySelector('.printStatus')
 
 const button_edit = document.getElementById("button_edit");
 if (button_edit) {
@@ -44,6 +45,23 @@ function verificar() {
             auth = false;
     })
     return auth;
+}
+
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3> Vaga atualizada com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro na atualização da vaga </h3>
+    `;
+    }
+    printStatus.appendChild(div);
 }
 
 const ViewJobsClass = document.querySelector('.ViewJobsClass');
@@ -126,10 +144,8 @@ function updateOption(select) {
 
 }
 
-
 const OldJobTitleName = document.querySelector('#OldJobTitle');
 updateOption(OldJobTitleName);
-
 
 if(edit_button){
     edit_button.addEventListener('click', (e) => {
@@ -147,6 +163,7 @@ if(edit_button){
                 }
                 axios.post('http://localhost:3000/editjob', obj)
                 .then((response)=> {
+                    PrintStatusCad(response.data.valor)
                 }, (error) => {
                     console.log(error);
                 })

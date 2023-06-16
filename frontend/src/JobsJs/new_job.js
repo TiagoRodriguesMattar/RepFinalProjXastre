@@ -9,6 +9,8 @@ const Requiriments = document.querySelector('#Requiriments');
 const Salary = document.querySelector('#Salary');
 const MaxNumber = document.querySelector('#MaxNumber');
 
+const printStatus = document.querySelector('.printStatus');
+
 function verificar() {
     var auth = true;
     //console.log(User)
@@ -26,6 +28,23 @@ function verificar() {
             auth = false;
     })
     return auth;
+}
+
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3> Vaga Cadastrada com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro no cadastro da vaga </h3>
+    `;
+    }
+    printStatus.appendChild(div);
 }
 
 if(register_button){
@@ -47,6 +66,12 @@ if(register_button){
                     }
                     axios.post('http://localhost:3000/newjob', obj)
                     .then((response)=> {
+                        /*if (response.data.valor === '1')
+                            PrintStatusCad(response.data.valor)
+                        else
+                            PrintStatus.textContent('Erro no cadastro da vaga')*/
+                            PrintStatusCad(response.data.valor)
+                        //ipcRenderer.send('display_crud')
                     },(error) => {
                         console.log(error);
                     })
