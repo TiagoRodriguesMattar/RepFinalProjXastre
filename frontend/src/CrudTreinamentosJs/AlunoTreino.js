@@ -114,7 +114,13 @@ if (CadUserTreino_button) {
                         treinoname: nome.toUpperCase(),
                         treinocodigo: cod.toUpperCase()
                     }
-                    axios.post('http://localhost:3000/CadUsuarioTreino', treinodata);
+                    axios.post('http://localhost:3000/CadUsuarioTreino', treinodata)
+                    .then(response => {
+                        if (response.data.valor === '1')
+                            alert('Aluno Cadastrado com sucesso!')
+                        else
+                            alert('Erro no cadastro do aluno!')
+                    })
                 })
             }
         }

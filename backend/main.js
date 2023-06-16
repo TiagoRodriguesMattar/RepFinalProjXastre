@@ -733,65 +733,60 @@ app.post('/DeleteQuiz', async (req, res) => {
 
 app.post('/CadUsuarioTreino', async (req, res) => {
   const obj = req.body;
+  const retorno = {
+    valor: '',
+  }
+
   try {
     pool.connect(function(err) {
-        if (err) throw err;
-        //console.log("conectou");
+      if (err) throw err;
     });
 
-    /*pool.query(`SELECT * FROM alunoTreinamento`, (err, result) => {
-      console.log(result);
-    })*/
-    /*
-      0 ==> nao cadastrado
-      1 ==> cadastrado e em curso
-      2 ==> terminou e aprovado 
-      3 ==> terminou e reprovado
-    */
-    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {    // verifica se existe um treinamento com o nome e código passados para cadastro
-      if(!Objetovazio(result)) {
-        pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, res) => {    // verifica se o aluno já está cadastrado nesse treinamento
-          if(Objetovazio(res)) {
-            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()`, [obj.treinoname, obj.treinocodigo] , (err, response) => {    // verifica se a data de inicio e fim das inscrições é válida
-              if(!Objetovazio(response)) {
-                pool.query(`SELECT min_inscritos, max_inscritos from Treinamento where nome_comercial = ? and codigo = ?`, [obj.treinoname, obj.treinocodigo], (err, r1) => {   // verifica o maximo e minimo de inscritos para cadastro do aluno
+    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = '${obj.treinoname}' and codigo = '${obj.treinocodigo}'`, (err, result) => {
+      if (!Objetovazio(result)) {
+        pool.query(`SELECT * FROM alunoTreinamento WHERE alunoname = '${obj.nomeuser}' and treinoname = '${obj.treinoname}' and treinocodigo = '${obj.treinocodigo}'`, (err, alunoResult) => {
+          if (Objetovazio(alunoResult)) {
+            pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ? and codigo = ? and inicio_inscricoes <= CURDATE() AND fim_inscricoes >= CURDATE()`, [obj.treinoname, obj.treinocodigo], (err, validResult) => {
+              if (!Objetovazio(validResult)) {
+                pool.query(`SELECT min_inscritos, max_inscritos from Treinamento where nome_comercial = ? and codigo = ?`, [obj.treinoname, obj.treinocodigo], (err, countResult) => {
                   pool.query(`SELECT count(*) as contagem from alunoTreinamento where treinoname = ? and treinocodigo = ?`, [obj.treinoname, obj.treinocodigo], (err, r2) => {
-                    /*console.log(r1);
-                    console.log(r2);
-                    console.log(r1[0].max_inscritos)
-                    console.log(r1[0].min_inscritos)
-                    console.log(r2[0].contagem)*/
-
-                    if (r2[0].contagem >= r1[0].max_inscritos || r2[0].contagem < r1[0].min_inscritos) {
+                    if (r2[0].contagem >= countResult[0].max_inscritos || r2[0].contagem < countResult[0].min_inscritos) {
                       console.log('falhou')
-                    }
-                    else {
-                      pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`);
+                      res.status(200).json({ valor: '0' });
+                    } else {
+                      pool.query(`INSERT into alunoTreinamento (alunoname, treinoname, treinocodigo, status) values ('${obj.nomeuser}','${obj.treinoname}','${obj.treinocodigo}', '0');`, (err, r3) => {
+                        if (r3.affectedRows === 1) {
+                          retorno.valor = '1';
+                          res.status(200).json(retorno);
+                        } else {
+                          retorno.valor = '0';
+                          res.status(200).json(retorno);
+                        }
+                      });
                     }
                   })
                 })
-
-                //.log('Aluno cadastrado com sucesso no treinamento!');
-              }
-              else {
+              } else {
                 console.log('fora do período de inscrição')
+                res.status(200).json({ valor: '0' });
               }
             })
-          }
-          else {
+          } else {
             console.log('Aluno já cadastrado nesse treinamento!');
+            res.status(200).json({ valor: '0' });
           }
         });
-      }
-      else {
+      } else {
         console.log('Treinamento inexistente no sistema!');
+        res.status(200).json({ valor: '0' });
       }
     });
-
-  } catch(e){
+  } catch(e) {
     console.log(e);
+    res.status(500).json({ valor: '0' });
   }
 })
+
 
 app.post('/UpdateStatusTreino', async (req,res) => {
   
