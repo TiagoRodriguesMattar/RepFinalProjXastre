@@ -115,3 +115,17 @@ if(submit_button_treino){
         catch{console.log(e);}
     })
 }
+
+const VoltarCRUDAdm_button = document.getElementById("VoltarCrudAdm");
+
+if(VoltarCRUDAdm_button) { 
+    VoltarCRUDAdm_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud_treinamento');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}

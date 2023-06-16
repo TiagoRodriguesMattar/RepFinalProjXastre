@@ -49,3 +49,17 @@ if(button_delete_Quiz){
         }
     })
 }
+
+const VoltarHomeAdm_button = document.getElementById("VoltarHomeAdm");
+
+if(VoltarHomeAdm_button) { 
+    VoltarHomeAdm_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('janela_HomeAdmPerm');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const e = require('express');
+const {ipcRenderer} = require('electron');
 
 function verificar() {
     var auth = true;
@@ -118,6 +119,20 @@ if (CadUserTreino_button) {
             }
         }
         catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+const VoltarHomeAluno_button = document.getElementById("VoltarHomeAluno");
+
+if(VoltarHomeAluno_button) { 
+    VoltarHomeAluno_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeAlunoPerm');
+        }
+        catch{
             console.log(e);
         }
     })

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const e = require('express');
+const {ipcRenderer} = require('electron');
 
 const new_nome_comercial = document.querySelector('#new_nome_comercial');
 const new_descricao = document.querySelector('#new_descricao');
@@ -203,4 +204,18 @@ if (edit_button_treino) {
         catch(e) {
             console.log(e);
         }})
+}
+
+const VoltarCRUDAdm_edit_button = document.getElementById("VoltarCrudAdm_edit");
+
+if(VoltarCRUDAdm_edit_button) { 
+    VoltarCRUDAdm_edit_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud_treinamento');
+        }
+        catch{
+            console.log(e);
+        }
+    })
 }

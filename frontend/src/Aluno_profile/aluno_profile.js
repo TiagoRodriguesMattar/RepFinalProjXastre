@@ -203,6 +203,20 @@ if (show_vagas_button) {
     })
 }
 
+const VoltarHomeAluno_button = document.getElementById("VoltarHomeAluno");
+
+if(VoltarHomeAluno_button) { 
+    VoltarHomeAluno_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeAlunoPerm');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}
+
 // PARTE EMPRESA DE ACESSO AO PERFIL DO ALUNO
 
 const VerAtividadesAlunosClass = document.querySelector(".VerAtividadesAlunosClass");
@@ -334,6 +348,20 @@ if (ViewNotasAlunos_button) {
     })
 }
 
+const VoltarHomeEmpresa_button = document.getElementById("VoltarHomeEmpresa");
+
+if(VoltarHomeEmpresa_button) { 
+    VoltarHomeEmpresa_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeEmpresas');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}
+
 // PARTE ADM DE ACESSO AO PERFIL DO ALUNO
 
 const VerNotasAlunosAdmClass = document.querySelector(".VerNotasAlunosAdmClass");
@@ -379,6 +407,20 @@ if (ViewNotasAlunos_button_adm) {
             })
         }
         catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+const VoltarHomeAdm_button = document.getElementById("VoltarHomeAdm");
+
+if(VoltarHomeAdm_button) { 
+    VoltarHomeAdm_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('janela_HomeAdmPerm');
+        }
+        catch{
             console.log(e);
         }
     })

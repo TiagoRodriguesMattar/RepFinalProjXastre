@@ -51,3 +51,17 @@ if (button_cadQuest) {
         }
     })
 }
+
+const VoltarCrudQuiz_button = document.getElementById("VoltarCrudQuiz");
+
+if(VoltarCrudQuiz_button) { 
+    VoltarCrudQuiz_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud_quiz');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}

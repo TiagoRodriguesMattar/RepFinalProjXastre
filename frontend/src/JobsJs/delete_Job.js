@@ -27,7 +27,6 @@ function updateOption(select){
         })
 }
 
-
 const deleteJobTitle = document.querySelector('#OldJobTitle');
 
 updateOption(deleteJobTitle);
@@ -130,6 +129,20 @@ if(delete_button) {
                 
         } 
         catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+const VoltarCrudVagas_button = document.getElementById("VoltarCrudVagas");
+
+if(VoltarCrudVagas_button) { 
+    VoltarCrudVagas_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud');
+        }
+        catch{
             console.log(e);
         }
     })

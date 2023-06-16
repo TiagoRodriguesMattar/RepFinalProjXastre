@@ -109,6 +109,12 @@ function finish() {
                 };
                 axios.post('http://localhost:3000/UpdateStatusTreino', TreinoInfo);
             })
+
+            btnContinuar.onclick = () => {
+                if (verificar()) { 
+                    ipcRenderer.send("Janela_alunoTestes");
+                }
+            };
         }
     }
 }

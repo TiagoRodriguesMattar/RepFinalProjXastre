@@ -1,4 +1,6 @@
 const axios = require('axios');
+const {ipcRenderer} = require('electron');
+
 const register_button = document.getElementById("register_button");
 
 const JobTitle = document.querySelector('#JobTitle');
@@ -52,6 +54,20 @@ if(register_button){
             }
             else
                 console.log('acesso negado');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}
+
+const VoltarCrudVagas_button = document.getElementById("VoltarCrudVagas");
+
+if(VoltarCrudVagas_button) { 
+    VoltarCrudVagas_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud');
         }
         catch{
             console.log(e);

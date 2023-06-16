@@ -1,4 +1,5 @@
 const axios = require('axios');
+const {ipcRenderer} = require('electron');
 
 const jobs = document.querySelector(".jobs");
 
@@ -80,8 +81,6 @@ if(AllJobsList){
     })
 }
 
-
-
 function updateOption(select){
     axios.post("http://localhost:3000/readAlljob")
     .then(response => {
@@ -132,6 +131,20 @@ if (CadUser) {
             catch(e) {
                 console.log(e);
             }
+        }
+    })
+}
+
+const VoltarHomeAluno_button = document.getElementById("VoltarHomeAluno");
+
+if(VoltarHomeAluno_button) { 
+    VoltarHomeAluno_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeAlunoPerm');
+        }
+        catch{
+            console.log(e);
         }
     })
 }

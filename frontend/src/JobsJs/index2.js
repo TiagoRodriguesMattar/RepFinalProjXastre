@@ -95,3 +95,17 @@ if (ListStudents_button){
         }
     })
 }
+
+const VoltarHomeEmpresa_button = document.getElementById("VoltarHomeEmpresa");
+
+if(VoltarHomeEmpresa_button) { 
+    VoltarHomeEmpresa_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeEmpresas');
+        }
+        catch{
+            console.log(e);
+        }
+    })
+}

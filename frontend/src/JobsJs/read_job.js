@@ -1,4 +1,5 @@
 const axios = require('axios');
+const {ipcRenderer} = require('electron');
 
 const read_button = document.getElementById('read_button');
 const CompanyNameForRead = document.querySelector('#CompanyNameForRead');
@@ -74,6 +75,20 @@ if(read_button){
                 console.log('acesso negado');
         }
         catch(e){
+            console.log(e);
+        }
+    })
+}
+
+const VoltarCrudVagas_button = document.getElementById("VoltarCrudVagas");
+
+if(VoltarCrudVagas_button) { 
+    VoltarCrudVagas_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud');
+        }
+        catch{
             console.log(e);
         }
     })

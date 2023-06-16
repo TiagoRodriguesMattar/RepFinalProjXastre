@@ -100,8 +100,6 @@ function updateOption(select){
         })
 }
 
-
-
 const NomeTreinamentoForQuiz = document.querySelector('#NomeTreinamentoForQuiz');
 
 updateOption(NomeTreinamentoForQuiz);
@@ -249,6 +247,20 @@ if (IrParaCase2_button) {
             }
         } 
         catch (e) {
+            console.log(e);
+        }
+    })
+}
+
+const VoltarHomeAluno_button = document.getElementById("VoltarHomeAluno");
+
+if(VoltarHomeAluno_button) { 
+    VoltarHomeAluno_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('Janela_HomeAlunoPerm');
+        }
+        catch{
             console.log(e);
         }
     })

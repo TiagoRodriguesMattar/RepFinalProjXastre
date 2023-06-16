@@ -1,4 +1,5 @@
 const axios = require('axios');
+const {ipcRenderer} = require('electron');
 
 const read_button_treino = document.getElementById('read_button_treinamento');
 const TreinoNameForRead = document.querySelector('#TreinoNameForRead');
@@ -96,6 +97,20 @@ if(read_button_treino){
                 console.log('acesso negado');
         }
         catch(e){
+            console.log(e);
+        }
+    })
+}
+
+const VoltarCRUDAdm_button = document.getElementById("VoltarCrudAdm");
+
+if(VoltarCRUDAdm_button) { 
+    VoltarCRUDAdm_button.addEventListener('click', (e) => {
+        e.preventDefault();
+        try{
+            ipcRenderer.send('display_crud_treinamento');
+        }
+        catch{
             console.log(e);
         }
     })

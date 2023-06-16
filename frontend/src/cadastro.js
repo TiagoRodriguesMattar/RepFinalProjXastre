@@ -36,16 +36,13 @@ if(button_signup) {
     })
 }
 
-
 const button_lastPage = document.getElementById("last_page");
-
 
 if(button_lastPage) { 
     button_lastPage.addEventListener('click', (e) => {
         e.preventDefault();
         try{
-            console.log("entrei")
-
+            ipcRenderer.send('Voltar_Login');
         }
         catch{
             console.log(e);
