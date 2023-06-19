@@ -41,6 +41,7 @@ if (button_cadQuest) {
                     codigo: codcurso.value, 
                 };
                 axios.post('http://localhost:3000/CadQuestaoQuiz', PerguntasRespostas);
+                ipcRenderer.send('display_montar_Quiz');
             }
             else {
                 console.log('Acesso negado');

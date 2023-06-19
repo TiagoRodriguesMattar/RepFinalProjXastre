@@ -2,8 +2,26 @@ const axios = require('axios');
 const {ipcRenderer} = require('electron');
 
 const read_button_treino = document.getElementById('read_button_treinamento');
+
+function updateOption(select){
+    axios.get('http://localhost:3000/ViewAllTreinamentos')
+    .then(response => {
+        const obj = response.data;
+            for(let i=0;i<select.length;i++){
+                select.options.remove(0)
+            }
+            for(let i=0; i<obj.length;i++){
+                var c = document.createElement("option");
+                c.value = `${obj[i].nome_comercial}_${obj[i].codigo}`;
+                c.text = obj[i].nome_comercial;
+                select.options.add(c,i);
+        }
+    })
+}
+
 const TreinoNameForRead = document.querySelector('#TreinoNameForRead');
-const TreinoCodForRead = document.querySelector('#TreinoCodForRead');
+updateOption(TreinoNameForRead);
+
 
 function verificar() {
     var auth = true;
@@ -82,9 +100,12 @@ if(read_button_treino){
         e.preventDefault();
         try{
             if(verificar()) {
+                var option = TreinoNameForRead.options[TreinoNameForRead.selectedIndex];
+                var nome = option.value.split('_')[0]
+                var cod = option.value.split('_')[1]
                 obj = {
-                    nome: TreinoNameForRead.value.toUpperCase(),
-                    cod: TreinoCodForRead.value,
+                    nome: nome.toUpperCase(),
+                    cod: cod,
                 }
                 axios.post('http://localhost:3000/treinamento_read', obj)
                 .then((response)=> {

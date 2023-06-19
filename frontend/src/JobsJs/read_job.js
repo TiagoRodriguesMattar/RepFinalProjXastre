@@ -2,7 +2,25 @@ const axios = require('axios');
 const {ipcRenderer} = require('electron');
 
 const read_button = document.getElementById('read_button');
+
+function updateOption(select){
+    axios.get('http://localhost:3000/get-AllCompanies')
+    .then(response => {
+        const obj = response.data;
+            for(let i=0;i<select.length;i++){
+                select.options.remove(0)
+            }
+            for(let i=0; i<obj.length;i++){
+                var c = document.createElement("option");
+                c.value = `${obj[i].Company}`;
+                c.text = obj[i].Company;
+                select.options.add(c,i);
+        }
+    })
+}
+
 const CompanyNameForRead = document.querySelector('#CompanyNameForRead');
+updateOption(CompanyNameForRead);
 
 function verificar() {
     var auth = true;
@@ -61,9 +79,12 @@ if(read_button){
         e.preventDefault();
         try{
             if(verificar()) {
+                var option = CompanyNameForRead.options[CompanyNameForRead.selectedIndex];
+                var nome = option.value
                 obj = {
-                    data: CompanyNameForRead.value.toUpperCase(),
+                    data: nome.toUpperCase(),
                 }
+                console.log(obj)
                 axios.post('http://localhost:3000/readjob', obj)
                 .then((response)=> {
                     displayVagasDeEmprego(response.data)

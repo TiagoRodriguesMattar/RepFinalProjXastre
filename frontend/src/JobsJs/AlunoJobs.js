@@ -2,6 +2,7 @@ const axios = require('axios');
 const {ipcRenderer} = require('electron');
 
 const jobs = document.querySelector(".jobs");
+const printStatus = document.querySelector('.printStatus');
 
 function Objetovazio(obj) {
     for (var prop in obj) {
@@ -106,6 +107,23 @@ function updateOption(select){
     })
 }
 
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3>Cadastrado realizado com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro na realização do cadastro! </h3>
+    `;
+    }
+    printStatus.appendChild(div);
+}
+
 const UserSigninJobName = document.querySelector('#UserSigninJobName')
 
 updateOption(UserSigninJobName);
@@ -134,10 +152,7 @@ if (CadUser) {
                     }
                     axios.post('http://localhost:3000/CadUsuario', jobdata)
                     .then(response => {
-                        if (response.data.valor === '1')
-                            alert('Aluno Cadastrado com sucesso!')
-                        else
-                            alert('Erro no cadastro do aluno!')
+                        PrintStatusCad(response.data.valor)
                     })
                 })
             }

@@ -122,6 +122,12 @@ app.post('/viewjobs', async(req, res) => {    // retorna o username do usuario l
     }
 });
 
+app.get('/get-AllCompanies', async(req, res) => {
+  pool.query(`SELECT Company from job group by Company`, (err, result) => {
+    res.json(result)
+  })
+})
+
 app.post('/editjob', async (req, res) => {    // (UPDATE)
     const newjob = req.body;
     try {
@@ -550,40 +556,43 @@ function verificarData(data){
   return true;
 }
 
-app.post("/treinamento_create", async (req, res) => {   // Create novo treinamento
-  const cadastro = req.body
-  console.log(cadastro)
-  try{
-    if(verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))){
-      pool.connect(function(err) {
+app.post("/treinamento_create", async (req, res) => {
+  const cadastro = req.body;
+  console.log(cadastro);
+  try {
+    if (verificarData(cadastro.inicio_inscricoes.split("-")) && verificarData(cadastro.fim_inscricoes.split("-"))) {
+      pool.connect(function (err) {
         if (err) throw err;
-        //console.log("conectou");
-    });
+      });
 
-    pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?`, [cadastro.nome_comercial], (err, result) => {
-      if(Objetovazio(result)) {
-        pool.query(`SELECT * FROM quiz WHERE NomeQuiz IN (?, ?, ?)`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, res) => {
-          if (!Objetovazio(res)) {
-            pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`);
-            console.log('Treinamento cadastrado com sucesso');
-          }
-          else {
-            console.log('Quiz inexistente. Impossível realizar o cadastro!');
-          }
-        })
-      }
-      else {
-        console.log('Treinamento já existente. Impossível realizar o cadastro!');
-      }
-    })
+      pool.query(`SELECT * FROM Treinamento WHERE nome_comercial = ?`, [cadastro.nome_comercial], (err, result) => {
+        if (Objetovazio(result)) {
+          pool.query(`SELECT * FROM quiz WHERE NomeQuiz IN (?, ?, ?)`, [cadastro.Aptidao, cadastro.case1, cadastro.case2], (err, quizResult) => {
+            if (!Objetovazio(quizResult)) {
+              pool.query(`INSERT INTO Treinamento (nome_comercial, descricao, carga_horaria, inicio_inscricoes, fim_inscricoes, inicio_treinamento, fim_treinamento, min_inscritos, max_inscritos, QAptidao, QCase1 , QCase2, Curso1, Curso2) VALUES ('${cadastro.nome_comercial}', '${cadastro.descricao}', '${cadastro.carga_horaria}', '${cadastro.inicio_inscricoes}', '${cadastro.fim_inscricoes}', '${cadastro.inicio_treinamento}', '${cadastro.fim_treinamento}', '${cadastro.min_inscritos}', '${cadastro.max_inscritos}', '${cadastro.Aptidao}', '${cadastro.case1}', '${cadastro.case2}', '${cadastro.curso1}', '${cadastro.curso2}');`, (err, insertResult) => {
+                console.log('Treinamento cadastrado com sucesso');
+                res.status(200).json({ valor: '1' });
+              });
+            } else {
+              console.log('Quiz inexistente. Impossível realizar o cadastro!');
+              res.status(200).json({ valor: '0' });
+            }
+          });
+        } else {
+          console.log('Treinamento já existente. Impossível realizar o cadastro!');
+          res.status(200).json({ valor: '0' });
+        }
+      });
+    } else {
+      console.log("data menor");
+      res.status(200).json({ valor: '0' });
     }
-    else{
-      console.log("data menor")
-    }
-  }catch(e){
-      console.log(e);
+  } catch (e) {
+    res.status(500).json({ valor: '0' });
+    console.log(e);
   }
-})
+});
+
 
 app.post("/treinamento_read", async (req, res) => {   // Read treinamento especifico
   //const id = req.params.id;
@@ -606,16 +615,25 @@ app.post("/treinamento_read", async (req, res) => {   // Read treinamento especi
 app.post("/treinamento_update", async (req, res) => {   // Update treinamento especifico
   //const id = req.params.id;
   const cadastro = req.body;
+  console.log(cadastro);
   try{
     pool.connect(function(err) {
       if (err) throw err;
       //console.log("conectou");
     });
     var query = `UPDATE Treinamento SET codigo = ?, nome_comercial = ?, descricao = ?, carga_horaria = ?, inicio_inscricoes = ?, fim_inscricoes = ?, inicio_treinamento = ?, fim_treinamento = ?, min_inscritos = ?, max_inscritos = ?, QAptidao = ?, QCase1 = ?, QCase2 = ?, Curso1 = ?, Curso2 = ? where codigo = ? and nome_comercial = ?;`;
-    pool.query(query, [cadastro.codigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos, cadastro.newQuizAptidao, cadastro.newQuizCase1, cadastro.newQuizCase2, cadastro.newCurso1, cadastro.newCurso2, cadastro.codigo, cadastro.oldnome_comercial]);
+    pool.query(query, [cadastro.codigo, cadastro.newnome_comercial, cadastro.newdescricao, cadastro.newcarga_horaria, cadastro.newinicio_inscricoes, cadastro.newfim_inscricoes, cadastro.newinicio_treinamento, cadastro.newfim_treinamento, cadastro.newmin_inscritos, cadastro.newmax_inscritos, cadastro.newQuizAptidao, cadastro.newQuizCase1, cadastro.newQuizCase2, cadastro.newCurso1, cadastro.newCurso2, cadastro.codigo, cadastro.oldnome_comercial], (err, result) => {
+      res.status(200).json({ valor: '1' })
+    });
+
+    var query2 = `UPDATE alunoTreinamento SET treinoname = ? where treinoname = ? AND treinocodigo = ?`;
+    pool.query(query2, [cadastro.newnome_comercial, cadastro.oldnome_comercial,cadastro.codigo],(err, res) => {
+      console.log('aluno atualizado')
+    })
   }
   catch(e){
     console.log(e);
+    res.status(500).json({ valor: '0' })
   }
 })
 
@@ -631,10 +649,12 @@ app.post("/DeleteTreinamento", async (req, res) => {   // Delete treinamento esp
       //res.json(response);
       pool.query(`DELETE FROM alunoTreinamento WHERE treinoname = ? and treinocodigo = ?`, [objdelete.Nome, objdelete.Cod]);
       console.log('Treinamento deletado com sucesso');
+      res.status(200).json({ valor: '1' })
     });
   }
   catch(e){
     console.log(e);
+    res.status(200).json({ valor: '0' })
   }
 });
 
@@ -736,6 +756,10 @@ app.post('/DeleteQuiz', async (req, res) => {
       });
       pool.query(`DELETE from histacertos where NomeQuiz = ?`, [obj.Nome])
       pool.query(`DELETE FROM Treinamento where QAptidao = ? or QCase1 = ? or QCase2 = ?`, [obj.Nome, obj.Nome, obj.Nome])
+      res.status(200).json({ valor: '1' })
+    }
+    else {
+      res.status(200).json({ valor: '0' })
     }
   })
 })
@@ -871,7 +895,7 @@ app.post('/Show_Hist_Aluno', async (req,res) => {
 
   pool.query(`SELECT treinoname, status from alunoTreinamento WHERE alunoname = ? and status = ?`, [obj.nomeAluno, '3'], (err, result) => {
     result.forEach( i => {
-      i.status = 'Reprovados';
+      i.status = 'Reprovado';
   })
     //console.log(result)
     obj2.Reprovados = result;
@@ -901,7 +925,7 @@ app.get('/get-atividades-mentor', async (req,res) => {
 
   pool.query(`SELECT alunoname, treinoname, status from alunoTreinamento WHERE status = '3' LIMIT 0, 10`, (err, result) => {
     result.forEach( i => {
-      i.status = 'Reprovados';
+      i.status = 'Reprovado';
   })
     //console.log(result)
     obj2.Reprovados = result;

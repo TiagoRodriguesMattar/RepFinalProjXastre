@@ -20,6 +20,8 @@ const Case2 = document.querySelector('#Case2');
 
 const submit_button_treino = document.getElementById("submit_button_treino");
 
+const printStatus = document.querySelector('.printStatus');
+
 function verificar() {
     var auth = true;
     //console.log(User)
@@ -82,6 +84,22 @@ if (VerAllQuiz_button) {
     })
 }
 
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3> Treinamento Cadastrado com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro no cadastro do Treinamento </h3>
+    `;
+    }
+    printStatus.appendChild(div);
+}
 
 if(submit_button_treino){
     submit_button_treino.addEventListener('click', (e) => {
@@ -108,7 +126,8 @@ if(submit_button_treino){
                 //ipcRenderer.invoke("treino-bd", cadastro);
                 axios.post('http://localhost:3000/treinamento_create', cadastro)
                 .then((res) => {
-                console.log(res);
+                    PrintStatusCad(res.data.valor)
+                    //console.log(res);
                 })
             }
         }

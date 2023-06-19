@@ -173,7 +173,6 @@ ipcMain.on("Janela_AlunoTreinamentos", (event, args) => {
 
 ipcMain.on("Janela_HomeAlunoPerm", (event, args) => {
   navegate("./NiveisDePermissao/Aluno.html", mainwindow);
-
 });
 
 // Página que aparece para o administrador depois do LOGIN

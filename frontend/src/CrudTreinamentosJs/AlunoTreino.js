@@ -2,6 +2,8 @@ const axios = require('axios');
 const e = require('express');
 const {ipcRenderer} = require('electron');
 
+const printStatus = document.querySelector('.printStatus');
+
 function verificar() {
     var auth = true;
 
@@ -96,6 +98,23 @@ const CadUserTreino_button = document.getElementById('CadUserTreino');
 
 updateOption(NomeTreinamentoCad);
 
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3>Cadastrado realizado com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro na realização do cadastro! </h3>
+    `;
+    }
+    printStatus.appendChild(div);
+}
+
 if (CadUserTreino_button) {
     CadUserTreino_button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -116,10 +135,7 @@ if (CadUserTreino_button) {
                     }
                     axios.post('http://localhost:3000/CadUsuarioTreino', treinodata)
                     .then(response => {
-                        if (response.data.valor === '1')
-                            alert('Aluno Cadastrado com sucesso!')
-                        else
-                            alert('Erro no cadastro do aluno!')
+                        PrintStatusCad(response.data.valor)
                     })
                 })
             }

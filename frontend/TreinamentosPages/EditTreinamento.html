@@ -20,17 +20,7 @@
     <div class="ViewTreinamentosAdm"></div>
 
     <div>
-        <h2>Ver Quizzes disponíveis para Update</h2>
-        <button id="VerAllQuiz">Ver</button><br>
-    </div>
-
-    <div class="ViewQuizAdm"></div>
-
-    <div>
-        <label for="OldTreinamentoTitle">Título do treinamento desejado: </label>
-        <input type="text" id="OldTreinamentoTitle"/><br><br>
-        <label for="OldTreinamentoCodigo">Código do treinamento desejado: </label>
-        <input type="number" id="OldTreinamentoCodigo"/><br><br>
+        <select id="OldTreinamentoTitle">Título do treinamento desejado: </select><br>
         <button id="button_edit_treinamento">Clique aqui para começar a editar</button>
     </div>
     
@@ -56,22 +46,20 @@
         <label for="new_max_inscritos">Novo máximo de inscritos</label>
         <input type="number" id="new_max_inscritos"><br>
 
-        <label for="QuizAptidao"> Novo nome do Quiz de Aptidão</label>
-        <input type="text" id="QuizAptidao"><br>
-        <label for="Case1">Nobo nome do Quiz para Case 1</label>
-        <input type="text" id="Case1"><br>
-        <label for="Case2">Novo nome do Quiz para Case 2</label>
-        <input type="text" id="Case2"><br>
+        <select id="QuizAptidao"> Novo nome do Quiz de Aptidão</select>
+        <select id="Case1">Nobo nome do Quiz para Case 1</select>
+        <select id="Case2">Novo nome do Quiz para Case 2</select>
 
         <label for="Curso1text">Novo texto de apresentação curso 1</label>
         <input type="text" id="Curso1text"><br>
         <label for="Curso2text">Novo texto de apresentação curso 2</label>
         <input type="text" id="Curso2text"><br>
     </div>
-    <div class="button_editar_treino">
+    <div>
         <button id="edit_button_treino">Concluir Edição</button>
     </div>  
 
+    <div class="printStatus"></div>
 </body>
 <script src="../src/CrudTreinamentosJs/EditTreino.js"></script>
 </html>

@@ -2,6 +2,8 @@ const axios = require('axios');
 const { response } = require('express');
 const {ipcRenderer} = require('electron');
 
+const printStatus = document.querySelector('.printStatus');
+
 function verificar() {
     var auth = true;
     //console.log(User)
@@ -82,6 +84,23 @@ function updateOption(select){
 
 const QuizTitle = document.querySelector('#QuizTitle');
 
+function PrintStatusCad(res) {
+    printStatus.innerHTML = ""
+
+    const div = document.createElement("div");
+    if (res === '1') {
+        div.innerHTML = `
+        <h3> Quiz deletado com sucesso! </h3>
+    `;
+    }
+    else {
+        div.innerHTML = `
+        <h3> Erro na deleção do Quiz </h3>
+    `;
+    }
+    printStatus.appendChild(div);
+}
+
 updateOption(QuizTitle);
 const delete_button_quiz = document.getElementById('delete_button_quiz');
 
@@ -93,7 +112,10 @@ if (delete_button_quiz) {
                 const obj = {
                     Nome: QuizTitle.value.toUpperCase(),
                 }
-                axios.post('http://localhost:3000/DeleteQuiz', obj);
+                axios.post('http://localhost:3000/DeleteQuiz', obj)
+                .then(response => {
+                    PrintStatusCad(response.data.valor)
+                })
             }
         }
         catch (e) {
