@@ -55,17 +55,6 @@ function displayTreinamentosRead(obj) {
                     <th><b>Código</b></th>
                     <th><b>Descrição</b></th>
                     <th><b>Carga Horária</b></th>
-                    <th><b>Início das inscrições</b></th>
-                    <th><b>Fim das inscrições</b></th>
-                    <th><b>Início dos treinamentos</b></th>
-                    <th><b>Fim dos treinamentos</b></th>
-                    <th><b>Mínimo de inscritos</b></th>
-                    <th><b>Máximo de inscritos</b></th>
-                    <th><b>Nome Quiz de Aptidao</b></th>
-                    <th><b>Nome Case 1</b></th>
-                    <th><b>Nome Case 2</b></th>
-                    <th><b>Texto Curso 1</b></th>
-                    <th><b>Texto Curso 2</b></th>
                 </tr>
             </thead>
     
@@ -75,20 +64,69 @@ function displayTreinamentosRead(obj) {
                     <th>${obj[i].codigo}</th>
                     <th>${obj[i].descricao}</th>
                     <th>${obj[i].carga_horaria}</th>
-                    <th>${obj[i].inicio_inscricoes}</th>
-                    <th>${obj[i].fim_inscricoes}</th>
-                    <th>${obj[i].inicio_treinamento}</th>
-                    <th>${obj[i].fim_treinamento}</th>
-                    <th>${obj[i].min_inscritos}</th>
-                    <th>${obj[i].max_inscritos}</th>
-                    <th>${obj[i].QAptidao}</th>
-                    <th>${obj[i].QCase1}</th>
-                    <th>${obj[i].QCase2}</th>
-                    <th>${obj[i].Curso1}</th>
-                    <th>${obj[i].Curso2}</th>
                 </tr>
-
             <tbody>
+    
+            </table>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th><b>Início das inscrições</b></th>
+                        <th><b>Fim das inscrições</b></th>
+                        <th><b>Início dos treinamentos</b></th>
+                        <th><b>Fim dos treinamentos</b></th>
+                    </tr>
+                </thead>
+    
+            <tbody>
+                    <tr>
+                        <th>${obj[i].inicio_inscricoes}</th>
+                        <th>${obj[i].fim_inscricoes}</th>
+                        <th>${obj[i].inicio_treinamento}</th>
+                        <th>${obj[i].fim_treinamento}</th>
+                    </tr>
+            <tbody>
+    
+            </table>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th><b>Mínimo de inscritos</b></th>
+                        <th><b>Máximo de inscritos</b></th>
+                        <th><b>Nome Quiz de Aptidao</b></th>
+                        <th><b>Nome Case 1</b></th>
+                        <th><b>Nome Case 2</b></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <th>${obj[i].min_inscritos}</th>
+                        <th>${obj[i].max_inscritos}</th>
+                        <th>${obj[i].QAptidao}</th>
+                        <th>${obj[i].QCase1}</th>
+                        <th>${obj[i].QCase2}</th>
+                    </tr>
+                <tbody>
+    
+            </table>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th><b>Texto Curso 1</b></th>
+                        <th><b>Texto Curso 2</b></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <th>${obj[i].Curso1}</th>
+                        <th>${obj[i].Curso2}</th>
+                    </tr>
+                <tbody>
     
             </table>`;
             ReadTreinamentoAdm.appendChild(div);
